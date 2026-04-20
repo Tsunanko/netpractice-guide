@@ -1,0 +1,126 @@
+site_name: NetPractice Guide
+site_description: 42 Tokyo NetPractice プロジェクトの解説サイト（超初心者向け）
+site_url: https://tsunanko.github.io/netpractice-guide/
+
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  language: ja
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: ダークモードへ
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: ライトモードへ
+  font:
+    text: Noto Sans JP
+    code: JetBrains Mono
+  icon:
+    logo: material/lan
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: false
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.caret
+  - pymdownx.tilde
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+plugins:
+  - search:
+      lang:
+        - ja
+        - en
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  - js/video-control.js
+
+nav:
+  - ホーム: index.md
+  - はじめに:
+    - 00. このガイドの使い方: 00-start-here.md
+  - 第1部 ネットワークの基礎:
+    - 01. IP アドレスって何？: 01-basics/ip-address.md
+    - 02. サブネットマスクって何？: 01-basics/subnet-mask.md
+    - 03. CIDR 早見表と計算: 01-basics/cidr.md
+    - 04. スイッチとルータの違い: 01-basics/switch-router.md
+    - 05. ゲートウェイって何？: 01-basics/gateway.md
+    - 06. ルーティングテーブル: 01-basics/routing-table.md
+    - 07. 双方向到達性（最重要）: 01-basics/bidirectional.md
+  - 第2部 全10レベル攻略:
+    - Level 1 — 直結リンク: 02-levels/level1.md
+    - Level 2 — 不正マスクの修正: 02-levels/level2.md
+    - Level 3 — スイッチで3台接続: 02-levels/level3.md
+    - Level 4 — ルータ登場: 02-levels/level4.md
+    - Level 5 — ルーティング初登場: 02-levels/level5.md
+    - Level 6 — Internet 越しの通信: 02-levels/level6.md
+    - Level 7 — サブネット分割設計: 02-levels/level7.md
+    - Level 8 — 2つのLAN + Internet: 02-levels/level8.md
+    - Level 9 — 大ボス（6ゴール）: 02-levels/level9.md
+    - Level 10 — 最終ボス（7ゴール）: 02-levels/level10.md
+  - 第3部 抽象化された学び:
+    - なぜ 42 はこの課題を出す？: 03-learnings/why-this-exercise.md
+    - 他分野に応用できる考え方: 03-learnings/transferable.md
+    - 制約からの逆算という思考法: 03-learnings/debugging-mindset.md
+  - 第4部 評価対策:
+    - 🎓 ディフェンス Q&A: 04-defense/qa.md
+    - 📋 当日チートシート: 04-defense/cheatsheet.md
+  - 📚 用語集: glossary.md
