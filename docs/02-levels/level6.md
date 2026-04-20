@@ -17,7 +17,7 @@ NetPractice 最重要概念「**双方向到達性**」の入門編。
 
 ## 📷 問題画面
 
-![Level 6 のスクリーンショット](../images/screenshots/level6.png)
+[![Level 6 のスクリーンショット](../images/screenshots/level6.png)](../images/screenshots/level6.png)
 
 ---
 

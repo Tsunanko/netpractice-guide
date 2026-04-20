@@ -16,7 +16,7 @@
 
 ## 📷 問題画面
 
-![Level 3 のスクリーンショット](../images/screenshots/level3.png)
+[![Level 3 のスクリーンショット](../images/screenshots/level3.png)](../images/screenshots/level3.png)
 
 ---
 

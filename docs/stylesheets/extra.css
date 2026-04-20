@@ -3,6 +3,11 @@
  * 超初心者向け・小学生でも読める可読性重視
  * ===================================================== */
 
+/* ----- コンテンツエリアを広く ----- */
+.md-grid {
+    max-width: 1440px;   /* Material デフォルト 1220px */
+}
+
 /* ----- 基本: 本文フォントを大きく ----- */
 .md-typeset {
     font-size: 0.92rem;       /* ← 以前より少し大きく。Material デフォルトは 0.8rem 相当 */
@@ -39,6 +44,30 @@
     display: block;
     margin: 1em auto;
     max-width: 100%;
+}
+
+/* 画像を a タグでラップして「クリックで原寸を新タブ表示」できる
+ * リンクを付けた画像に付与するカーソルと hover 効果 */
+.md-content a img {
+    cursor: zoom-in;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.md-content a img:hover {
+    transform: scale(1.01);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+}
+
+.md-content a:hover::after {
+    content: "🔍 クリックで拡大";
+    display: inline-block;
+    margin-left: 0.5em;
+    font-size: 0.85em;
+    color: #1976d2;
+}
+
+[data-md-color-scheme="slate"] .md-content a:hover::after {
+    color: #90caf9;
 }
 
 /* =====================================================

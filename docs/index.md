@@ -6,7 +6,7 @@
 各問には「**ホスト**（パソコン）」「**ルータ**（中継機）」「**Internet**」が線で繋がった図が出てきて、
 **どこかの設定が間違っている** ので直して **すべての目標を緑色に変える** のがゴール。
 
-![Level 9 のスクリーンショット](images/screenshots/level9.png)
+[![Level 9 のスクリーンショット](images/screenshots/level9.png)](images/screenshots/level9.png)
 
 *↑ 実際の画面例。ピンク色の欄を埋めて全ゴールを緑色にする*
 

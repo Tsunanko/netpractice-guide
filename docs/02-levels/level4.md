@@ -18,7 +18,7 @@ R はさらに R2, R3 という別サブネット用の口も持っている。
 
 ## 📷 問題画面
 
-![Level 4 のスクリーンショット](../images/screenshots/level4.png)
+[![Level 4 のスクリーンショット](../images/screenshots/level4.png)](../images/screenshots/level4.png)
 
 ---
 
