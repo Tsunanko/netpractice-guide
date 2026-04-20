@@ -1,16 +1,39 @@
 /* =====================================================
- * cub3D ガイド 共通スタイル
+ * NetPractice Guide 共通スタイル
+ * 超初心者向け・小学生でも読める可読性重視
  * ===================================================== */
+
+/* ----- 基本: 本文フォントを大きく ----- */
+.md-typeset {
+    font-size: 0.92rem;       /* ← 以前より少し大きく。Material デフォルトは 0.8rem 相当 */
+    line-height: 1.75;
+}
+.md-typeset h1 { font-size: 2.0rem; }
+.md-typeset h2 { font-size: 1.5rem; margin-top: 1.8em; }
+.md-typeset h3 { font-size: 1.2rem; }
+.md-typeset h4 { font-size: 1.05rem; }
+
+/* サイドバー・ナビゲーション文字サイズを本文と揃える */
+.md-nav {
+    font-size: 0.75rem;
+}
+
+/* 段落の間をしっかり空けて読みやすく */
+.md-typeset p,
+.md-typeset ul,
+.md-typeset ol,
+.md-typeset dl {
+    margin-bottom: 1em;
+}
 
 /* 画像とGIFを全幅で大きく表示 */
 .md-content img {
     max-width: 100%;
     height: auto;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
-/* GIFやスクリーンショットは特に大きく */
 .md-content img[src$=".gif"],
 .md-content img[src$=".png"] {
     display: block;
@@ -18,54 +41,70 @@
     max-width: 100%;
 }
 
-/* 動画も画像と同じ扱いで表示 */
-.md-content video,
-.md-content .cub3d-video {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 1em auto;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-    cursor: pointer;
+/* =====================================================
+ * Mermaid 図: ライトモード・ダークモード両方で読みやすく
+ * ===================================================== */
+
+/* Mermaid コンテナに余白 */
+.mermaid {
+    margin: 1.5em auto;
+    text-align: center;
 }
 
-.md-content video:hover {
-    opacity: 0.97;
-    transition: opacity 0.15s;
+/* Mermaid ノード全般の枠を太く */
+.mermaid .node rect,
+.mermaid .node polygon,
+.mermaid .node circle,
+.mermaid .node ellipse,
+.mermaid .node path {
+    stroke-width: 2px !important;
+}
+
+/* Mermaid ノード内テキストを大きく */
+.mermaid .nodeLabel,
+.mermaid .nodeLabel p,
+.mermaid .label {
+    font-size: 15px !important;
+    font-weight: 500;
+}
+
+/* edgeLabel（矢印上のテキスト）も大きく */
+.mermaid .edgeLabel {
+    font-size: 14px !important;
 }
 
 /* =====================================================
- * ダークモード調整（[data-md-color-scheme="slate"]）
- *
- * 目的:
- *   Mermaid のパステル塗り (style X fill:#E3F2FD 等) は
- *   デフォルトで黒文字を想定していてダークモードで
- *   文字が読みにくいため、明示的に塗りの彩度を上げて
- *   文字を濃色に強制する。
+ * ダークモード（[data-md-color-scheme="slate"]）
  * ===================================================== */
 
-/* Mermaid ノードのテキストをダークモードでも見やすく */
+/* ノードの塗りをダークモードでも明るいパステル維持
+ * + Material Mermaid が自動で暗くしてしまう場合の救済 */
 [data-md-color-scheme="slate"] .mermaid .node rect,
 [data-md-color-scheme="slate"] .mermaid .node polygon,
 [data-md-color-scheme="slate"] .mermaid .node circle,
 [data-md-color-scheme="slate"] .mermaid .node ellipse,
 [data-md-color-scheme="slate"] .mermaid .node path {
-    stroke-width: 1.5px;
+    filter: brightness(1.15) saturate(1.2);
 }
 
-/* ダークモードで Mermaid ラベル文字を濃い色に統一 */
+/* ラベル文字を必ず濃色に（パステル背景に黒文字） */
 [data-md-color-scheme="slate"] .mermaid .nodeLabel,
 [data-md-color-scheme="slate"] .mermaid .nodeLabel p,
 [data-md-color-scheme="slate"] .mermaid .nodeLabel span,
-[data-md-color-scheme="slate"] .mermaid .edgeLabel,
-[data-md-color-scheme="slate"] .mermaid .edgeLabel p,
 [data-md-color-scheme="slate"] .mermaid .label {
     color: #1a1a1a !important;
     fill: #1a1a1a !important;
 }
 
-/* edgeLabel の背景（矢印ラベル下地）もダーク対応 */
+/* エッジ（矢印）のラベル背景をダーク対応 */
+[data-md-color-scheme="slate"] .mermaid .edgeLabel,
+[data-md-color-scheme="slate"] .mermaid .edgeLabel p,
+[data-md-color-scheme="slate"] .mermaid .edgeLabel span {
+    color: #1a1a1a !important;
+    fill: #1a1a1a !important;
+    background-color: #eceff1 !important;
+}
+
 [data-md-color-scheme="slate"] .mermaid .edgeLabel rect,
 [data-md-color-scheme="slate"] .mermaid .edgeLabel .labelBkg {
     fill: #eceff1 !important;
@@ -73,11 +112,12 @@
     opacity: 0.95 !important;
 }
 
-/* Mermaid の矢印線 */
+/* 矢印の線色 */
 [data-md-color-scheme="slate"] .mermaid .flowchart-link,
 [data-md-color-scheme="slate"] .mermaid path.path,
 [data-md-color-scheme="slate"] .mermaid .edgePath .path {
     stroke: #b0bec5 !important;
+    stroke-width: 2px !important;
 }
 
 [data-md-color-scheme="slate"] .mermaid marker path,
@@ -86,17 +126,80 @@
     stroke: #b0bec5 !important;
 }
 
+/* Subgraph（枠囲み）のラベル色 */
+[data-md-color-scheme="slate"] .mermaid .cluster rect {
+    fill: rgba(255, 255, 255, 0.04) !important;
+    stroke: #546e7a !important;
+}
+
+[data-md-color-scheme="slate"] .mermaid .cluster-label,
+[data-md-color-scheme="slate"] .mermaid .cluster text {
+    fill: #eceff1 !important;
+    color: #eceff1 !important;
+}
+
 /* =====================================================
- * ダークモードでのその他の読みやすさ改善
+ * 前へ/次へナビゲーションボタン（目立たせる）
  * ===================================================== */
 
-/* インラインコード（`code`）のコントラスト向上 */
+.md-footer__inner.md-grid {
+    padding: 1em;
+}
+
+.md-footer__link {
+    padding: 1em 1.2em;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+    background-color: rgba(63, 81, 181, 0.08);  /* indigo 薄 */
+}
+
+.md-footer__link:hover {
+    background-color: rgba(63, 81, 181, 0.18);
+    border-color: rgba(63, 81, 181, 0.5);
+    transform: translateY(-1px);
+}
+
+.md-footer__link--next {
+    background-color: rgba(63, 81, 181, 0.12);
+    border-color: rgba(63, 81, 181, 0.3);
+}
+
+.md-footer__direction {
+    font-size: 0.85em;
+    font-weight: bold;
+    opacity: 1 !important;
+}
+
+.md-footer__title {
+    font-weight: bold;
+}
+
+[data-md-color-scheme="slate"] .md-footer__link {
+    background-color: rgba(159, 168, 218, 0.12);
+}
+
+[data-md-color-scheme="slate"] .md-footer__link:hover {
+    background-color: rgba(159, 168, 218, 0.22);
+    border-color: rgba(159, 168, 218, 0.6);
+}
+
+[data-md-color-scheme="slate"] .md-footer__link--next {
+    background-color: rgba(159, 168, 218, 0.18);
+    border-color: rgba(159, 168, 218, 0.4);
+}
+
+/* =====================================================
+ * ダークモードでの他の読みやすさ改善
+ * ===================================================== */
+
+/* インラインコード */
 [data-md-color-scheme="slate"] code {
     background-color: rgba(255, 255, 255, 0.08);
     color: #ffcc80;
 }
 
-/* ==highlight== のダークモード対応 */
+/* ==highlight== */
 [data-md-color-scheme="slate"] mark {
     background-color: #ffe082;
     color: #1a1a1a;
@@ -104,7 +207,7 @@
     border-radius: 3px;
 }
 
-/* テーブル行の縞模様（ダークモードでも読みやすく） */
+/* テーブル */
 [data-md-color-scheme="slate"] .md-typeset table:not([class]) tbody tr:nth-child(odd) {
     background-color: rgba(255, 255, 255, 0.02);
 }
@@ -114,55 +217,41 @@
     color: #eceff1;
 }
 
-/* 引用ブロック (blockquote) のダークモード */
 [data-md-color-scheme="slate"] .md-typeset blockquote {
     color: #cfd8dc;
     border-left-color: #546e7a;
 }
 
-/* Admonition タイトルバーの文字色を明るく */
+/* Admonition ボックス */
 [data-md-color-scheme="slate"] .md-typeset .admonition-title,
 [data-md-color-scheme="slate"] .md-typeset summary {
     color: #eceff1;
 }
 
-/* Admonition ボックスの背景を若干明るく */
 [data-md-color-scheme="slate"] .md-typeset .admonition,
 [data-md-color-scheme="slate"] .md-typeset details {
     background-color: rgba(255, 255, 255, 0.03);
     border-color: rgba(255, 255, 255, 0.1);
 }
 
-/* タブ (pymdownx.tabbed) のダークモード */
-[data-md-color-scheme="slate"] .md-typeset .tabbed-set > input:checked + label {
-    color: #ff9800;
-    border-color: #ff9800;
-}
-
-[data-md-color-scheme="slate"] .md-typeset .tabbed-labels > label {
-    color: #b0bec5;
-}
-
-/* リンクの下線強化（ダークモードでも見やすく） */
+/* リンク */
 [data-md-color-scheme="slate"] .md-typeset a {
-    color: #80cbc4;
+    color: #90caf9;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: rgba(144, 202, 249, 0.4);
 }
 
 [data-md-color-scheme="slate"] .md-typeset a:hover {
     color: #ffcc80;
+    text-decoration-color: #ffcc80;
 }
 
-/* チェックリストのチェックマークもダーク対応 */
-[data-md-color-scheme="slate"] .md-typeset [type="checkbox"] + label::before {
-    border-color: #78909c;
-}
-
-/* 見出しの下線（h2）のコントラスト */
 [data-md-color-scheme="slate"] .md-typeset h2 {
     border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
-/* コードブロック全体のフォント明るさ */
+/* コードブロック */
 [data-md-color-scheme="slate"] .highlight .cp,
 [data-md-color-scheme="slate"] .highlight .c1,
 [data-md-color-scheme="slate"] .highlight .cm,
@@ -170,10 +259,193 @@
     color: #90a4ae !important;
 }
 
-/* キーボードショートカット */
 [data-md-color-scheme="slate"] .md-typeset kbd {
     background-color: #37474f;
     color: #eceff1;
     border-color: #546e7a;
     box-shadow: 0 1px 0 #263238;
+}
+
+/* =====================================================
+ * カスタム UI コンポーネント（HTML/CSS で図示したい時用）
+ * ===================================================== */
+
+/* ビット列を 8 マスで並べるグリッド */
+.bit-grid {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(2.2em, 1fr));
+    gap: 4px;
+    margin: 1em 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: bold;
+}
+
+.bit-grid .bit {
+    background: #e3f2fd;
+    color: #0d47a1;
+    border: 2px solid #90caf9;
+    border-radius: 6px;
+    padding: 0.6em 0.2em;
+    text-align: center;
+    font-size: 1.1em;
+}
+
+.bit-grid .bit.bit-1 {
+    background: #ffca28;
+    color: #1a1a1a;
+    border-color: #f9a825;
+}
+
+[data-md-color-scheme="slate"] .bit-grid .bit {
+    background: #455a64;
+    color: #eceff1;
+    border-color: #78909c;
+}
+
+[data-md-color-scheme="slate"] .bit-grid .bit.bit-1 {
+    background: #ffc107;
+    color: #1a1a1a;
+    border-color: #ffa000;
+}
+
+/* 4 オクテット並び（IP アドレスを大きく表示） */
+.octet-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    margin: 1.5em 0;
+    flex-wrap: wrap;
+}
+
+.octet-row .octet {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    border: 2px solid #42a5f5;
+    border-radius: 10px;
+    padding: 0.8em 1.2em;
+    min-width: 4em;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #0d47a1;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.octet-row .octet-dot {
+    font-size: 2em;
+    color: #546e7a;
+    font-weight: bold;
+}
+
+.octet-row .octet.octet-highlight {
+    background: linear-gradient(135deg, #fff9c4, #fff59d);
+    border-color: #fbc02d;
+    color: #795548;
+}
+
+[data-md-color-scheme="slate"] .octet-row .octet {
+    background: linear-gradient(135deg, #37474f, #455a64);
+    color: #e3f2fd;
+    border-color: #78909c;
+}
+
+[data-md-color-scheme="slate"] .octet-row .octet.octet-highlight {
+    background: linear-gradient(135deg, #5d4037, #6d4c41);
+    color: #fff9c4;
+    border-color: #ffa726;
+}
+
+[data-md-color-scheme="slate"] .octet-row .octet-dot {
+    color: #b0bec5;
+}
+
+/* 概念カード（「なぜ？」を視覚化） */
+.concept-card {
+    display: block;
+    margin: 1.5em 0;
+    padding: 1.2em 1.4em;
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    border-left: 6px solid #4caf50;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.concept-card .concept-title {
+    font-weight: bold;
+    font-size: 1.15em;
+    color: #1b5e20;
+    margin-bottom: 0.4em;
+}
+
+.concept-card.concept-warning {
+    background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+    border-left-color: #ff9800;
+}
+
+.concept-card.concept-warning .concept-title {
+    color: #e65100;
+}
+
+[data-md-color-scheme="slate"] .concept-card {
+    background: linear-gradient(135deg, #1b5e20, #2e7d32);
+    color: #e8f5e9;
+}
+
+[data-md-color-scheme="slate"] .concept-card .concept-title {
+    color: #c8e6c9;
+}
+
+[data-md-color-scheme="slate"] .concept-card.concept-warning {
+    background: linear-gradient(135deg, #bf360c, #d84315);
+    color: #ffe0b2;
+}
+
+[data-md-color-scheme="slate"] .concept-card.concept-warning .concept-title {
+    color: #ffcc80;
+}
+
+/* ステップフロー（番号付きの横並びカード） */
+.step-flow {
+    display: flex;
+    gap: 10px;
+    margin: 1.5em 0;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: center;
+}
+
+.step-flow .step {
+    flex: 1 1 180px;
+    min-width: 180px;
+    padding: 1em;
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    border: 2px solid #64b5f6;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+    font-size: 0.95em;
+}
+
+.step-flow .step .step-num {
+    display: inline-block;
+    width: 2em;
+    height: 2em;
+    line-height: 2em;
+    background: #1976d2;
+    color: #fff;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+[data-md-color-scheme="slate"] .step-flow .step {
+    background: linear-gradient(135deg, #37474f, #455a64);
+    color: #eceff1;
+    border-color: #78909c;
+}
+
+[data-md-color-scheme="slate"] .step-flow .step .step-num {
+    background: #64b5f6;
+    color: #0d47a1;
 }

@@ -10,29 +10,58 @@
 
 ### 🌱 ネットワーク初心者の方
 
-```
-はじめに → 第1部（全ページ）→ 第2部 Level 1 から順番に
-     ↓
-     途中で分からない単語が出たら → 用語集へ
+```mermaid
+flowchart LR
+    S[はじめに] --> A[第1部 全ページ]
+    A --> B[第2部 Level 1 から順番]
+    B --> G[🎉 全レベル攻略]
+    A -.-> D[📚 用語集]
+    B -.-> D
+
+    style S fill:#E3F2FD,stroke:#1976d2,color:#000
+    style A fill:#FFF9C4,stroke:#f9a825,color:#000
+    style B fill:#FFE0B2,stroke:#f57c00,color:#000
+    style D fill:#F8BBD0,stroke:#c2185b,color:#000
+    style G fill:#C8E6C9,stroke:#388e3c,color:#000
 ```
 
-**所要時間目安**: 全部で 3〜4 時間。1日 30 分で 1 週間というペース推奨。
+*途中で分からない単語が出たら用語集へ戻れます。*
+
+**所要時間目安**: 全部で **3〜4 時間**。1日 30 分で 1 週間というペース推奨。
+
+---
 
 ### 🎓 評価（ディフェンス）が明日の方
 
-```
-第4部 Q&A → 当日チートシート → 特に怪しいレベルだけ第2部を復習
+```mermaid
+flowchart LR
+    A[第4部 Q&A] --> B[当日チートシート]
+    B --> C[怪しいレベルだけ<br>第2部を復習]
+    C --> G[🎯 評価本番]
+
+    style A fill:#E3F2FD,stroke:#1976d2,color:#000
+    style B fill:#FFE0B2,stroke:#f57c00,color:#000
+    style C fill:#F8BBD0,stroke:#c2185b,color:#000
+    style G fill:#C8E6C9,stroke:#388e3c,color:#000
 ```
 
-**所要時間目安**: 1 時間。
+**所要時間目安**: **1 時間**。
+
+---
 
 ### 🔧 42 で基礎は知ってるが NetPractice 初挑戦の方
 
-```
-第1部 07. 双方向到達性 だけ → 第2部を順番に
+```mermaid
+flowchart LR
+    A[第1部 07<br>双方向到達性] --> B[第2部<br>Level 1 から順番]
+    B --> G[🎉 全レベル攻略]
+
+    style A fill:#FFF9C4,stroke:#f9a825,color:#000
+    style B fill:#FFE0B2,stroke:#f57c00,color:#000
+    style G fill:#C8E6C9,stroke:#388e3c,color:#000
 ```
 
-**所要時間目安**: 2 時間。第1部前半はさっと流し読みで OK。
+**所要時間目安**: **2 時間**。第1部前半はさっと流し読みで OK。
 
 ---
 
