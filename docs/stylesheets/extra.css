@@ -3,24 +3,53 @@
  * 超初心者向け・小学生でも読める可読性重視
  * ===================================================== */
 
-/* ----- コンテンツエリアを広く ----- */
+/* ----- コンテンツエリア: ほどよい広さ ----- */
 .md-grid {
-    max-width: 1440px;   /* Material デフォルト 1220px */
+    max-width: 1280px;   /* Material デフォルト 1220px。少しだけ広く。 */
 }
 
-/* ----- 基本: 本文フォントを大きく ----- */
+/* ----- 基本: 本文フォントはビューポート幅で伸縮 -----
+ * clamp(min, preferred, max)
+ *   min       : 狭い画面でもこの大きさ (0.82rem ≒ 13px)
+ *   preferred : 1rem ベース + 画面幅 0.12vw 分だけ増加
+ *   max       : 広い画面でもこの大きさ (0.92rem ≒ 14.7px)
+ * これで狭い画面ははみ出さず、広い画面では読みやすい。
+ */
 .md-typeset {
-    font-size: 0.92rem;       /* ← 以前より少し大きく。Material デフォルトは 0.8rem 相当 */
+    font-size: clamp(0.82rem, 0.78rem + 0.22vw, 0.92rem);
     line-height: 1.75;
 }
-.md-typeset h1 { font-size: 2.0rem; }
-.md-typeset h2 { font-size: 1.5rem; margin-top: 1.8em; }
-.md-typeset h3 { font-size: 1.2rem; }
+.md-typeset h1 { font-size: clamp(1.6rem, 1.3rem + 0.9vw, 2.0rem); }
+.md-typeset h2 { font-size: clamp(1.25rem, 1.05rem + 0.6vw, 1.5rem); margin-top: 1.8em; }
+.md-typeset h3 { font-size: clamp(1.05rem, 0.95rem + 0.3vw, 1.2rem); }
 .md-typeset h4 { font-size: 1.05rem; }
 
-/* サイドバー・ナビゲーション文字サイズを本文と揃える */
+/* サイドバー・ナビは本文より一回り小さく */
 .md-nav {
-    font-size: 0.75rem;
+    font-size: clamp(0.7rem, 0.68rem + 0.08vw, 0.76rem);
+}
+
+/* 長い英単語・URL などでコンテンツがはみ出すのを防ぐ */
+.md-typeset p,
+.md-typeset li,
+.md-typeset td,
+.md-typeset th {
+    overflow-wrap: anywhere;
+}
+
+/* テーブルが狭い画面ではみ出す場合は横スクロール */
+.md-typeset table:not([class]) {
+    display: table;
+    max-width: 100%;
+}
+.md-typeset__table {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+/* コードブロックは wrap せず横スクロール（等幅レイアウト維持） */
+.md-typeset pre {
+    overflow-x: auto;
 }
 
 /* 段落の間をしっかり空けて読みやすく */
