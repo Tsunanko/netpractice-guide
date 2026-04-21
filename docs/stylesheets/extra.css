@@ -27,9 +27,121 @@
 .md-typeset h3 { font-size: clamp(1.05rem, 0.95rem + 0.3vw, 1.2rem); }
 .md-typeset h4 { font-size: 1.05rem; }
 
-/* サイドバー・ナビは本文より一回り小さく */
+/* =====================================================
+ * サイドバー（左ナビ）: セクション見出しとクリック可能リンクを
+ * 一目で区別できるようにする
+ * ===================================================== */
+
+/* 全体フォントは本文より一回り小さく */
 .md-nav {
     font-size: clamp(0.7rem, 0.68rem + 0.08vw, 0.76rem);
+}
+
+/* ---- ナビ全体タイトル「NetPractice Guide」 ---- */
+.md-nav__title {
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+/* ---- セクション見出し（= クリックできない親カテゴリ）----
+ * 例: 「はじめに」「第1部 ネットワークの基礎」「第2部 全10レベル攻略」
+ * nav.sections 機能でラベル化された項目。default では薄いグレー文字のみで
+ * クリック可能なリンクと見分けがつかないので、「見出し感」を強化する。 */
+.md-nav__item--section > .md-nav__link,
+.md-nav--secondary .md-nav__item--nested > .md-nav__link,
+.md-nav__list > .md-nav__item > label.md-nav__link {
+    cursor: default;
+    font-weight: 700;
+    font-size: 0.82rem;
+    text-transform: none;
+    letter-spacing: 0.04em;
+    margin-top: 0.9em;
+    margin-bottom: 0.2em;
+    padding-top: 0.35em;
+    padding-bottom: 0.35em;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    color: #1f2a44;
+    opacity: 1;
+}
+
+/* ライトモードのセクション見出しにアクセントカラー */
+.md-nav__item--section > .md-nav__link {
+    color: #3f51b5;
+}
+
+/* ダークモード: 見出しを明るく、区切り線も見えるように */
+[data-md-color-scheme="slate"] .md-nav__item--section > .md-nav__link,
+[data-md-color-scheme="slate"] .md-nav--secondary .md-nav__item--nested > .md-nav__link,
+[data-md-color-scheme="slate"] .md-nav__list > .md-nav__item > label.md-nav__link {
+    color: #90caf9;
+    border-top-color: rgba(255, 255, 255, 0.12);
+}
+
+/* セクション見出しは hover しても色を変えない（クリック不可の表現） */
+.md-nav__item--section > .md-nav__link:hover,
+.md-nav__item--section > .md-nav__link:focus {
+    color: #3f51b5;
+    background: transparent;
+}
+[data-md-color-scheme="slate"] .md-nav__item--section > .md-nav__link:hover,
+[data-md-color-scheme="slate"] .md-nav__item--section > .md-nav__link:focus {
+    color: #90caf9;
+}
+
+/* ---- クリック可能なページリンク ---- */
+/* セクション直下の実リンク。hover で左バー + 背景色を出してクリックできることを示す */
+.md-nav__item:not(.md-nav__item--section) > .md-nav__link {
+    display: block;
+    padding: 0.35em 0.6em;
+    margin: 0.1em 0;
+    border-left: 3px solid transparent;
+    border-radius: 0 4px 4px 0;
+    color: #2c3e50;
+    transition: background-color 0.15s ease,
+                border-left-color 0.15s ease,
+                color 0.15s ease,
+                padding-left 0.15s ease;
+}
+
+[data-md-color-scheme="slate"] .md-nav__item:not(.md-nav__item--section) > .md-nav__link {
+    color: #cfd8dc;
+}
+
+/* hover: 左に青いバー + 薄い背景 + 少し右にインデント */
+.md-nav__item:not(.md-nav__item--section) > .md-nav__link:hover {
+    background-color: rgba(63, 81, 181, 0.10);
+    border-left-color: #3f51b5;
+    color: #1a237e;
+    padding-left: 0.9em;
+}
+[data-md-color-scheme="slate"] .md-nav__item:not(.md-nav__item--section) > .md-nav__link:hover {
+    background-color: rgba(144, 202, 249, 0.14);
+    border-left-color: #90caf9;
+    color: #ffffff;
+}
+
+/* アクティブな（現在開いている）ページはもっと強調 */
+.md-nav__link--active,
+.md-nav__item:not(.md-nav__item--section) > .md-nav__link--active {
+    background-color: rgba(63, 81, 181, 0.16);
+    border-left-color: #3f51b5;
+    color: #1a237e !important;
+    font-weight: 600;
+}
+[data-md-color-scheme="slate"] .md-nav__link--active,
+[data-md-color-scheme="slate"] .md-nav__item:not(.md-nav__item--section) > .md-nav__link--active {
+    background-color: rgba(144, 202, 249, 0.20);
+    border-left-color: #90caf9;
+    color: #ffffff !important;
+}
+
+/* キーボード操作時のフォーカス可視化 */
+.md-nav__link:focus-visible {
+    outline: 2px solid #3f51b5;
+    outline-offset: 1px;
+}
+[data-md-color-scheme="slate"] .md-nav__link:focus-visible {
+    outline-color: #90caf9;
 }
 
 /* 長い英単語・URL などでコンテンツがはみ出すのを防ぐ */
@@ -80,6 +192,11 @@
 
 /* 画像を a タグでラップして「クリックで原寸を新タブ表示」できる
  * リンクを付けた画像に付与するカーソルと hover 効果 */
+.md-content a:has(> img) {
+    position: relative;
+    display: inline-block;
+}
+
 .md-content a img {
     cursor: zoom-in;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -90,16 +207,27 @@
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
 }
 
-.md-content a:hover::after {
+/* 画像リンクだけにオーバーレイで「クリックで拡大」を表示。
+ * position: absolute なので周囲のレイアウトに影響せず
+ * テキストリンク（目次表など）には出ない。 */
+.md-content a:has(> img):hover::after {
     content: "🔍 クリックで拡大";
-    display: inline-block;
-    margin-left: 0.5em;
-    font-size: 0.85em;
-    color: #1976d2;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: rgba(25, 118, 210, 0.92);
+    color: #ffffff;
+    font-size: 0.8em;
+    font-weight: 600;
+    pointer-events: none;
+    letter-spacing: 0.02em;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
-[data-md-color-scheme="slate"] .md-content a:hover::after {
-    color: #90caf9;
+[data-md-color-scheme="slate"] .md-content a:has(> img):hover::after {
+    background: rgba(33, 150, 243, 0.92);
 }
 
 /* =====================================================
