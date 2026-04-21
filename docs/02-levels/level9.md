@@ -75,28 +75,31 @@ A↔B, C↔D, A↔I, A↔D, B↔C, C↔I（計 6 本）
 ### Step 1: D 側を決める
 
 - Dr1 gate = `32.30.74.78` → **R23 の IP = これ**
-- R23 mask = /18 → 町 = `32.30.74.78` の /18 ネットワーク
+- R23 mask = `/18` → 町 = `32.30.74.78` を `/18` で切った先頭
 
-/18 計算:
-```
-マスク = 255.255.192.0
-第 3 オクテット: 74 AND 192 = 64
-→ 町: 32.30.64.0/18 (住人 32.30.64.1 〜 32.30.127.254)
-```
+`/18` は第 3 オクテットの上位 2 ビットまでがネットワーク部、ブロック幅は 64:
+
+<div class="step-flow">
+  <div class="step"><span class="step-num">1</span>マスク<br><code>/18</code><br>= <code>255.255.192.0</code></div>
+  <div class="step"><span class="step-num">2</span>第 3 オクテット<br><code>74 AND 192</code><br>= <b>64</b></div>
+  <div class="step"><span class="step-num">3</span>町の先頭<br><code>32.30.64.0/18</code></div>
+  <div class="step"><span class="step-num">4</span>使える IP<br><code>32.30.64.1</code><br>〜 <code>.127.254</code></div>
+</div>
 
 - D1 IP → **`32.30.64.1`**, Mask → **`255.255.192.0`**
 - D gate → **`32.30.74.78`**
 
 ### Step 2: ルータ間リンクを決める
 
-R21 = `31.203.18.253/30` で固定。
+R21 = `31.203.18.253/30` で固定。`/30` はブロック幅 4 の超狭いリンクで、1 ブロックに 2 IP しか収まらない。
 
-/30 計算:
-```
-253 ÷ 4 切り捨て 63 → 63 × 4 = 252
-→ ブロック .252/30 (.252, .253, .254, .255)
-→ 住人 .253 と .254
-```
+<div class="step-flow">
+  <div class="step"><span class="step-num">1</span>R21 の値<br><code>.253</code></div>
+  <div class="step"><span class="step-num">2</span>253 ÷ 4<br>= 63.25<br>切り捨て <b>63</b></div>
+  <div class="step"><span class="step-num">3</span>63 × 4<br>= <b>252</b></div>
+  <div class="step"><span class="step-num">4</span>ブロック<br><code>.252/30</code><br>(.252, .253, .254, .255)</div>
+  <div class="step"><span class="step-num">5</span>使える IP<br><code>.253</code> と <code>.254</code></div>
+</div>
 
 - R13 IP → **`31.203.18.254`**, Mask → **`255.255.255.252`**
 
