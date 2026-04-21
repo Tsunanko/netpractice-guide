@@ -57,10 +57,10 @@ host: 192.168.1.10/24
 パソコンは通信するとき、**宛先 IP を見て毎回こう考える**:
 
 ```mermaid
-flowchart TD
+flowchart LR
     Start[パケット送信!] --> Q{宛先は自分と<br>同じ町？}
-    Q -->|Yes| Direct[直接送る<br>（スイッチ経由）]
-    Q -->|No| Gate[玄関ルータ<br>= ゲートウェイに<br>送る]
+    Q -->|Yes| Direct[直接送る<br>スイッチ経由]
+    Q -->|No| Gate[ゲートウェイ<br>= 玄関ルータ<br>に送る]
 
     style Start fill:#E3F2FD
     style Q fill:#FFF9C4
