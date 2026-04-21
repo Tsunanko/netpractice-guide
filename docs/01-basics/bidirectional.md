@@ -95,24 +95,18 @@ flowchart LR
 
 ### 行きの設定（A → B）
 
-```
-A 側:
-  A の gateway = 192.168.1.1 (R の左口)
-
-R の自動ルート:
-  192.168.1.0/24 は左口で直接送る
-  10.0.0.0/24 は右口で直接送る （これがあるので A→B が繋がる）
-```
+| 設定場所 | 内容 |
+|:---|:---|
+| A 側 | gateway = `192.168.1.1`（R の左口） |
+| R の自動ルート | `192.168.1.0/24` は左口で直接送る |
+| R の自動ルート | `10.0.0.0/24` は右口で直接送る（これで A→B が届く） |
 
 ### 帰りの設定（B → A）
 
-```
-B 側:
-  B の gateway = 10.0.0.1 (R の右口)  ← これを忘れると通信失敗！
-
-R の自動ルート（既にある）:
-  192.168.1.0/24 は左口で直接送る （B→A のパケットをここで A に渡す）
-```
+| 設定場所 | 内容 |
+|:---|:---|
+| B 側 | gateway = `10.0.0.1`（R の右口）**← 忘れると通信失敗！** |
+| R の自動ルート（既にある） | `192.168.1.0/24` は左口で直接送る（B→A のパケットをここで A に渡す） |
 
 **両方設定して初めて A ↔ B が繋がる**。
 
@@ -120,21 +114,17 @@ R の自動ルート（既にある）:
 
 ## 🔥 Level 6 を例に見る
 
-Level 6 の教訓:
+Level 6 の教訓は「**行きは gateway だけで OK、でも帰りは Internet 側の route を広げないと届かない**」:
 
-```
-A → Internet (8.8.8.8 など) に通信したい。
-行きは gateway を設定すれば OK。
-問題は帰り:
-  Internet 側の "I route" が
-    55.232.27.0/31
-  となっていると、A の IP (55.232.27.227) はこの /31 に含まれない。
-  → 帰りパケットが A に届かない → ping 失敗
-修正:
-  I route を
-    55.232.27.128/25
-  に変更 → A の IP を含む範囲を指定 → 帰りが成立
-```
+<div class="step-flow">
+  <div class="step"><span class="step-num">1</span>A が ping<br><code>8.8.8.8</code></div>
+  <div class="step"><span class="step-num">2</span>行きは<br>gateway 経由<br>で出ていく</div>
+  <div class="step"><span class="step-num">3</span>Internet の<br><code>I route</code> が<br><code>55.232.27.0/31</code></div>
+  <div class="step"><span class="step-num">4</span>A の IP<br><code>.227</code> は<br>この /31 の外側</div>
+  <div class="step"><span class="step-num">5</span>❌ 帰り<br>パケットが<br>届かない</div>
+</div>
+
+**修正**: `I route` を **`55.232.27.128/25`** に書き換えて A の IP を含む範囲を指定 → 帰りが成立。
 
 詳しくは [Level 6 攻略ページ](../02-levels/level6.md) で解説します。
 

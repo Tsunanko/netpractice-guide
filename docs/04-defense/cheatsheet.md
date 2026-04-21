@@ -78,16 +78,20 @@ route: default → gate3   ← 必ず最後
 
 ### 例: `192.168.1.222 / 27`
 
-```
-ブロックサイズ: 256 − 224 = 32
-222 ÷ 32 = 6.9 → 6
-6 × 32 = 192
+<div class="step-flow">
+  <div class="step"><span class="step-num">1</span>マスク<br><code>/27</code><br>= <code>...224</code></div>
+  <div class="step"><span class="step-num">2</span>ブロック幅<br><code>256 − 224</code><br>= <b>32</b></div>
+  <div class="step"><span class="step-num">3</span>222 ÷ 32<br>= 6.9<br>切り捨て <b>6</b></div>
+  <div class="step"><span class="step-num">4</span>6 × 32<br>= <b>192</b></div>
+  <div class="step"><span class="step-num">5</span>ブロック<br><code>.192/27</code></div>
+</div>
 
-→ .192/27 ブロック
-→ ネットワーク: .192
-→ ホスト: .193 〜 .222
-→ ブロードキャスト: .223
-```
+| 項目 | 値 |
+|:---|:---|
+| ブロック全範囲 | `.192〜.223` |
+| ネットワーク | `.192`（使用不可） |
+| 住人範囲 | `.193〜.222` |
+| ブロードキャスト | `.223`（使用不可） |
 
 ---
 
