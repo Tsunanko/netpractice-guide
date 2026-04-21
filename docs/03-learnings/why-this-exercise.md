@@ -53,12 +53,12 @@
 ```mermaid
 flowchart LR
     A[教科書を読む] --> B[頭で理解したつもり]
-    B -. 1ヶ月後 .-> C[忘れる]
+    B -.->|1ヶ月後| C[忘れる]
 
     D[NetPractice で手を動かす] --> E[失敗する]
     E --> F[なぜ？と考える]
     F --> G[修正して goal 緑]
-    G -. 半年後でも .-> H[覚えている]
+    G -.->|半年後でも| H[覚えている]
 
     style A fill:#FFCDD2
     style C fill:#FFCDD2

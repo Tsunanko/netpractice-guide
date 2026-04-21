@@ -42,7 +42,7 @@ flowchart LR
 flowchart LR
     A[Host A<br>192.168.1.10/24] --> R[🏛️ Router]
     R --> I[🌍 Internet]
-    I -. 帰り道が知らない<br>192.168.1.0/24 .-> R
+    I -.->|帰り道が知らない<br>192.168.1.0/24| R
 
     style A fill:#E3F2FD
     style R fill:#F8BBD0
