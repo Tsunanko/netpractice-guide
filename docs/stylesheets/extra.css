@@ -40,6 +40,22 @@
     line-break: strict;
 }
 
+/* 表の中で <code>（IP アドレス・マスク等）が途中で折れないようにする。
+ * 例: `192.168.1.128/25` が「192.168.1.128/2」「5」に割れる事故を防ぐ。
+ * 表は狭くなりがちなので、横スクロールできるよう table-wrapper 側で overflow を確保。 */
+.md-typeset table code {
+    white-space: nowrap;
+}
+
+/* 日本語でも「(128 個)」「.1〜.126」のような短い単位は途中改行させない。
+ * keep-all は CJK を単語境界でまとめ、(128 個) が「128」「個」で割れない。 */
+.md-typeset table td,
+.md-typeset table th {
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+    line-break: strict;
+}
+
 /* =====================================================
  * サイドバー（左ナビ）: セクション見出しとクリック可能リンクを
  * 一目で区別できるようにする
