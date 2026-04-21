@@ -62,11 +62,15 @@ flowchart LR
 
 ### Step 1: A の町を R1 に合わせる
 
-R1 は `44.166.160.126/25` で固定。町を計算:
-```
-126 ÷ 128 切り捨て 0 → .0/25
-→ R1 の町: 44.166.160.0/25 (住人 .1〜.126)
-```
+R1 は `44.166.160.126/25` で固定。まず町の先頭を求める（`/25` はブロック幅 128）:
+
+<div class="step-flow">
+  <div class="step"><span class="step-num">1</span>R1 の値<br><code>.126</code></div>
+  <div class="step"><span class="step-num">2</span>マスク<br><code>/25</code><br>幅 128</div>
+  <div class="step"><span class="step-num">3</span>126 ÷ 128<br>= 0.98…<br>切り捨て <b>0</b></div>
+  <div class="step"><span class="step-num">4</span>0 × 128<br>= <b>0</b></div>
+  <div class="step"><span class="step-num">5</span>町の先頭<br><code>.0/25</code><br>住人 <code>.1〜.126</code></div>
+</div>
 
 A1 はこの町に入る必要がある。
 
@@ -80,12 +84,14 @@ A1 はこの町に入る必要がある。
 
 ### Step 3: B の町を R2 に合わせる
 
-R2 は `150.40.107.254/18` で固定。町を計算:
-```
-/18 マスク = 255.255.192.0
-第 3 オクテット: 107 AND 192 = 64
-→ R2 の町: 150.40.64.0/18 (住人 150.40.64.1 〜 150.40.127.254)
-```
+R2 は `150.40.107.254/18` で固定。`/18` は第 3 オクテットの上位 2 ビットまでがネットワーク部:
+
+<div class="step-flow">
+  <div class="step"><span class="step-num">1</span>マスク<br><code>/18</code><br>= <code>255.255.192.0</code></div>
+  <div class="step"><span class="step-num">2</span>第 3 オクテット<br><code>107 AND 192</code><br>= <b>64</b></div>
+  <div class="step"><span class="step-num">3</span>町の先頭<br><code>150.40.64.0/18</code></div>
+  <div class="step"><span class="step-num">4</span>使える IP<br><code>150.40.64.1</code><br>〜 <code>.127.254</code></div>
+</div>
 
 - B1 IP → **`150.40.64.1`**
 - B1 Mask → **`255.255.192.0`**
