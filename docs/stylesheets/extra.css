@@ -27,6 +27,19 @@
 .md-typeset h3 { font-size: clamp(1.05rem, 0.95rem + 0.3vw, 1.2rem); }
 .md-typeset h4 { font-size: 1.05rem; }
 
+/* 見出しは日本語単位で改行（半角スペース前後で変な位置に折れないように）。
+ * keep-all で CJK は単語境界維持、最後の逃げ道として overflow-wrap で破断。 */
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4,
+.md-typeset h5,
+.md-typeset h6 {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    line-break: strict;
+}
+
 /* =====================================================
  * サイドバー（左ナビ）: セクション見出しとクリック可能リンクを
  * 一目で区別できるようにする
@@ -45,39 +58,30 @@
 
 /* ---- セクション見出し（= クリックできない親カテゴリ）----
  * 例: 「はじめに」「第1部 ネットワークの基礎」「第2部 全10レベル攻略」
- * nav.sections 機能でラベル化された項目。default では薄いグレー文字のみで
- * クリック可能なリンクと見分けがつかないので、「見出し感」を強化する。 */
-.md-nav__item--section > .md-nav__link,
-.md-nav--secondary .md-nav__item--nested > .md-nav__link,
-.md-nav__list > .md-nav__item > label.md-nav__link {
+ * nav.sections で出力される .md-nav__item--section の直下の link 要素のみ対象。
+ * 注意: label.md-nav__link はモバイル展開用で Material はデフォルトで hide 扱い
+ * にしているため、ここではスタイルしない（過去にこれをやってデスクトップで
+ * 「ホーム」が 2 重表示される不具合を起こした）。 */
+.md-nav__item--section > .md-nav__link {
     cursor: default;
     font-weight: 700;
     font-size: 0.82rem;
-    text-transform: none;
     letter-spacing: 0.04em;
     margin-top: 0.9em;
     margin-bottom: 0.2em;
     padding-top: 0.35em;
     padding-bottom: 0.35em;
     border-top: 1px solid rgba(0, 0, 0, 0.08);
-    color: #1f2a44;
+    color: #3f51b5;
     opacity: 1;
 }
 
-/* ライトモードのセクション見出しにアクセントカラー */
-.md-nav__item--section > .md-nav__link {
-    color: #3f51b5;
-}
-
-/* ダークモード: 見出しを明るく、区切り線も見えるように */
-[data-md-color-scheme="slate"] .md-nav__item--section > .md-nav__link,
-[data-md-color-scheme="slate"] .md-nav--secondary .md-nav__item--nested > .md-nav__link,
-[data-md-color-scheme="slate"] .md-nav__list > .md-nav__item > label.md-nav__link {
+[data-md-color-scheme="slate"] .md-nav__item--section > .md-nav__link {
     color: #90caf9;
     border-top-color: rgba(255, 255, 255, 0.12);
 }
 
-/* セクション見出しは hover しても色を変えない（クリック不可の表現） */
+/* セクション見出しは hover しても色を変えない */
 .md-nav__item--section > .md-nav__link:hover,
 .md-nav__item--section > .md-nav__link:focus {
     color: #3f51b5;
@@ -89,8 +93,8 @@
 }
 
 /* ---- クリック可能なページリンク ---- */
-/* セクション直下の実リンク。hover で左バー + 背景色を出してクリックできることを示す */
-.md-nav__item:not(.md-nav__item--section) > .md-nav__link {
+/* a 要素に限定（label は Material のモバイル drawer 用、デスクトップでは非表示） */
+.md-nav__item:not(.md-nav__item--section) > a.md-nav__link {
     display: block;
     padding: 0.35em 0.6em;
     margin: 0.1em 0;
@@ -103,44 +107,52 @@
                 padding-left 0.15s ease;
 }
 
-[data-md-color-scheme="slate"] .md-nav__item:not(.md-nav__item--section) > .md-nav__link {
+[data-md-color-scheme="slate"] .md-nav__item:not(.md-nav__item--section) > a.md-nav__link {
     color: #cfd8dc;
 }
 
-/* hover: 左に青いバー + 薄い背景 + 少し右にインデント */
-.md-nav__item:not(.md-nav__item--section) > .md-nav__link:hover {
+.md-nav__item:not(.md-nav__item--section) > a.md-nav__link:hover {
     background-color: rgba(63, 81, 181, 0.10);
     border-left-color: #3f51b5;
     color: #1a237e;
     padding-left: 0.9em;
 }
-[data-md-color-scheme="slate"] .md-nav__item:not(.md-nav__item--section) > .md-nav__link:hover {
+[data-md-color-scheme="slate"] .md-nav__item:not(.md-nav__item--section) > a.md-nav__link:hover {
     background-color: rgba(144, 202, 249, 0.14);
     border-left-color: #90caf9;
     color: #ffffff;
 }
 
-/* アクティブな（現在開いている）ページはもっと強調 */
-.md-nav__link--active,
-.md-nav__item:not(.md-nav__item--section) > .md-nav__link--active {
+/* アクティブ: a 要素のみ強調。label 側 (`.md-nav__link--active` も付く) には
+ * 背景を出さないようにする（label はデスクトップで本来見えない要素）。 */
+.md-nav__item:not(.md-nav__item--section) > a.md-nav__link--active {
     background-color: rgba(63, 81, 181, 0.16);
     border-left-color: #3f51b5;
     color: #1a237e !important;
     font-weight: 600;
 }
-[data-md-color-scheme="slate"] .md-nav__link--active,
-[data-md-color-scheme="slate"] .md-nav__item:not(.md-nav__item--section) > .md-nav__link--active {
+[data-md-color-scheme="slate"] .md-nav__item:not(.md-nav__item--section) > a.md-nav__link--active {
     background-color: rgba(144, 202, 249, 0.20);
     border-left-color: #90caf9;
     color: #ffffff !important;
 }
 
+/* label.md-nav__link はモバイル時の展開トグル用 要素。
+ * Material の default は適切に hide しているので、独自スタイルを付けて
+ * レイアウトを壊さないよう背景・枠だけ明示的に無効化しておく。 */
+label.md-nav__link {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+}
+
 /* キーボード操作時のフォーカス可視化 */
-.md-nav__link:focus-visible {
+a.md-nav__link:focus-visible {
     outline: 2px solid #3f51b5;
     outline-offset: 1px;
 }
-[data-md-color-scheme="slate"] .md-nav__link:focus-visible {
+[data-md-color-scheme="slate"] a.md-nav__link:focus-visible {
     outline-color: #90caf9;
 }
 
