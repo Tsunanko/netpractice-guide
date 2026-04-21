@@ -70,13 +70,13 @@ NetPractice では各ルータに `Rr1`, `Rr2`, … と番号付きの route 行
 ### ルール 1: 上から順に見る
 
 ```mermaid
-flowchart TD
-    Pkt[宛先: 10.0.0.5] --> E1{行 1<br>10.0.0.0/8 に<br>マッチ？}
-    E1 -->|Yes| R1[行 1 のゲートウェイへ送る]
-    E1 -->|No| E2{行 2<br>172.16.0.0/12 に<br>マッチ？}
-    E2 -->|Yes| R2[行 2 のゲートウェイへ送る]
-    E2 -->|No| E3{行 3<br>default に<br>マッチ？}
-    E3 -->|Yes| R3[行 3 のゲートウェイへ送る]
+flowchart LR
+    Pkt[宛先<br>10.0.0.5] --> E1{行 1<br>10.0.0.0/8}
+    E1 -->|Yes| R1[行 1 の gate]
+    E1 -->|No| E2{行 2<br>172.16.0.0/12}
+    E2 -->|Yes| R2[行 2 の gate]
+    E2 -->|No| E3{行 3<br>default}
+    E3 -->|Yes| R3[行 3 の gate]
 
     style Pkt fill:#E3F2FD
     style R1 fill:#C8E6C9

@@ -55,11 +55,13 @@ YouTube の動画も、LINE のメッセージも、Google の検索結果も、
 ```mermaid
 flowchart TB
     subgraph H[🏠 家の世界]
+      direction LR
       H1[📮 郵便屋さん] --> H2[住所は？]
       H2 --> H3[東京都 渋谷区<br>代々木 1-1-1]
       H3 --> H4[🎁 その家に配達!]
     end
     subgraph N[💻 ネットの世界]
+      direction LR
       N1[📡 ルータ] --> N2[IP アドレスは？]
       N2 --> N3[192.168.1.10]
       N3 --> N4[💻 そのパソコンに配信!]

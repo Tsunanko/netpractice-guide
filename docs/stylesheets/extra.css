@@ -246,10 +246,15 @@ a.md-nav__link:focus-visible {
  * Mermaid 図: ライトモード・ダークモード両方で読みやすく
  * ===================================================== */
 
-/* Mermaid コンテナに余白 */
+/* Mermaid コンテナに余白。SVG は親幅いっぱい使い、極端に小さくならない
+ * 最低幅を確保する。画面は広いので大きめの最小幅で良い。 */
 .mermaid {
     margin: 1.5em auto;
     text-align: center;
+}
+.mermaid svg {
+    max-width: 100%;
+    height: auto;
 }
 
 /* Mermaid ノード全般の枠を太く */
@@ -261,17 +266,18 @@ a.md-nav__link:focus-visible {
     stroke-width: 2px !important;
 }
 
-/* Mermaid ノード内テキストを大きく */
+/* Mermaid ノード内テキストを本文に揃える大きさに。
+ * 15 → 17px。本文 clamp の上限 (~14.7px) と釣り合う。 */
 .mermaid .nodeLabel,
 .mermaid .nodeLabel p,
 .mermaid .label {
-    font-size: 15px !important;
+    font-size: 17px !important;
     font-weight: 500;
 }
 
-/* edgeLabel（矢印上のテキスト）も大きく */
+/* edgeLabel（矢印上のテキスト）もノードと揃える */
 .mermaid .edgeLabel {
-    font-size: 14px !important;
+    font-size: 16px !important;
 }
 
 /* =====================================================

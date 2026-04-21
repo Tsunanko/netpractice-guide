@@ -109,15 +109,16 @@ gate:   192.168.1.1
 ### 動きの例
 
 ```mermaid
-flowchart TD
-    Start[宛先 8.8.8.8<br>に送りたい] --> Check{ルーティング<br>テーブルを<br>上から見る}
-    Check --> R1{宛先 10.0.0.0/8 に<br>マッチ？}
-    R1 -->|No| R2{宛先 172.16.0.0/12 に<br>マッチ？}
-    R2 -->|No| Default{default にマッチ？}
-    Default -->|Yes| Gate[玄関ルータに送る]
+flowchart LR
+    Start[宛先 8.8.8.8<br>に送りたい] --> R1{10.0.0.0/8<br>マッチ？}
+    R1 -->|No| R2{172.16.0.0/12<br>マッチ？}
+    R2 -->|No| Default{default<br>マッチ？}
+    Default -->|Yes| Gate[玄関ルータ<br>に送る ✅]
 
     style Start fill:#E3F2FD
-    style Check fill:#FFF9C4
+    style R1 fill:#FFF9C4
+    style R2 fill:#FFF9C4
+    style Default fill:#FFF9C4
     style Gate fill:#C8E6C9
 ```
 
