@@ -311,28 +311,28 @@ a.md-nav__link:focus-visible {
 }
 
 /* Mermaid ノード内テキストを大きく。
- * 17 → 20px。SVG が拡大されるとビューア上ではさらに大きく見える。 */
+ * 図中の文字が小さくて読めないという声を受けて 20 → 26px に拡大。 */
 .mermaid .nodeLabel,
 .mermaid .nodeLabel p,
 .mermaid .label {
-    font-size: 20px !important;
-    font-weight: 500;
-    line-height: 1.4 !important;
+    font-size: 26px !important;
+    font-weight: 600;
+    line-height: 1.45 !important;
 }
 
 /* edgeLabel（矢印上のテキスト）もノードと揃える */
 .mermaid .edgeLabel,
 .mermaid .edgeLabel p,
 .mermaid .edgeLabel span {
-    font-size: 18px !important;
-    font-weight: 500;
+    font-size: 22px !important;
+    font-weight: 600;
 }
 
 /* Subgraph（枠囲み）のラベルも大きく */
 .mermaid .cluster-label,
 .mermaid .cluster text {
-    font-size: 19px !important;
-    font-weight: 600 !important;
+    font-size: 24px !important;
+    font-weight: 700 !important;
 }
 
 /* =====================================================
