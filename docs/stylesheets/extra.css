@@ -349,11 +349,33 @@ a.md-nav__link:focus-visible {
     filter: brightness(1.15) saturate(1.2);
 }
 
-/* ラベル文字を必ず濃色に（パステル背景に黒文字） */
-[data-md-color-scheme="slate"] .mermaid .nodeLabel,
-[data-md-color-scheme="slate"] .mermaid .nodeLabel p,
-[data-md-color-scheme="slate"] .mermaid .nodeLabel span,
-[data-md-color-scheme="slate"] .mermaid .label {
+/* ライトモードでも一貫させる（Material の color 継承で薄くなる事故を防ぐ第一防衛線） */
+.md-typeset .mermaid .nodeLabel,
+.md-typeset .mermaid .nodeLabel *,
+.md-typeset .mermaid .label,
+.md-typeset .mermaid .label *,
+.md-typeset .mermaid foreignObject,
+.md-typeset .mermaid foreignObject *,
+.md-typeset .mermaid foreignObject p,
+.md-typeset .mermaid foreignObject span,
+.md-typeset .mermaid foreignObject div {
+    color: #111111 !important;
+    fill: #111111 !important;
+}
+
+/* ラベル文字を必ず濃色に（パステル背景に黒文字）
+ * Mermaid 11.x は foreignObject 内に複数階層で span/div/p を生成する。
+ * Material のダーク CSS が `.md-typeset p { color: var(--md-typeset-color) }`
+ * のような形で specificity を持って当たるので、`.md-typeset` を含めて勝つ。 */
+[data-md-color-scheme="slate"] .md-typeset .mermaid .nodeLabel,
+[data-md-color-scheme="slate"] .md-typeset .mermaid .nodeLabel *,
+[data-md-color-scheme="slate"] .md-typeset .mermaid .label,
+[data-md-color-scheme="slate"] .md-typeset .mermaid .label *,
+[data-md-color-scheme="slate"] .md-typeset .mermaid foreignObject,
+[data-md-color-scheme="slate"] .md-typeset .mermaid foreignObject *,
+[data-md-color-scheme="slate"] .md-typeset .mermaid foreignObject p,
+[data-md-color-scheme="slate"] .md-typeset .mermaid foreignObject span,
+[data-md-color-scheme="slate"] .md-typeset .mermaid foreignObject div {
     color: #1a1a1a !important;
     fill: #1a1a1a !important;
 }

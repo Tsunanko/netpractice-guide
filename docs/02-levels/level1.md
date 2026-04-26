@@ -41,10 +41,11 @@ flowchart LR
       C --- D
     end
 
-    style A fill:#E3F2FD
-    style B fill:#FFF9C4
-    style C fill:#E3F2FD
-    style D fill:#FFF9C4
+    classDef leftHost fill:#E3F2FD,stroke:#1976D2,color:#000,stroke-width:2px
+    classDef rightHost fill:#FFF9C4,stroke:#F9A825,color:#000,stroke-width:2px
+
+    class A,C leftHost
+    class B,D rightHost
 ```
 
 → **2 組のホストがそれぞれ直結**。ルータもスイッチもない、最もシンプルな構成。
@@ -92,16 +93,42 @@ flowchart LR
 
 ### Step 1: 固定側の「町（サブネット）」を調べる
 
-**B1 = `104.94.23.12/24`** から「B が住んでいる町」を計算します。
+**B1 = `104.94.23.12/24`** が固定値。ここから「B が住んでいる町」を逆算します。
 
-```
-IP    : 104.94.23.12
-Mask  : 255.255.255.0  (/24)
+#### 🔢 計算手順
 
-→ 町 = 104.94.23.0/24
-→ 住人範囲: 104.94.23.1 〜 104.94.23.254
-   (.0 はネットワークアドレス、.255 はブロードキャスト → 使えない)
+<div class="step-flow">
+  <div class="step"><span class="step-num">1</span>B1 の IP<br><code>104.94.23.12</code></div>
+  <div class="step"><span class="step-num">2</span>マスク<br><code>/24</code></div>
+  <div class="step"><span class="step-num">3</span>第4オクテットを<br>0 にする</div>
+  <div class="step"><span class="step-num">4</span>町の住所<br><code>104.94.23.0/24</code></div>
+</div>
+
+#### 🏘️ 町の中身を見える化
+
+```mermaid
+flowchart LR
+    subgraph town ["🏘️ 104.94.23.0/24 — B1 が住む町（住人 254 人）"]
+      direction LR
+      Net[".0<br>📛 入口看板<br>住人不可"]
+      H1[".1〜.11<br>👤 空き番地"]
+      B[".12<br>🏠 B1（固定）"]
+      H2[".13〜.254<br>👤 空き番地"]
+      BC[".255<br>📣 一斉放送<br>住人不可"]
+    end
+
+    classDef unusable fill:#FFCDD2,stroke:#C62828,color:#000,stroke-width:2px
+    classDef fixed fill:#FFF59D,stroke:#F9A825,color:#000,stroke-width:3px
+    classDef available fill:#E8F5E9,stroke:#66BB6A,color:#000,stroke-width:2px
+
+    class Net,BC unusable
+    class B fixed
+    class H1,H2 available
 ```
+
+- `.0` は町の **入口看板**（ネットワークアドレス）→ 誰も住めない
+- `.255` は **一斉放送用**（ブロードキャスト）→ 誰も住めない
+- 残りの `.1〜.254` から、**`.12` 以外** を A1 に割り当てればいい
 
 ### Step 2: A1 を B1 と同じ町に入れる
 
@@ -109,19 +136,49 @@ A1 の IP を `104.94.23.x`（`x` は 1〜254、12 以外）に変更。
 
 例: **`104.94.23.13`**
 
+```mermaid
+flowchart LR
+    A["🏠 A1<br>104.94.23.13<br>（新規）"]
+    B["🏠 B1<br>104.94.23.12<br>（固定）"]
+    A <-->|"✅ 直接通信OK<br>同じ町"| B
+
+    classDef hostNew fill:#A5D6A7,stroke:#2E7D32,color:#000,stroke-width:3px
+    classDef hostFixed fill:#FFF59D,stroke:#F9A825,color:#000,stroke-width:3px
+
+    class A hostNew
+    class B hostFixed
+```
+
+→ A1 と B1 が同じ町（`104.94.23.0/24`）の住人になったので、ケーブル直結で通信できる。
+
 ### Step 3: 同じことを C ↔ D にも
 
-**C1 = `211.191.62.75/16`** から町を計算：
+**C1 = `211.191.62.75/16`** から町を計算（手順は Step 1 と同じ）：
 
+<div class="step-flow">
+  <div class="step"><span class="step-num">1</span>C1 の IP<br><code>211.191.62.75</code></div>
+  <div class="step"><span class="step-num">2</span>マスク<br><code>/16</code></div>
+  <div class="step"><span class="step-num">3</span>第3〜4オクテットを<br>0 にする</div>
+  <div class="step"><span class="step-num">4</span>町の住所<br><code>211.191.0.0/16</code></div>
+</div>
+
+`/24` の町は 254 人だったが、**`/16` の町は 65,534 人** の大都市。
+住人範囲は `211.191.0.1 〜 211.191.255.254` で、**第3・第4オクテットの両方を自由に使える**。
+
+D1 を `211.191.x.y`（C1 と被らない値）に。例: **`211.191.62.76`**
+
+```mermaid
+flowchart LR
+    C["🏠 C1<br>211.191.62.75<br>（固定）"]
+    D["🏠 D1<br>211.191.62.76<br>（新規）"]
+    C <-->|"✅ 直接通信OK<br>同じ町 /16"| D
+
+    classDef hostFixed fill:#FFF59D,stroke:#F9A825,color:#000,stroke-width:3px
+    classDef hostNew fill:#A5D6A7,stroke:#2E7D32,color:#000,stroke-width:3px
+
+    class C hostFixed
+    class D hostNew
 ```
-IP    : 211.191.62.75
-Mask  : 255.255.0.0  (/16)
-
-→ 町 = 211.191.0.0/16
-→ 住人範囲: 211.191.0.1 〜 211.191.255.254
-```
-
-D1 を `211.191.x.y` に。例: **`211.191.62.76`**
 
 ---
 
