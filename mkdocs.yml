@@ -101,6 +101,7 @@ nav:
   - ホーム: index.md
   - はじめに:
     - 00. このガイドの使い方: 00-start-here.md
+    - 🎓 数字の決め方 (4 黄金ルール): 00-rules.md
     - 🧭 共通の解き方 (どこから手を付けるか): 00-how-to-solve.md
   - 第1部 ネットワークの基礎:
     - 01. IP アドレスって何？: 01-basics/ip-address.md
