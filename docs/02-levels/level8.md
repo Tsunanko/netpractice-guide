@@ -610,86 +610,343 @@ flowchart LR
 
 ---
 
-## 🧠 考え方
+## 🧠 考え方の核心 (1 ステップずつ「今どこを考えているか」を見る)
 
-### Step 1: 制約の連鎖を読む
+!!! tip "💡 このセクションの読み方"
+    各ステップの上に **「📍 今ここに注目」** というトポロジー図が出ます。
+    🟡 黄色く光ってる箱が **「今このステップで考えている対象」** です。
+    これで「**今どこの話をしてるんだっけ？**」と迷子になりません。
 
-!!! tip "逆算の出発点"
-    **R2r1 gate = `161.138.113.62`** が固定 → R2 がパケットを投げる先は R13。
-    よって **R13 の IP は `161.138.113.62`** でなければならない。
-    さらに **Ir1 route = `161.138.113.0/26` 固定** → R1-R2 間のリンクは /26。
+---
 
-### Step 2: R13 と R21 を同じ /26 に
+### Step 1: 制約の連鎖を読む (固定値だけに注目)
 
-ブロック `161.138.113.0/26` の住人は `.1〜.62`。
-
-| 項目 | 値 | 備考 |
-|:---|:---|:---|
-| R13 IP | `161.138.113.62` | R2r1 gate の固定値 |
-| R21 IP | `161.138.113.1` | 空いている住人 |
-| マスク | `255.255.255.192` (/26) | R13 と R21 で同じ |
-
-### Step 3: ⭐ C と D を隣接ブロックに配置
-
-**問題**: R1 で編集できる routes は 1 本のみ。でも C と D の **両方への戻り道** が必要。
-
-**解決策**: C と D を **隣り合った `/28` ブロック** に配置して、**`/27` でまとめて 1 本** で包む。
-
-#### `/27` で半分に切ると `/28` 2 つに分かれる
-
-`7.9.10.0/27` (.0〜.31) を更に `/28` (= 16 ずつ) で割ると 2 つに分かれます：
-
-<div class="subnet-ruler cols-2">
-  <div class="subnet-block target">
-    <span class="block-name">.0/28</span>
-    <span class="block-range">.0〜.15</span>
-    <span class="block-purpose">D の街</span>
-    <span class="block-host-range">D1=.11 (固定)</span>
-  </div>
-  <div class="subnet-block target-2">
-    <span class="block-name">.16/28</span>
-    <span class="block-range">.16〜.31</span>
-    <span class="block-purpose">C の街</span>
-    <span class="block-host-range">R22=.17, C1=.18</span>
-  </div>
-</div>
-
-→ **これら 2 つを合わせると `.0〜.31` の 32 個** = `/27` 1 つ分
-
-#### ⭐ 集約 (supernetting) の魔法
+#### 📍 今ここに注目
 
 ```mermaid
-graph TB
-    A["📜 routes 1 本: 7.9.10.0/27<br/>(.0〜.31 を全部カバー)"]
-    A --> B["📦 7.9.10.0/28<br/>(D の街)"]
-    A --> C["📦 7.9.10.16/28<br/>(C の街)"]
+flowchart LR
+    HC[💻 Host C]
+    R22_[R22<br/>R2 左上口]
+    HD[💻 Host D]
+    R23_[R23<br/>R2 左下口]
+    R2[📡 Router R2]
+    R21["⭐ R21<br/>R2 右口"]
+    R13["⭐ R13<br/>R1 左口"]
+    R1[📡 Router R1]
+    R12_[R12<br/>R1 上口]
+    I[🌍 Internet]
 
-    style A fill:#FFE082,stroke:#F57F17
-    style B fill:#C8E6C9
-    style C fill:#FFF59D
+    HC --- R22_
+    R22_ --- R2
+    HD --- R23_
+    R23_ --- R2
+    R2 --- R21
+    R21 ===|"📌 R2r1 gate=.62 が指す<br/>📌 Ir1 route=.0/26 が縛る"| R13
+    R13 --- R1
+    R1 --- R12_
+    R12_ --- I
+
+    classDef host fill:#E3F2FD,stroke:#1976D2
+    classDef router fill:#F8BBD0,stroke:#C2185B
+    classDef iface fill:#EEEEEE,stroke:#757575,color:#9E9E9E
+    classDef focus fill:#FFEB3B,stroke:#F57F17,stroke-width:4px,color:#000
+    classDef ext fill:#C8E6C9,stroke:#388E3C
+    class HC,HD host
+    class R1,R2 router
+    class R22_,R23_,R12_ iface
+    class R13,R21 focus
+    class I ext
 ```
 
-> 💡 **1 本の routes (`.0/27`)** で 2 つのサブネット (`.0/28` と `.16/28`) **両方** を包める。
-> これが **「ルート集約 (supernetting)」** の威力。R1 のルートスロットが 1 本でも何とかなる！
+→ 🟡 光ってる **R13** と **R21** が今の注目箱。
 
-| ブロック | 用途 | 範囲（住人） |
+#### 何を考えるか
+
+固定値の中で「**他の値を強制する**」ものを見つけ出します。Level 8 では：
+
+!!! info "🔥 逆算の出発点"
+    **R2r1 gate = `161.138.113.62`** (固定) → これは **R2 が R1 にパケットを投げる時の宛先** という意味。
+    つまり **R13 (R1 の R2 側口) の IP は必ず `161.138.113.62`**。
+
+    さらに **Ir1 route = `161.138.113.0/26`** (固定) → Internet が「**R1-R2 間の街は /26 サイズ**」と前提にしている。
+    だから R13 と R21 の **マスクは両方 /26** にしないと矛盾する。
+
+#### 📊 この時点で確定したこと
+
+| 箱 | 値 | 確定理由 |
 |:---|:---|:---|
-| `7.9.10.0/28` | D の街 | `.1〜.14` |
-| `7.9.10.16/28` | C の街 | `.17〜.30` |
-| **`7.9.10.0/27`** | **集約 → 1 本の routes** | `.1〜.30`（両方含む） |
+| ✅ R13 IP | `161.138.113.62` | R2r1 gate の固定値が指してる |
+| ✅ R13 Mask | `/26` | Ir1 route の /26 と一致させる |
+| ✅ R21 Mask | `/26` | 同上 (R13 と直結だから同じマスク) |
 
-#### 各 IF の割り当て
+---
 
-- **D 側**: D1 = `7.9.10.11` (固定)、R23 = `7.9.10.1`
-- **C 側**: R22 = `7.9.10.17`、C1 = `7.9.10.18`
+### Step 2: R21 IP を埋める (R13 と同じ街にする)
 
-### Step 4: R1 のルート
+#### 📍 今ここに注目
 
+```mermaid
+flowchart LR
+    HC[💻 Host C]
+    R22_[R22]
+    HD[💻 Host D]
+    R23_[R23]
+    R2[📡 Router R2]
+    R21["⭐ R21<br/>= ?"]
+    R13["✅ R13<br/>.62/26"]
+    R1[📡 Router R1]
+    R12_[R12]
+    I[🌍 Internet]
+
+    HC --- R22_
+    R22_ --- R2
+    HD --- R23_
+    R23_ --- R2
+    R2 --- R21
+    R21 ===|"R13 と同じ街<br/>(.0/26 住人)<br/>から選ぶ"| R13
+    R13 --- R1
+    R1 --- R12_
+    R12_ --- I
+
+    classDef host fill:#E3F2FD
+    classDef router fill:#F8BBD0
+    classDef iface fill:#EEEEEE,color:#9E9E9E
+    classDef done fill:#90CAF9,stroke:#1565C0
+    classDef focus fill:#FFEB3B,stroke:#F57F17,stroke-width:4px,color:#000
+    classDef ext fill:#C8E6C9
+    class HC,HD host
+    class R1,R2 router
+    class R22_,R23_,R12_ iface
+    class R13 done
+    class R21 focus
+    class I ext
 ```
-R1r2 route: 7.9.10.0/27 → gate: 161.138.113.1 (R21)
+
+→ 🟡 光ってる **R21** だけが今の対象。R13 はもう確定したので 🟦 青。
+
+#### 何を考えるか
+
+R13 の街 = `.0/26` (`.0〜.63`、住人 `.1〜.62`)。
+R21 はこの街の中で **`.62` 以外の空き住人** を選ぶ。
+
+→ **R21 IP = `161.138.113.1`** (任意、`.1` が一番楽)
+
+#### 📊 この時点で確定したこと (累積)
+
+| 箱 | 値 |
+|:---|:---|
+| ✅ R13 IP / Mask | `.62 / /26` |
+| ✅ R21 IP | `.1` |
+| ✅ R21 Mask | `/26` |
+
+---
+
+### Step 3: D 周辺を埋める (D の街を完成させる)
+
+#### 📍 今ここに注目
+
+```mermaid
+flowchart LR
+    HC[💻 Host C]
+    R22_[R22]
+    HD["💻 Host D<br/>📌 D1=.11/28"]
+    R23["⭐ R23<br/>= ?"]
+    R2[📡 Router R2]
+    R21[✅ R21<br/>.1/26]
+    R13[✅ R13<br/>.62/26]
+
+    HC --- R22_
+    R22_ --- R2
+    HD ===|"D の街は .0/28<br/>(.11 から逆算)"| R23
+    R23 --- R2
+    R2 --- R21
+    R21 -.- R13
+
+    classDef host fill:#E3F2FD
+    classDef router fill:#F8BBD0
+    classDef iface fill:#EEEEEE,color:#9E9E9E
+    classDef done fill:#90CAF9,stroke:#1565C0
+    classDef focus fill:#FFEB3B,stroke:#F57F17,stroke-width:4px,color:#000
+    classDef fixed fill:#FFCCBC,stroke:#D84315
+    class HC host
+    class HD fixed
+    class R1,R2 router
+    class R22_ iface
+    class R13,R21 done
+    class R23 focus
 ```
 
-このルート **1 本で C と D 両方** をカバー。
+→ 🟡 光ってる **R23 (R2 左下口)** が今の対象。
+→ 🟧 オレンジの **D1** は固定値ヒント。
+
+#### 何を考えるか
+
+D1 = `7.9.10.11/28` 固定 → D の街 = `7.9.10.0/28`（`.0〜.15`、住人 `.1〜.14`）。
+R23 はこの街の住人にする。
+
+→ **R23 IP = `7.9.10.1`** (空き住人の中で `.1` を選ぶ)
+→ **R23 Mask = `/28`** (D と同じマスク)
+→ **D の gate = `7.9.10.1`** (= R23、D の街の玄関)
+
+---
+
+### Step 4: ⭐ 山場! C を「D の隣」に置く (集約のための配置)
+
+#### 📍 今ここに注目
+
+```mermaid
+flowchart LR
+    HC["💻 Host C<br/>= ?"]
+    R22["⭐ R22<br/>= ?"]
+    HD[✅ D1<br/>.11/28]
+    R23[✅ R23<br/>7.9.10.1/28]
+    R2[📡 Router R2]
+    R21[✅ R21]
+    R1r2["⭐ R1r2 routes<br/>= ?"]
+    R1[📡 R1]
+
+    HC ===|"C の街を D の隣に!<br/>= .16/28 にする"| R22
+    R22 --- R2
+    HD --- R23
+    R23 --- R2
+    R2 --- R21
+    R21 -.- R1
+    R1 --- R1r2
+
+    classDef host fill:#E3F2FD
+    classDef router fill:#F8BBD0
+    classDef done fill:#90CAF9,stroke:#1565C0
+    classDef focus fill:#FFEB3B,stroke:#F57F17,stroke-width:4px,color:#000
+    class R1,R2 router
+    class HD,R23,R21 done
+    class HC,R22,R1r2 focus
+```
+
+→ 🟡 **C, R22, R1r2** が同時に光ってます (これらが連動して決まる)。
+
+#### 何を考えるか — このレベル最大の罠
+
+!!! danger "🚨 制約: R1 で編集できる routes は 1 本だけ"
+    R1 から見て、C も D も「R2 経由で行く街」。
+    でも R1 の routes は **1 本しか書けない** (他は固定で動かせない)。
+    → C と D を **1 本でカバーする方法** を考えるしかない！
+
+#### 解決: C を D の隣 (`.16/28`) に置く
+
+D の街 (`.0/28` = `.0〜.15`) のすぐ隣が `.16/28` (`.16〜.31`)。
+この **2 つを合わせると `.0〜.31` = `/27` 1 つ分**！
+
+```mermaid
+flowchart TB
+    A["🎯 R1 の routes 1 本: 7.9.10.0/27<br/>(.0〜.31 を全部カバー)"]
+    A --> B["📦 7.9.10.0/28 = D の街<br/>(.0〜.15)"]
+    A --> C["📦 7.9.10.16/28 = C の街<br/>(.16〜.31)"]
+
+    style A fill:#FFE082,stroke:#F57F17,stroke-width:3px
+    style B fill:#90CAF9
+    style C fill:#FFE0B2
+```
+
+#### 配置の決定
+
+→ **R22 IP = `7.9.10.17`** (C の街の住人)
+→ **R22 Mask = `/28`**
+→ **C1 IP = `7.9.10.18`** (R22 と同じ街)
+→ **C1 Mask = `/28`**
+→ **C の gate = `7.9.10.17`** (= R22)
+
+> 💡 **これがルート集約 (supernetting)**。Level 8 が「**C の街を自由に決められる**」を逆手に取った設計問題なんです！
+
+---
+
+### Step 5: routes を埋める (経路を書く)
+
+#### 📍 今ここに注目
+
+```mermaid
+flowchart LR
+    HC[✅ Host C]
+    R22[✅ R22<br/>.17/28]
+    HD[✅ Host D]
+    R23[✅ R23]
+    R2["📡 R2"]
+    R2r1["⭐ R2r1 routes<br/>= 0.0.0.0/0"]
+    R21[✅ R21]
+    R13[✅ R13]
+    R1["📡 R1"]
+    R1r2["⭐ R1r2 routes<br/>= 7.9.10.0/27"]
+    R12[✅ R12]
+    Ir1["⭐ Ir1 routes<br/>gate = R12 IP"]
+    I[🌍 Internet]
+
+    HC --- R22
+    R22 --- R2
+    HD --- R23
+    R23 --- R2
+    R2 --- R2r1
+    R2 --- R21
+    R21 -.- R13
+    R13 --- R1
+    R1 --- R1r2
+    R1 --- R12
+    R12 --- I
+    I --- Ir1
+
+    classDef host fill:#E3F2FD
+    classDef router fill:#F8BBD0
+    classDef done fill:#90CAF9
+    classDef focus fill:#FFEB3B,stroke:#F57F17,stroke-width:4px,color:#000
+    classDef ext fill:#C8E6C9
+    class HC,HD host
+    class R1,R2 router
+    class R22,R23,R21,R13,R12 done
+    class R2r1,R1r2,Ir1 focus
+    class I ext
+```
+
+→ 🟡 光ってる **R2r1, R1r2, Ir1** の 3 つの routes 欄を埋めていく。
+
+#### それぞれの役割と値
+
+| routes 欄 | 何を書く？ | 値 |
+|:---|:---|:---|
+| **R2r1 route** | R2 から外に出る道 (= Internet 行き default) | `0.0.0.0/0` |
+| **R1r2 route** | R1 から C と D 両方への戻り道 (集約!) | `7.9.10.0/27` ⭐ |
+| **R1r2 gate** | R1 から見た R2 の入口 | `161.138.113.1` (= R21) |
+| **Ir1 gate** | Internet が R1 に渡す相手 | `163.178.250.12` (= R12) |
+
+---
+
+### 🎉 全部埋まった完成図
+
+```mermaid
+flowchart LR
+    HC[💻 Host C<br/>.18/28]
+    R22[R22<br/>.17/28]
+    HD[💻 Host D<br/>.11/28]
+    R23[R23<br/>.1/28]
+    R2[📡 R2]
+    R21[R21<br/>.1/26]
+    R13[R13<br/>.62/26]
+    R1[📡 R1]
+    R12[R12<br/>.250.12/28]
+    I[🌍 Internet]
+
+    HC --- R22
+    R22 --- R2
+    HD --- R23
+    R23 --- R2
+    R2 --- R21
+    R21 -.- R13
+    R13 --- R1
+    R1 --- R12
+    R12 --- I
+
+    classDef done fill:#A5D6A7,stroke:#2E7D32,stroke-width:2px
+    class HC,R22,HD,R23,R2,R21,R13,R1,R12,I done
+```
+
+→ Check Again ボタン → 🎉 **全 Goal 緑になればクリア！**
 
 ---
 
