@@ -57,6 +57,29 @@
 }
 
 /* =====================================================
+ * サイドバー: スクロール保証
+ * navigation.tabs と長い目次の組み合わせで Level 6+ などが
+ * 画面下に追いやられて到達できない事故を防ぐ
+ * ===================================================== */
+
+.md-sidebar--primary .md-sidebar__scrollwrap {
+    overflow-y: auto !important;
+    max-height: calc(100vh - 4rem);
+}
+
+/* スクロールバーを常時うっすら見せて「スクロール可能」と気付かせる */
+.md-sidebar--primary .md-sidebar__scrollwrap::-webkit-scrollbar {
+    width: 8px;
+}
+.md-sidebar--primary .md-sidebar__scrollwrap::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.18);
+    border-radius: 4px;
+}
+[data-md-color-scheme="slate"] .md-sidebar--primary .md-sidebar__scrollwrap::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* =====================================================
  * サイドバー（左ナビ）: セクション見出しとクリック可能リンクを
  * 一目で区別できるようにする
  * ===================================================== */
@@ -642,6 +665,208 @@ a.md-nav__link:focus-visible {
 
 [data-md-color-scheme="slate"] .concept-card.concept-warning .concept-title {
     color: #ffcc80;
+}
+
+/* =====================================================
+ * サブネット定規 (subnet-ruler)
+ * /24 を /25, /26, /27, /28 で分割した時の各ブロックを
+ * 横方向の "目盛り" として視覚化する
+ * ===================================================== */
+
+.subnet-ruler {
+    display: grid;
+    margin: 1.5em 0;
+    border: 2px solid #455a64;
+    border-radius: 10px;
+    overflow: hidden;
+    font-family: 'JetBrains Mono', monospace;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.subnet-ruler.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.subnet-ruler.cols-4 { grid-template-columns: repeat(4, 1fr); }
+.subnet-ruler.cols-8 { grid-template-columns: repeat(8, 1fr); }
+
+.subnet-block {
+    padding: 0.9em 0.6em;
+    border-right: 1px solid rgba(0, 0, 0, 0.15);
+    background: #f5f5f5;
+    text-align: center;
+    line-height: 1.5;
+    position: relative;
+    font-size: 0.92em;
+}
+
+.subnet-block:last-child {
+    border-right: none;
+}
+
+/* ブロックの状態別配色 */
+.subnet-block.used {
+    /* すでに他のIFが占有している */
+    background: linear-gradient(135deg, #ffcdd2, #ef9a9a);
+    color: #b71c1c;
+}
+
+.subnet-block.target {
+    /* 今回設計対象のブロック */
+    background: linear-gradient(135deg, #c8e6c9, #81c784);
+    color: #1b5e20;
+    font-weight: 600;
+}
+
+.subnet-block.target-2 {
+    /* 設計対象 (副) */
+    background: linear-gradient(135deg, #fff9c4, #fff176);
+    color: #f57f17;
+    font-weight: 600;
+}
+
+.subnet-block.empty {
+    background: linear-gradient(135deg, #fafafa, #eeeeee);
+    color: #757575;
+}
+
+.subnet-block .block-name {
+    font-weight: 700;
+    font-size: 1.05em;
+    display: block;
+}
+
+.subnet-block .block-range {
+    font-size: 0.78em;
+    opacity: 0.85;
+    display: block;
+    margin-top: 0.2em;
+}
+
+.subnet-block .block-host-range {
+    font-size: 0.74em;
+    opacity: 0.78;
+    display: block;
+    margin-top: 0.15em;
+}
+
+.subnet-block .block-purpose {
+    font-size: 0.85em;
+    margin-top: 0.5em;
+    display: block;
+    font-weight: 600;
+}
+
+/* ダークモード */
+[data-md-color-scheme="slate"] .subnet-ruler {
+    border-color: #78909c;
+}
+[data-md-color-scheme="slate"] .subnet-block {
+    background: #37474f;
+    color: #eceff1;
+    border-right-color: rgba(255, 255, 255, 0.1);
+}
+[data-md-color-scheme="slate"] .subnet-block.used {
+    background: linear-gradient(135deg, #6d2c2c, #8e3a3a);
+    color: #ffcdd2;
+}
+[data-md-color-scheme="slate"] .subnet-block.target {
+    background: linear-gradient(135deg, #2e6b32, #43a047);
+    color: #e8f5e9;
+}
+[data-md-color-scheme="slate"] .subnet-block.target-2 {
+    background: linear-gradient(135deg, #6d5e1f, #9e8a35);
+    color: #fff9c4;
+}
+[data-md-color-scheme="slate"] .subnet-block.empty {
+    background: #455a64;
+    color: #b0bec5;
+}
+
+/* =====================================================
+ * 凡例 (subnet-legend)
+ * 定規の上下に置いて何色が何を意味するか説明
+ * ===================================================== */
+
+.subnet-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    margin: 0.8em 0;
+    font-size: 0.85em;
+}
+
+.subnet-legend .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+}
+
+.subnet-legend .legend-swatch {
+    display: inline-block;
+    width: 20px;
+    height: 14px;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
+}
+
+.legend-swatch.used    { background: linear-gradient(135deg, #ffcdd2, #ef9a9a); }
+.legend-swatch.target  { background: linear-gradient(135deg, #c8e6c9, #81c784); }
+.legend-swatch.target-2 { background: linear-gradient(135deg, #fff9c4, #fff176); }
+.legend-swatch.empty   { background: linear-gradient(135deg, #fafafa, #eeeeee); }
+
+[data-md-color-scheme="slate"] .legend-swatch.used    { background: linear-gradient(135deg, #6d2c2c, #8e3a3a); }
+[data-md-color-scheme="slate"] .legend-swatch.target  { background: linear-gradient(135deg, #2e6b32, #43a047); }
+[data-md-color-scheme="slate"] .legend-swatch.target-2 { background: linear-gradient(135deg, #6d5e1f, #9e8a35); }
+[data-md-color-scheme="slate"] .legend-swatch.empty   { background: #455a64; }
+
+/* =====================================================
+ * パケット旅マップ (packet-journey)
+ * ホスト→ルータ→ホスト の経路を順番に並べて見せる
+ * ===================================================== */
+
+.packet-journey {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6em;
+    align-items: center;
+    margin: 1.5em 0;
+    padding: 1em;
+    background: linear-gradient(135deg, #fff8e1, #fff3c4);
+    border: 2px dashed #ffb300;
+    border-radius: 10px;
+    justify-content: center;
+}
+
+.packet-journey .pj-node {
+    flex: 0 1 130px;
+    padding: 0.7em 0.6em;
+    background: #fff;
+    border: 2px solid #ffa000;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 0.88em;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.packet-journey .pj-node strong {
+    display: block;
+    color: #e65100;
+    font-size: 1.05em;
+}
+
+.packet-journey .pj-arrow {
+    font-size: 1.6em;
+    color: #ff8f00;
+    font-weight: bold;
+}
+
+[data-md-color-scheme="slate"] .packet-journey {
+    background: linear-gradient(135deg, #4e3a0e, #6d4c14);
+    border-color: #ffb300;
+}
+[data-md-color-scheme="slate"] .packet-journey .pj-node {
+    background: #2c2c2c;
+    color: #ffe0b2;
+    border-color: #ffb300;
 }
 
 /* ステップフロー（番号付きの横並びカード） */
