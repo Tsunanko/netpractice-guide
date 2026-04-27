@@ -1,0 +1,1162 @@
+/* =====================================================
+ * NetPractice Guide 共通スタイル
+ * 超初心者向け・小学生でも読める可読性重視
+ * ===================================================== */
+
+/* ----- コンテンツエリア: 広い画面では左右の余白を有効活用 -----
+ * Material デフォルト 1220px は FHD/QHD で両脇が空きすぎる。
+ * viewport の 92% を上限にしつつ、超ワイドでも 1760px で頭打ち。
+ */
+.md-grid {
+    max-width: min(1760px, 92vw);
+}
+
+/* ----- 基本: 本文フォントはビューポート幅で伸縮 -----
+ * clamp(min, preferred, max)
+ *   min       : 狭い画面でもこの大きさ (0.82rem ≒ 13px)
+ *   preferred : 1rem ベース + 画面幅 0.12vw 分だけ増加
+ *   max       : 広い画面でもこの大きさ (0.92rem ≒ 14.7px)
+ * これで狭い画面ははみ出さず、広い画面では読みやすい。
+ */
+.md-typeset {
+    font-size: clamp(0.82rem, 0.78rem + 0.22vw, 0.92rem);
+    line-height: 1.75;
+}
+.md-typeset h1 { font-size: clamp(1.6rem, 1.3rem + 0.9vw, 2.0rem); }
+.md-typeset h2 { font-size: clamp(1.25rem, 1.05rem + 0.6vw, 1.5rem); margin-top: 1.8em; }
+.md-typeset h3 { font-size: clamp(1.05rem, 0.95rem + 0.3vw, 1.2rem); }
+.md-typeset h4 { font-size: 1.05rem; }
+
+/* 見出しは日本語単位で改行（半角スペース前後で変な位置に折れないように）。
+ * keep-all で CJK は単語境界維持、最後の逃げ道として overflow-wrap で破断。 */
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4,
+.md-typeset h5,
+.md-typeset h6 {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    line-break: strict;
+}
+
+/* 表の中で <code>（IP アドレス・マスク等）が途中で折れないようにする。
+ * 例: `192.168.1.128/25` が「192.168.1.128/2」「5」に割れる事故を防ぐ。
+ * 表は狭くなりがちなので、横スクロールできるよう table-wrapper 側で overflow を確保。 */
+.md-typeset table code {
+    white-space: nowrap;
+}
+
+/* 日本語でも「(128 個)」「.1〜.126」のような短い単位は途中改行させない。
+ * keep-all は CJK を単語境界でまとめ、(128 個) が「128」「個」で割れない。 */
+.md-typeset table td,
+.md-typeset table th {
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+    line-break: strict;
+}
+
+/* =====================================================
+ * サイドバー: スクロール保証
+ * navigation.tabs と長い目次の組み合わせで Level 6+ などが
+ * 画面下に追いやられて到達できない事故を防ぐ
+ * ===================================================== */
+
+.md-sidebar--primary .md-sidebar__scrollwrap {
+    overflow-y: auto !important;
+    max-height: calc(100vh - 4rem);
+}
+
+/* スクロールバーを常時うっすら見せて「スクロール可能」と気付かせる */
+.md-sidebar--primary .md-sidebar__scrollwrap::-webkit-scrollbar {
+    width: 8px;
+}
+.md-sidebar--primary .md-sidebar__scrollwrap::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.18);
+    border-radius: 4px;
+}
+[data-md-color-scheme="slate"] .md-sidebar--primary .md-sidebar__scrollwrap::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* =====================================================
+ * サイドバー（左ナビ）: セクション見出しとクリック可能リンクを
+ * 一目で区別できるようにする
+ * ===================================================== */
+
+/* 全体フォントは本文より一回り小さく */
+.md-nav {
+    font-size: clamp(0.7rem, 0.68rem + 0.08vw, 0.76rem);
+}
+
+/* ---- ナビ全体タイトル「NetPractice Guide」 ---- */
+.md-nav__title {
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+/* ---- セクション見出し（= クリックできない親カテゴリ）----
+ * 例: 「はじめに」「第1部 ネットワークの基礎」「第2部 全10レベル攻略」
+ * nav.sections で出力される .md-nav__item--section の直下の link 要素のみ対象。
+ * 注意: label.md-nav__link はモバイル展開用で Material はデフォルトで hide 扱い
+ * にしているため、ここではスタイルしない（過去にこれをやってデスクトップで
+ * 「ホーム」が 2 重表示される不具合を起こした）。 */
+.md-nav__item--section > .md-nav__link {
+    cursor: default;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    margin-top: 0.9em;
+    margin-bottom: 0.2em;
+    padding-top: 0.35em;
+    padding-bottom: 0.35em;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    color: #3f51b5;
+    opacity: 1;
+}
+
+[data-md-color-scheme="slate"] .md-nav__item--section > .md-nav__link {
+    color: #90caf9;
+    border-top-color: rgba(255, 255, 255, 0.12);
+}
+
+/* セクション見出しは hover しても色を変えない */
+.md-nav__item--section > .md-nav__link:hover,
+.md-nav__item--section > .md-nav__link:focus {
+    color: #3f51b5;
+    background: transparent;
+}
+[data-md-color-scheme="slate"] .md-nav__item--section > .md-nav__link:hover,
+[data-md-color-scheme="slate"] .md-nav__item--section > .md-nav__link:focus {
+    color: #90caf9;
+}
+
+/* ---- クリック可能なページリンク ---- */
+/* a 要素に限定（label は Material のモバイル drawer 用、デスクトップでは非表示） */
+.md-nav__item:not(.md-nav__item--section) > a.md-nav__link {
+    display: block;
+    padding: 0.35em 0.6em;
+    margin: 0.1em 0;
+    border-left: 3px solid transparent;
+    border-radius: 0 4px 4px 0;
+    color: #2c3e50;
+    transition: background-color 0.15s ease,
+                border-left-color 0.15s ease,
+                color 0.15s ease,
+                padding-left 0.15s ease;
+}
+
+[data-md-color-scheme="slate"] .md-nav__item:not(.md-nav__item--section) > a.md-nav__link {
+    color: #cfd8dc;
+}
+
+.md-nav__item:not(.md-nav__item--section) > a.md-nav__link:hover {
+    background-color: rgba(63, 81, 181, 0.10);
+    border-left-color: #3f51b5;
+    color: #1a237e;
+    padding-left: 0.9em;
+}
+[data-md-color-scheme="slate"] .md-nav__item:not(.md-nav__item--section) > a.md-nav__link:hover {
+    background-color: rgba(144, 202, 249, 0.14);
+    border-left-color: #90caf9;
+    color: #ffffff;
+}
+
+/* アクティブ: a 要素のみ強調。label 側 (`.md-nav__link--active` も付く) には
+ * 背景を出さないようにする（label はデスクトップで本来見えない要素）。 */
+.md-nav__item:not(.md-nav__item--section) > a.md-nav__link--active {
+    background-color: rgba(63, 81, 181, 0.16);
+    border-left-color: #3f51b5;
+    color: #1a237e !important;
+    font-weight: 600;
+}
+[data-md-color-scheme="slate"] .md-nav__item:not(.md-nav__item--section) > a.md-nav__link--active {
+    background-color: rgba(144, 202, 249, 0.20);
+    border-left-color: #90caf9;
+    color: #ffffff !important;
+}
+
+/* label.md-nav__link はモバイル時の展開トグル用 要素。
+ * Material の default は適切に hide しているので、独自スタイルを付けて
+ * レイアウトを壊さないよう背景・枠だけ明示的に無効化しておく。 */
+label.md-nav__link {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+}
+
+/* キーボード操作時のフォーカス可視化 */
+a.md-nav__link:focus-visible {
+    outline: 2px solid #3f51b5;
+    outline-offset: 1px;
+}
+[data-md-color-scheme="slate"] a.md-nav__link:focus-visible {
+    outline-color: #90caf9;
+}
+
+/* 長い英単語・URL などでコンテンツがはみ出すのを防ぐ */
+.md-typeset p,
+.md-typeset li,
+.md-typeset td,
+.md-typeset th {
+    overflow-wrap: anywhere;
+}
+
+/* テーブルが狭い画面ではみ出す場合は横スクロール */
+.md-typeset table:not([class]) {
+    display: table;
+    max-width: 100%;
+}
+.md-typeset__table {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+/* コードブロックは wrap せず横スクロール（等幅レイアウト維持） */
+.md-typeset pre {
+    overflow-x: auto;
+}
+
+/* 段落の間をしっかり空けて読みやすく */
+.md-typeset p,
+.md-typeset ul,
+.md-typeset ol,
+.md-typeset dl {
+    margin-bottom: 1em;
+}
+
+/* 画像とGIFを全幅で大きく表示 */
+.md-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.md-content img[src$=".gif"],
+.md-content img[src$=".png"] {
+    display: block;
+    margin: 1em auto;
+    max-width: 100%;
+}
+
+/* 画像を a タグでラップして「クリックで原寸を新タブ表示」できる
+ * リンクを付けた画像に付与するカーソルと hover 効果 */
+.md-content a:has(> img) {
+    position: relative;
+    display: inline-block;
+}
+
+.md-content a img {
+    cursor: zoom-in;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.md-content a img:hover {
+    transform: scale(1.01);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+}
+
+/* 画像リンクだけにオーバーレイで「クリックで拡大」を表示。
+ * position: absolute なので周囲のレイアウトに影響せず
+ * テキストリンク（目次表など）には出ない。 */
+.md-content a:has(> img):hover::after {
+    content: "🔍 クリックで拡大";
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: rgba(25, 118, 210, 0.92);
+    color: #ffffff;
+    font-size: 0.8em;
+    font-weight: 600;
+    pointer-events: none;
+    letter-spacing: 0.02em;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+[data-md-color-scheme="slate"] .md-content a:has(> img):hover::after {
+    background: rgba(33, 150, 243, 0.92);
+}
+
+/* =====================================================
+ * Mermaid 図: ライトモード・ダークモード両方で読みやすく
+ * ===================================================== */
+
+/* Mermaid コンテナに余白。SVG は親幅いっぱい使い、極端に小さくならない
+ * 最低幅を確保する。画面は広いので大きめの最小幅で良い。 */
+.mermaid {
+    margin: 1.5em auto;
+    text-align: center;
+}
+/* SVG は親幅いっぱい使う。Mermaid は内部 viewBox を持つので
+ * width: 100% で自然にスケールアップ（小さい図も画面幅まで広がる） */
+.mermaid svg {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Mermaid ノード全般の枠を太く */
+.mermaid .node rect,
+.mermaid .node polygon,
+.mermaid .node circle,
+.mermaid .node ellipse,
+.mermaid .node path {
+    stroke-width: 2.5px !important;
+}
+
+/* Mermaid ノード内テキストを大きく。
+ * 図中の文字が小さくて読めないという声を受けて 20 → 26px に拡大。 */
+.mermaid .nodeLabel,
+.mermaid .nodeLabel p,
+.mermaid .label {
+    font-size: 26px !important;
+    font-weight: 600;
+    line-height: 1.45 !important;
+}
+
+/* edgeLabel（矢印上のテキスト）もノードと揃える */
+.mermaid .edgeLabel,
+.mermaid .edgeLabel p,
+.mermaid .edgeLabel span {
+    font-size: 22px !important;
+    font-weight: 600;
+}
+
+/* Subgraph（枠囲み）のラベルも大きく */
+.mermaid .cluster-label,
+.mermaid .cluster text {
+    font-size: 24px !important;
+    font-weight: 700 !important;
+}
+
+/* =====================================================
+ * ダークモード（[data-md-color-scheme="slate"]）
+ * ===================================================== */
+
+/* ノードの塗りをダークモードでも明るいパステル維持
+ * + Material Mermaid が自動で暗くしてしまう場合の救済 */
+[data-md-color-scheme="slate"] .mermaid .node rect,
+[data-md-color-scheme="slate"] .mermaid .node polygon,
+[data-md-color-scheme="slate"] .mermaid .node circle,
+[data-md-color-scheme="slate"] .mermaid .node ellipse,
+[data-md-color-scheme="slate"] .mermaid .node path {
+    filter: brightness(1.15) saturate(1.2);
+}
+
+/* ライトモードでも一貫させる（Material の color 継承で薄くなる事故を防ぐ第一防衛線） */
+.md-typeset .mermaid .nodeLabel,
+.md-typeset .mermaid .nodeLabel *,
+.md-typeset .mermaid .label,
+.md-typeset .mermaid .label *,
+.md-typeset .mermaid foreignObject,
+.md-typeset .mermaid foreignObject *,
+.md-typeset .mermaid foreignObject p,
+.md-typeset .mermaid foreignObject span,
+.md-typeset .mermaid foreignObject div {
+    color: #111111 !important;
+    fill: #111111 !important;
+}
+
+/* ラベル文字を必ず濃色に（パステル背景に黒文字）
+ * Mermaid 11.x は foreignObject 内に複数階層で span/div/p を生成する。
+ * Material のダーク CSS が `.md-typeset p { color: var(--md-typeset-color) }`
+ * のような形で specificity を持って当たるので、`.md-typeset` を含めて勝つ。 */
+[data-md-color-scheme="slate"] .md-typeset .mermaid .nodeLabel,
+[data-md-color-scheme="slate"] .md-typeset .mermaid .nodeLabel *,
+[data-md-color-scheme="slate"] .md-typeset .mermaid .label,
+[data-md-color-scheme="slate"] .md-typeset .mermaid .label *,
+[data-md-color-scheme="slate"] .md-typeset .mermaid foreignObject,
+[data-md-color-scheme="slate"] .md-typeset .mermaid foreignObject *,
+[data-md-color-scheme="slate"] .md-typeset .mermaid foreignObject p,
+[data-md-color-scheme="slate"] .md-typeset .mermaid foreignObject span,
+[data-md-color-scheme="slate"] .md-typeset .mermaid foreignObject div {
+    color: #1a1a1a !important;
+    fill: #1a1a1a !important;
+}
+
+/* エッジ（矢印）のラベル背景をダーク対応 */
+[data-md-color-scheme="slate"] .mermaid .edgeLabel,
+[data-md-color-scheme="slate"] .mermaid .edgeLabel p,
+[data-md-color-scheme="slate"] .mermaid .edgeLabel span {
+    color: #1a1a1a !important;
+    fill: #1a1a1a !important;
+    background-color: #eceff1 !important;
+}
+
+[data-md-color-scheme="slate"] .mermaid .edgeLabel rect,
+[data-md-color-scheme="slate"] .mermaid .edgeLabel .labelBkg {
+    fill: #eceff1 !important;
+    background-color: #eceff1 !important;
+    opacity: 0.95 !important;
+}
+
+/* 矢印の線色 */
+[data-md-color-scheme="slate"] .mermaid .flowchart-link,
+[data-md-color-scheme="slate"] .mermaid path.path,
+[data-md-color-scheme="slate"] .mermaid .edgePath .path {
+    stroke: #b0bec5 !important;
+    stroke-width: 2px !important;
+}
+
+[data-md-color-scheme="slate"] .mermaid marker path,
+[data-md-color-scheme="slate"] .mermaid .arrowheadPath {
+    fill: #b0bec5 !important;
+    stroke: #b0bec5 !important;
+}
+
+/* Subgraph（枠囲み）のラベル色 */
+[data-md-color-scheme="slate"] .mermaid .cluster rect {
+    fill: rgba(255, 255, 255, 0.04) !important;
+    stroke: #546e7a !important;
+}
+
+[data-md-color-scheme="slate"] .mermaid .cluster-label,
+[data-md-color-scheme="slate"] .mermaid .cluster text {
+    fill: #eceff1 !important;
+    color: #eceff1 !important;
+}
+
+/* =====================================================
+ * 前へ/次へナビゲーションボタン（目立たせる）
+ * ===================================================== */
+
+.md-footer__inner.md-grid {
+    padding: 1em;
+}
+
+.md-footer__link {
+    padding: 1em 1.2em;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+    background-color: rgba(63, 81, 181, 0.08);  /* indigo 薄 */
+}
+
+.md-footer__link:hover {
+    background-color: rgba(63, 81, 181, 0.18);
+    border-color: rgba(63, 81, 181, 0.5);
+    transform: translateY(-1px);
+}
+
+.md-footer__link--next {
+    background-color: rgba(63, 81, 181, 0.12);
+    border-color: rgba(63, 81, 181, 0.3);
+}
+
+.md-footer__direction {
+    font-size: 0.85em;
+    font-weight: bold;
+    opacity: 1 !important;
+}
+
+.md-footer__title {
+    font-weight: bold;
+}
+
+[data-md-color-scheme="slate"] .md-footer__link {
+    background-color: rgba(159, 168, 218, 0.12);
+}
+
+[data-md-color-scheme="slate"] .md-footer__link:hover {
+    background-color: rgba(159, 168, 218, 0.22);
+    border-color: rgba(159, 168, 218, 0.6);
+}
+
+[data-md-color-scheme="slate"] .md-footer__link--next {
+    background-color: rgba(159, 168, 218, 0.18);
+    border-color: rgba(159, 168, 218, 0.4);
+}
+
+/* =====================================================
+ * ダークモードでの他の読みやすさ改善
+ * ===================================================== */
+
+/* インラインコード */
+[data-md-color-scheme="slate"] code {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #ffcc80;
+}
+
+/* ==highlight== */
+[data-md-color-scheme="slate"] mark {
+    background-color: #ffe082;
+    color: #1a1a1a;
+    padding: 0 0.2em;
+    border-radius: 3px;
+}
+
+/* テーブル */
+[data-md-color-scheme="slate"] .md-typeset table:not([class]) tbody tr:nth-child(odd) {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+[data-md-color-scheme="slate"] .md-typeset table:not([class]) th {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #eceff1;
+}
+
+[data-md-color-scheme="slate"] .md-typeset blockquote {
+    color: #cfd8dc;
+    border-left-color: #546e7a;
+}
+
+/* Admonition ボックス */
+[data-md-color-scheme="slate"] .md-typeset .admonition-title,
+[data-md-color-scheme="slate"] .md-typeset summary {
+    color: #eceff1;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .admonition,
+[data-md-color-scheme="slate"] .md-typeset details {
+    background-color: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* リンク */
+[data-md-color-scheme="slate"] .md-typeset a {
+    color: #90caf9;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: rgba(144, 202, 249, 0.4);
+}
+
+[data-md-color-scheme="slate"] .md-typeset a:hover {
+    color: #ffcc80;
+    text-decoration-color: #ffcc80;
+}
+
+[data-md-color-scheme="slate"] .md-typeset h2 {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+/* コードブロック */
+[data-md-color-scheme="slate"] .highlight .cp,
+[data-md-color-scheme="slate"] .highlight .c1,
+[data-md-color-scheme="slate"] .highlight .cm,
+[data-md-color-scheme="slate"] .highlight .c {
+    color: #90a4ae !important;
+}
+
+[data-md-color-scheme="slate"] .md-typeset kbd {
+    background-color: #37474f;
+    color: #eceff1;
+    border-color: #546e7a;
+    box-shadow: 0 1px 0 #263238;
+}
+
+/* =====================================================
+ * カスタム UI コンポーネント（HTML/CSS で図示したい時用）
+ * ===================================================== */
+
+/* ビット列を 8 マスで並べるグリッド */
+.bit-grid {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(2.2em, 1fr));
+    gap: 4px;
+    margin: 1em 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: bold;
+}
+
+.bit-grid .bit {
+    background: #e3f2fd;
+    color: #0d47a1;
+    border: 2px solid #90caf9;
+    border-radius: 6px;
+    padding: 0.6em 0.2em;
+    text-align: center;
+    font-size: 1.1em;
+}
+
+.bit-grid .bit.bit-1 {
+    background: #ffca28;
+    color: #1a1a1a;
+    border-color: #f9a825;
+}
+
+[data-md-color-scheme="slate"] .bit-grid .bit {
+    background: #455a64;
+    color: #eceff1;
+    border-color: #78909c;
+}
+
+[data-md-color-scheme="slate"] .bit-grid .bit.bit-1 {
+    background: #ffc107;
+    color: #1a1a1a;
+    border-color: #ffa000;
+}
+
+/* 4 オクテット並び（IP アドレスを大きく表示） */
+.octet-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    margin: 1.5em 0;
+    flex-wrap: wrap;
+}
+
+.octet-row .octet {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    border: 2px solid #42a5f5;
+    border-radius: 10px;
+    padding: 0.8em 1.2em;
+    min-width: 4em;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #0d47a1;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.octet-row .octet-dot {
+    font-size: 2em;
+    color: #546e7a;
+    font-weight: bold;
+}
+
+.octet-row .octet.octet-highlight {
+    background: linear-gradient(135deg, #fff9c4, #fff59d);
+    border-color: #fbc02d;
+    color: #795548;
+}
+
+[data-md-color-scheme="slate"] .octet-row .octet {
+    background: linear-gradient(135deg, #37474f, #455a64);
+    color: #e3f2fd;
+    border-color: #78909c;
+}
+
+[data-md-color-scheme="slate"] .octet-row .octet.octet-highlight {
+    background: linear-gradient(135deg, #5d4037, #6d4c41);
+    color: #fff9c4;
+    border-color: #ffa726;
+}
+
+[data-md-color-scheme="slate"] .octet-row .octet-dot {
+    color: #b0bec5;
+}
+
+/* 概念カード（「なぜ？」を視覚化） */
+.concept-card {
+    display: block;
+    margin: 1.5em 0;
+    padding: 1.2em 1.4em;
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    border-left: 6px solid #4caf50;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.concept-card .concept-title {
+    font-weight: bold;
+    font-size: 1.15em;
+    color: #1b5e20;
+    margin-bottom: 0.4em;
+}
+
+.concept-card.concept-warning {
+    background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+    border-left-color: #ff9800;
+}
+
+.concept-card.concept-warning .concept-title {
+    color: #e65100;
+}
+
+[data-md-color-scheme="slate"] .concept-card {
+    background: linear-gradient(135deg, #1b5e20, #2e7d32);
+    color: #e8f5e9;
+}
+
+[data-md-color-scheme="slate"] .concept-card .concept-title {
+    color: #c8e6c9;
+}
+
+[data-md-color-scheme="slate"] .concept-card.concept-warning {
+    background: linear-gradient(135deg, #bf360c, #d84315);
+    color: #ffe0b2;
+}
+
+[data-md-color-scheme="slate"] .concept-card.concept-warning .concept-title {
+    color: #ffcc80;
+}
+
+/* =====================================================
+ * サブネット定規 (subnet-ruler)
+ * /24 を /25, /26, /27, /28 で分割した時の各ブロックを
+ * 横方向の "目盛り" として視覚化する
+ * ===================================================== */
+
+.subnet-ruler {
+    display: grid;
+    margin: 1.5em 0;
+    border: 2px solid #455a64;
+    border-radius: 10px;
+    overflow: hidden;
+    font-family: 'JetBrains Mono', monospace;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.subnet-ruler.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.subnet-ruler.cols-4 { grid-template-columns: repeat(4, 1fr); }
+.subnet-ruler.cols-8 { grid-template-columns: repeat(8, 1fr); }
+
+.subnet-block {
+    padding: 0.9em 0.6em;
+    border-right: 1px solid rgba(0, 0, 0, 0.15);
+    background: #f5f5f5;
+    text-align: center;
+    line-height: 1.5;
+    position: relative;
+    font-size: 0.92em;
+}
+
+.subnet-block:last-child {
+    border-right: none;
+}
+
+/* ブロックの状態別配色 */
+.subnet-block.used {
+    /* すでに他のIFが占有している */
+    background: linear-gradient(135deg, #ffcdd2, #ef9a9a);
+    color: #b71c1c;
+}
+
+.subnet-block.target {
+    /* 今回設計対象のブロック */
+    background: linear-gradient(135deg, #c8e6c9, #81c784);
+    color: #1b5e20;
+    font-weight: 600;
+}
+
+.subnet-block.target-2 {
+    /* 設計対象 (副) */
+    background: linear-gradient(135deg, #fff9c4, #fff176);
+    color: #f57f17;
+    font-weight: 600;
+}
+
+.subnet-block.empty {
+    background: linear-gradient(135deg, #fafafa, #eeeeee);
+    color: #757575;
+}
+
+.subnet-block .block-name {
+    font-weight: 700;
+    font-size: 1.05em;
+    display: block;
+}
+
+.subnet-block .block-range {
+    font-size: 0.78em;
+    opacity: 0.85;
+    display: block;
+    margin-top: 0.2em;
+}
+
+.subnet-block .block-host-range {
+    font-size: 0.74em;
+    opacity: 0.78;
+    display: block;
+    margin-top: 0.15em;
+}
+
+.subnet-block .block-purpose {
+    font-size: 0.85em;
+    margin-top: 0.5em;
+    display: block;
+    font-weight: 600;
+}
+
+/* ダークモード */
+[data-md-color-scheme="slate"] .subnet-ruler {
+    border-color: #78909c;
+}
+[data-md-color-scheme="slate"] .subnet-block {
+    background: #37474f;
+    color: #eceff1;
+    border-right-color: rgba(255, 255, 255, 0.1);
+}
+[data-md-color-scheme="slate"] .subnet-block.used {
+    background: linear-gradient(135deg, #6d2c2c, #8e3a3a);
+    color: #ffcdd2;
+}
+[data-md-color-scheme="slate"] .subnet-block.target {
+    background: linear-gradient(135deg, #2e6b32, #43a047);
+    color: #e8f5e9;
+}
+[data-md-color-scheme="slate"] .subnet-block.target-2 {
+    background: linear-gradient(135deg, #6d5e1f, #9e8a35);
+    color: #fff9c4;
+}
+[data-md-color-scheme="slate"] .subnet-block.empty {
+    background: #455a64;
+    color: #b0bec5;
+}
+
+/* =====================================================
+ * 凡例 (subnet-legend)
+ * 定規の上下に置いて何色が何を意味するか説明
+ * ===================================================== */
+
+.subnet-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    margin: 0.8em 0;
+    font-size: 0.85em;
+}
+
+.subnet-legend .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+}
+
+.subnet-legend .legend-swatch {
+    display: inline-block;
+    width: 20px;
+    height: 14px;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
+}
+
+.legend-swatch.used    { background: linear-gradient(135deg, #ffcdd2, #ef9a9a); }
+.legend-swatch.target  { background: linear-gradient(135deg, #c8e6c9, #81c784); }
+.legend-swatch.target-2 { background: linear-gradient(135deg, #fff9c4, #fff176); }
+.legend-swatch.empty   { background: linear-gradient(135deg, #fafafa, #eeeeee); }
+
+[data-md-color-scheme="slate"] .legend-swatch.used    { background: linear-gradient(135deg, #6d2c2c, #8e3a3a); }
+[data-md-color-scheme="slate"] .legend-swatch.target  { background: linear-gradient(135deg, #2e6b32, #43a047); }
+[data-md-color-scheme="slate"] .legend-swatch.target-2 { background: linear-gradient(135deg, #6d5e1f, #9e8a35); }
+[data-md-color-scheme="slate"] .legend-swatch.empty   { background: #455a64; }
+
+/* =====================================================
+ * パケット旅マップ (packet-journey)
+ * ホスト→ルータ→ホスト の経路を順番に並べて見せる
+ * ===================================================== */
+
+.packet-journey {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6em;
+    align-items: center;
+    margin: 1.5em 0;
+    padding: 1em;
+    background: linear-gradient(135deg, #fff8e1, #fff3c4);
+    border: 2px dashed #ffb300;
+    border-radius: 10px;
+    justify-content: center;
+}
+
+.packet-journey .pj-node {
+    flex: 0 1 130px;
+    padding: 0.7em 0.6em;
+    background: #fff;
+    border: 2px solid #ffa000;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 0.88em;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.packet-journey .pj-node strong {
+    display: block;
+    color: #e65100;
+    font-size: 1.05em;
+}
+
+.packet-journey .pj-arrow {
+    font-size: 1.6em;
+    color: #ff8f00;
+    font-weight: bold;
+}
+
+[data-md-color-scheme="slate"] .packet-journey {
+    background: linear-gradient(135deg, #4e3a0e, #6d4c14);
+    border-color: #ffb300;
+}
+[data-md-color-scheme="slate"] .packet-journey .pj-node {
+    background: #2c2c2c;
+    color: #ffe0b2;
+    border-color: #ffb300;
+}
+
+/* ステップフロー（番号付きの横並びカード） */
+.step-flow {
+    display: flex;
+    gap: 10px;
+    margin: 1.5em 0;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: center;
+}
+
+.step-flow .step {
+    flex: 1 1 180px;
+    min-width: 180px;
+    padding: 1em;
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    border: 2px solid #64b5f6;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+    font-size: 0.95em;
+}
+
+.step-flow .step .step-num {
+    display: inline-block;
+    width: 2em;
+    height: 2em;
+    line-height: 2em;
+    background: #1976d2;
+    color: #fff;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+[data-md-color-scheme="slate"] .step-flow .step {
+    background: linear-gradient(135deg, #37474f, #455a64);
+    color: #eceff1;
+    border-color: #78909c;
+}
+
+[data-md-color-scheme="slate"] .step-flow .step .step-num {
+    background: #64b5f6;
+    color: #0d47a1;
+}
+/* =====================================================
+ * マイメモ機能 (user-notes.js)
+ * 右下 FAB + 右からスライドする drawer で、ページごとのメモを localStorage 保存
+ * カラーは JS 側から --un-primary / --un-primary-dark を注入
+ * ===================================================== */
+
+#un-fab {
+    position: fixed;
+    right: 1.2rem;
+    bottom: 1.2rem;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    background: var(--un-primary, #5e35b1);
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    z-index: 100;
+    transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+#un-fab:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    background: var(--un-primary-dark, #4527a0);
+}
+#un-fab:focus {
+    outline: 3px solid rgba(255, 255, 255, 0.6);
+    outline-offset: 2px;
+}
+.un-fab-icon {
+    font-size: 24px;
+    line-height: 1;
+}
+.un-fab-dot {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #4caf50;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+#un-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 199;
+    opacity: 0;
+    transition: opacity 0.24s ease-out;
+}
+#un-backdrop.un-open {
+    opacity: 1;
+}
+
+#un-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 420px;
+    max-width: 100vw;
+    height: 100vh;
+    background: var(--md-default-bg-color, #fff);
+    color: var(--md-default-fg-color, #111);
+    box-shadow: -4px 0 14px rgba(0, 0, 0, 0.2);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.24s ease-out;
+    font-size: 0.9rem;
+}
+#un-drawer.un-open {
+    transform: translateX(0);
+}
+
+.un-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1rem 1rem 0.8rem;
+    border-bottom: 1px solid var(--md-default-fg-color--lightest, rgba(0, 0, 0, 0.1));
+    gap: 0.6rem;
+}
+.un-head-title {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    min-width: 0;
+    flex: 1;
+}
+.un-head-icon {
+    font-size: 1.6rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+.un-head-text {
+    min-width: 0;
+    flex: 1;
+}
+.un-head-label {
+    font-size: 0.72rem;
+    opacity: 0.6;
+    line-height: 1.2;
+}
+.un-head-page {
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.3;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+}
+#un-close {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0.65;
+    padding: 0.2rem 0.5rem;
+    flex-shrink: 0;
+    line-height: 1;
+}
+#un-close:hover {
+    opacity: 1;
+}
+
+.un-hint {
+    padding: 0.6rem 1rem;
+    font-size: 0.74rem;
+    line-height: 1.6;
+    opacity: 0.8;
+    background: var(--md-code-bg-color, #f5f5f5);
+    border-bottom: 1px solid var(--md-default-fg-color--lightest, rgba(0, 0, 0, 0.08));
+}
+[data-md-color-scheme="slate"] .un-hint {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+#un-text {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    padding: 0.9rem 1rem;
+    border: none;
+    outline: none;
+    resize: none;
+    font-family: inherit;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: inherit;
+    background: transparent;
+    tab-size: 2;
+}
+#un-text::placeholder {
+    opacity: 0.4;
+}
+
+.un-foot {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+    padding: 0.7rem;
+    border-top: 1px solid var(--md-default-fg-color--lightest, rgba(0, 0, 0, 0.1));
+    background: var(--md-default-bg-color, #fff);
+}
+.un-foot button {
+    padding: 0.5rem 0.6rem;
+    background: transparent;
+    color: inherit;
+    border: 1px solid var(--md-default-fg-color--lightest, rgba(0, 0, 0, 0.15));
+    border-radius: 4px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s;
+}
+.un-foot button:hover {
+    background: var(--md-default-fg-color--lightest, rgba(0, 0, 0, 0.06));
+    border-color: var(--md-default-fg-color--lighter, rgba(0, 0, 0, 0.3));
+}
+.un-foot .un-feedback {
+    grid-column: 1 / -1;
+    background: var(--un-primary, #5e35b1);
+    color: #fff;
+    border-color: var(--un-primary, #5e35b1);
+    font-weight: 600;
+}
+.un-foot .un-feedback:hover {
+    background: var(--un-primary-dark, #4527a0);
+    border-color: var(--un-primary-dark, #4527a0);
+}
+
+[data-md-color-scheme="slate"] .un-foot button {
+    background: rgba(255, 255, 255, 0.04);
+}
+[data-md-color-scheme="slate"] .un-foot button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 480px) {
+    #un-drawer {
+        width: 100vw;
+    }
+    #un-fab {
+        right: 0.9rem;
+        bottom: 0.9rem;
+    }
+}
+
+/* 印刷時は表示しない */
+@media print {
+    #un-fab,
+    #un-drawer,
+    #un-backdrop {
+        display: none !important;
+    }
+}

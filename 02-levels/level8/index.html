@@ -1,0 +1,4404 @@
+
+<!doctype html>
+<html lang="ja" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="42 Tokyo NetPractice プロジェクトの解説サイト（超初心者向け）">
+      
+      
+      
+        <link rel="canonical" href="https://tsunanko.github.io/netpractice-guide/02-levels/level8/">
+      
+      
+        <link rel="prev" href="../level7/">
+      
+      
+        <link rel="next" href="../level9/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Level 8 — 2つのLAN + Internet - NetPractice Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans JP";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#level-8-2-lan-internet" class="md-skip">
+          コンテンツにスキップ
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="ヘッダー">
+    <a href="../.." title="NetPractice Guide" class="md-header__button md-logo" aria-label="NetPractice Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 2c-1.11 0-2 .89-2 2v3c0 1.11.89 2 2 2h1v2H2v2h4v2H5c-1.11 0-2 .89-2 2v3c0 1.11.89 2 2 2h4c1.11 0 2-.89 2-2v-3c0-1.11-.89-2-2-2H8v-2h8v2h-1c-1.11 0-2 .89-2 2v3c0 1.11.89 2 2 2h4c1.11 0 2-.89 2-2v-3c0-1.11-.89-2-2-2h-1v-2h4v-2h-9V9h1c1.11 0 2-.89 2-2V4c0-1.11-.89-2-2-2zm0 2h4v3h-4zM5 17h4v3H5zm10 0h4v3h-4z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            NetPractice Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Level 8 — 2つのLAN + Internet
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="ダークモードへ"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="ダークモードへ" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="ライトモードへ"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="ライトモードへ" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="検索" placeholder="検索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="検索">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="共有" aria-label="共有" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="クリア" aria-label="クリア" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            検索を初期化
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="タブ" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  ホーム
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../00-start-here/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  はじめに
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../01-basics/ip-address/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  第1部 ネットワークの基礎
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../level1/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  第2部 全10レベル攻略
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../03-learnings/why-this-exercise/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  第3部 抽象化された学び
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../04-defense/qa/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  第4部 評価対策
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../glossary/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  📚 用語集
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="ナビゲーション" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="NetPractice Guide" class="md-nav__button md-logo" aria-label="NetPractice Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 2c-1.11 0-2 .89-2 2v3c0 1.11.89 2 2 2h1v2H2v2h4v2H5c-1.11 0-2 .89-2 2v3c0 1.11.89 2 2 2h4c1.11 0 2-.89 2-2v-3c0-1.11-.89-2-2-2H8v-2h8v2h-1c-1.11 0-2 .89-2 2v3c0 1.11.89 2 2 2h4c1.11 0 2-.89 2-2v-3c0-1.11-.89-2-2-2h-1v-2h4v-2h-9V9h1c1.11 0 2-.89 2-2V4c0-1.11-.89-2-2-2zm0 2h4v3h-4zM5 17h4v3H5zm10 0h4v3h-4z"/></svg>
+
+    </a>
+    NetPractice Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ホーム
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    はじめに
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    はじめに
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../00-start-here/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    00. このガイドの使い方
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../00-rules/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎓 数字の決め方 (4 黄金ルール)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../00-how-to-solve/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🧭 共通の解き方 (どこから手を付けるか)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1部 ネットワークの基礎
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    第1部 ネットワークの基礎
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-basics/ip-address/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01. IP アドレスって何？
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-basics/subnet-mask/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02. サブネットマスクって何？
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-basics/cidr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03. CIDR 早見表と計算
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-basics/switch-router/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04. スイッチとルータの違い
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-basics/gateway/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    05. ゲートウェイって何？
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-basics/routing-table/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    06. ルーティングテーブル
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-basics/bidirectional/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    07. 双方向到達性（最重要）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2部 全10レベル攻略
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    第2部 全10レベル攻略
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../level1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Level 1 — 直結リンク
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../level2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Level 2 — 不正マスクの修正
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../level3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Level 3 — スイッチで3台接続
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../level4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Level 4 — ルータ登場
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../level5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Level 5 — ルーティング初登場
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../level6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Level 6 — Internet 越しの通信
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../level7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Level 7 — サブネット分割設計
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Level 8 — 2つのLAN + Internet
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Level 8 — 2つのLAN + Internet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📷 実際のスクリーンショットで解く（具体例）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📷 実際のスクリーンショットで解く（具体例）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 実例の固定値 (薄ピンク背景の値)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🛠️ 直す順 (画面の白い欄を順に埋める)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🛠️ 直す順 (画面の白い欄を順に埋める)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-interface-r13-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✏️ Step 1 — interface R13 の IP を直す
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-interface-r21-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✏️ Step 2 — interface R21 の IP を直す
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-interface-r23-d-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✏️ Step 3 — interface R23 と D の gate を直す
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-c-d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✏️ Step 4 — ⭐ C を D の隣に引っ越す（最重要）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-routes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✏️ Step 5 — routes を直す
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 直す前 vs 直した後 (このユーザーの場合)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📖 このページは何？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📷 問題画面
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🗺️ トポロジー
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📺 画面の編集できる箇所
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔒 固定値（抜粋）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-by-step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧭 解く順 — 「穴埋め」の進め方（絵で順番に追跡）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧭 解く順 — 「穴埋め」の進め方（絵で順番に追跡）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎨 図の色の意味
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟫 Phase 0 — 開始時: 固定値だけがある状態
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-1-r13-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟢 Step 1 — R13 IP を埋める
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-r13-r21-mask" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟢 Step 2 — R13 と R21 の Mask を埋める
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-r21-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟢 Step 3 — R21 IP を埋める
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-d-r23-d-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟢 Step 4 — D 周辺 (R23 と D の gate) を埋める
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-c-d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟢 Step 5 — ⭐ 山場: C を「D の隣」に置く
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-6-r2r1-route-internet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟢 Step 6 — R2r1 route を埋める (Internet 行き)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-7-r1r2-route-c-d-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟢 Step 7 — ⭐ 集約: R1r2 route で C と D 両方を 1 本でカバー
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-8-ir1-gate-internet-r1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟢 Step 8 — Ir1 gate を埋める (Internet → R1 への入り口)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎉 完成！ 全部 ✅ になった状態
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 全 8 ステップ コピペ用早見表
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧠 考え方の核心 (1 ステップずつ「今どこを考えているか」を見る)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧠 考え方の核心 (1 ステップずつ「今どこを考えているか」を見る)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: 制約の連鎖を読む (固定値だけに注目)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 1: 制約の連鎖を読む (固定値だけに注目)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📍 今ここに注目
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        何を考えるか
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 この時点で確定したこと
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-r21-ip-r13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: R21 IP を埋める (R13 と同じ街にする)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 2: R21 IP を埋める (R13 と同じ街にする)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📍 今ここに注目
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        何を考えるか
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 この時点で確定したこと (累積)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-d-d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: D 周辺を埋める (D の街を完成させる)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 3: D 周辺を埋める (D の街を完成させる)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📍 今ここに注目
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        何を考えるか
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-c-d_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: ⭐ 山場! C を「D の隣」に置く (集約のための配置)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 4: ⭐ 山場! C を「D の隣」に置く (集約のための配置)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📍 今ここに注目
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        何を考えるか — このレベル最大の罠
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-d-1628" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        解決: C を D の隣 (.16/28) に置く
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        配置の決定
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-routes_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: routes を埋める (経路を書く)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 5: routes を埋める (経路を書く)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📍 今ここに注目
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        それぞれの役割と値
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎉 全部埋まった完成図
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c-internet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎬 パケットの旅（C → Internet のゴール）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ 解答例
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔗 関連概念
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎓 このレベルの抽象的な学び
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_28" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚠️ よくあるミス
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_29" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ▶️ 次に読むページ
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../level9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Level 9 — 大ボス（6ゴール）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../level10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Level 10 — 最終ボス（7ゴール）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3部 抽象化された学び
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    第3部 抽象化された学び
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-learnings/why-this-exercise/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    なぜ 42 はこの課題を出す？
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-learnings/transferable/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    他分野に応用できる考え方
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-learnings/debugging-mindset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    制約からの逆算という思考法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4部 評価対策
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    第4部 評価対策
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-defense/qa/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎓 ディフェンス Q&A
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-defense/cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📋 当日チートシート
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📚 用語集
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📷 実際のスクリーンショットで解く（具体例）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📷 実際のスクリーンショットで解く（具体例）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 実例の固定値 (薄ピンク背景の値)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🛠️ 直す順 (画面の白い欄を順に埋める)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🛠️ 直す順 (画面の白い欄を順に埋める)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-interface-r13-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✏️ Step 1 — interface R13 の IP を直す
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-interface-r21-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✏️ Step 2 — interface R21 の IP を直す
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-interface-r23-d-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✏️ Step 3 — interface R23 と D の gate を直す
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-c-d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✏️ Step 4 — ⭐ C を D の隣に引っ越す（最重要）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-routes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✏️ Step 5 — routes を直す
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 直す前 vs 直した後 (このユーザーの場合)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📖 このページは何？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📷 問題画面
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🗺️ トポロジー
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📺 画面の編集できる箇所
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔒 固定値（抜粋）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-by-step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧭 解く順 — 「穴埋め」の進め方（絵で順番に追跡）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧭 解く順 — 「穴埋め」の進め方（絵で順番に追跡）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎨 図の色の意味
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟫 Phase 0 — 開始時: 固定値だけがある状態
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-1-r13-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟢 Step 1 — R13 IP を埋める
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-r13-r21-mask" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟢 Step 2 — R13 と R21 の Mask を埋める
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-r21-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟢 Step 3 — R21 IP を埋める
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-d-r23-d-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟢 Step 4 — D 周辺 (R23 と D の gate) を埋める
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-c-d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟢 Step 5 — ⭐ 山場: C を「D の隣」に置く
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-6-r2r1-route-internet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟢 Step 6 — R2r1 route を埋める (Internet 行き)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-7-r1r2-route-c-d-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟢 Step 7 — ⭐ 集約: R1r2 route で C と D 両方を 1 本でカバー
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-8-ir1-gate-internet-r1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟢 Step 8 — Ir1 gate を埋める (Internet → R1 への入り口)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎉 完成！ 全部 ✅ になった状態
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 全 8 ステップ コピペ用早見表
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧠 考え方の核心 (1 ステップずつ「今どこを考えているか」を見る)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧠 考え方の核心 (1 ステップずつ「今どこを考えているか」を見る)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: 制約の連鎖を読む (固定値だけに注目)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 1: 制約の連鎖を読む (固定値だけに注目)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📍 今ここに注目
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        何を考えるか
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 この時点で確定したこと
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-r21-ip-r13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: R21 IP を埋める (R13 と同じ街にする)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 2: R21 IP を埋める (R13 と同じ街にする)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📍 今ここに注目
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        何を考えるか
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 この時点で確定したこと (累積)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-d-d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: D 周辺を埋める (D の街を完成させる)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 3: D 周辺を埋める (D の街を完成させる)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📍 今ここに注目
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        何を考えるか
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-c-d_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: ⭐ 山場! C を「D の隣」に置く (集約のための配置)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 4: ⭐ 山場! C を「D の隣」に置く (集約のための配置)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📍 今ここに注目
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        何を考えるか — このレベル最大の罠
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-d-1628" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        解決: C を D の隣 (.16/28) に置く
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        配置の決定
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-routes_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: routes を埋める (経路を書く)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 5: routes を埋める (経路を書く)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📍 今ここに注目
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        それぞれの役割と値
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎉 全部埋まった完成図
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c-internet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎬 パケットの旅（C → Internet のゴール）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ 解答例
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔗 関連概念
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎓 このレベルの抽象的な学び
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_28" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚠️ よくあるミス
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_29" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ▶️ 次に読むページ
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="level-8-2-lan-internet">Level 8 — 2 つの LAN + Internet</h1>
+<div class="admonition warning">
+<p class="admonition-title">⚠️ 数値は毎回ランダムに変わります</p>
+<p>このページに書かれた IP・マスク・ルートの値は <strong>前回プレイした時の一例</strong> です。
+あなたの画面では違う数値になっているはずなので、<strong>そのままコピペしても絶対に解けません</strong>。</p>
+</div>
+<blockquote>
+<p>🎯 <strong>一言で言うと:</strong> R1 で書ける routes が <strong>1 本だけ</strong>。C と D を <strong>隣接 /28 ブロック</strong> に置いて、<strong><code>/27</code> で集約</strong> すれば 1 本で両方カバーできる。</p>
+</blockquote>
+<hr />
+<h2 id="_1">📷 実際のスクリーンショットで解く（具体例）</h2>
+<div class="admonition tip">
+<p class="admonition-title">💡 このセクションの目的</p>
+<p>「<strong>自分の画面を見ながら、どこに何を入れればいいか</strong>」が分からない人向け。
+あるユーザーの <strong>実際のスクリーンショット</strong> に基づいて、<strong>画面と同じ名前と数字で</strong> 解説します。
+あなたの画面では数字が違いますが、<strong>まったく同じ手順</strong> で解けます。</p>
+</div>
+<h3 id="_2">📋 実例の固定値 (薄ピンク背景の値)</h3>
+<p>このユーザーの画面では：</p>
+<table>
+<thead>
+<tr>
+<th>場所</th>
+<th>固定値 (薄ピンク)</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>interface D1</strong> (= host home.non-real.com)</td>
+<td>IP <code>7.9.10.11</code>, Mask <code>255.255.255.240</code> (/28)</td>
+<td>D が住んでる街 = <code>7.9.10.0/28</code></td>
+</tr>
+<tr>
+<td><strong>interface R12</strong> (= R1 の Internet 側口)</td>
+<td>IP <code>163.221.250.12</code>, Mask <code>255.255.255.240</code> (/28)</td>
+<td>R1-Internet 間の街</td>
+</tr>
+<tr>
+<td><strong>router R2 の routes 右側</strong> (gate)</td>
+<td><code>149.152.234.62</code></td>
+<td><strong>R13 の IP はこれと一致しなきゃダメ</strong></td>
+</tr>
+<tr>
+<td><strong>internet I の routes 左側</strong> (route)</td>
+<td><code>149.152.234.0/26</code></td>
+<td><strong>R1-R2 間の街は /26 サイズ</strong></td>
+</tr>
+</tbody>
+</table>
+<p>→ この <strong>4 つの固定値</strong> が、他の全部を決めてくれる。</p>
+<hr />
+<h3 id="_3">🛠️ 直す順 (画面の白い欄を順に埋める)</h3>
+<div class="admonition info">
+<p class="admonition-title">👀 自分の画面の数字に置き換え方</p>
+<ul>
+<li><strong><code>149.152.234.X</code></strong> が出てきたら → あなたの画面の <strong>R2 の routes 右側 (gate)</strong> の数字</li>
+<li><strong><code>7.9.10.X</code></strong> が出てきたら → あなたの画面の <strong>interface D1 の IP の最初の 3 オクテット</strong></li>
+<li><strong><code>163.221.250.X</code></strong> が出てきたら → あなたの画面の <strong>interface R12 の IP の最初の 3 オクテット</strong></li>
+</ul>
+</div>
+<h4 id="step-1-interface-r13-ip">✏️ Step 1 — interface R13 の IP を直す</h4>
+<p>📍 <strong>画面の場所:</strong> R1 の左口 (<code>interface R13</code>)</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>あなたが入力する値</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IP</strong></td>
+<td><code>149.152.234.62</code></td>
+<td>R2 の routes の右側 (gate) と一致させる</td>
+</tr>
+<tr>
+<td><strong>Mask</strong></td>
+<td><code>255.255.255.192</code> (= /26)</td>
+<td>Internet の routes の左側 <code>.../26</code> と一致</td>
+</tr>
+</tbody>
+</table>
+<h4 id="step-2-interface-r21-ip">✏️ Step 2 — interface R21 の IP を直す</h4>
+<p>📍 <strong>画面の場所:</strong> R2 の右口 (<code>interface R21</code>)</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>あなたが入力する値</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IP</strong></td>
+<td><code>149.152.234.1</code></td>
+<td>R13 (<code>.62</code>) と同じ街の住人。<code>.62</code> 以外の <code>.1〜.61</code> から好きに選べる、<code>.1</code> が楽</td>
+</tr>
+<tr>
+<td><strong>Mask</strong></td>
+<td><code>255.255.255.192</code> (= /26)</td>
+<td>R13 と同じマスク</td>
+</tr>
+</tbody>
+</table>
+<h4 id="step-3-interface-r23-d-gate">✏️ Step 3 — interface R23 と D の gate を直す</h4>
+<p>📍 <strong>画面の場所:</strong> R2 の左下口 (<code>interface R23</code>) と host D (<code>home.non-real.com</code>) の Routes</p>
+<p>D は街 <code>7.9.10.0/28</code> (.0〜.15) に住んでる (D1=.11 から逆算)。R23 もこの街の住人にする。</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>あなたが入力する値</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>R23 IP</strong></td>
+<td><code>7.9.10.1</code></td>
+<td>D の街の空き住人</td>
+</tr>
+<tr>
+<td><strong>R23 Mask</strong></td>
+<td><code>255.255.255.240</code> (= /28)</td>
+<td>D と同じ</td>
+</tr>
+<tr>
+<td><strong>D の gate</strong> (Routes 右側)</td>
+<td><code>7.9.10.1</code></td>
+<td>= R23 (D の玄関)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="step-4-c-d">✏️ Step 4 — ⭐ C を D の隣に引っ越す（最重要）</h4>
+<p>📍 <strong>画面の場所:</strong> R2 の左上口 (<code>interface R22</code>)、interface C1、host C (<code>office.non-real.com</code>)</p>
+<p>D の街 <code>7.9.10.0/28</code> (.0〜.15) <strong>のすぐ隣</strong> = <code>7.9.10.16/28</code> (.16〜.31) に C を置く。
+こうすると後で <code>/27</code> 1 本で両方カバーできる。</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>あなたが入力する値</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>R22 IP</strong></td>
+<td><code>7.9.10.17</code></td>
+<td>C の新しい街の住人</td>
+</tr>
+<tr>
+<td><strong>R22 Mask</strong></td>
+<td><code>255.255.255.240</code> (= /28)</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>C1 IP</strong></td>
+<td><code>7.9.10.18</code></td>
+<td>R22 と同じ街</td>
+</tr>
+<tr>
+<td><strong>C1 Mask</strong></td>
+<td><code>255.255.255.240</code> (= /28)</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>C の gate</strong> (Routes 右側)</td>
+<td><code>7.9.10.17</code></td>
+<td>= R22 (C の玄関)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="step-5-routes">✏️ Step 5 — routes を直す</h4>
+<p>📍 <strong>画面の場所:</strong> R1 の Routes、R2 の Routes、Internet の Routes</p>
+<table>
+<thead>
+<tr>
+<th>場所</th>
+<th>入力する値</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>R1 の routes 1 行目 左</strong></td>
+<td><code>7.9.10.0/27</code></td>
+<td>C と D 両方カバー (集約!)</td>
+</tr>
+<tr>
+<td><strong>R1 の routes 1 行目 右</strong></td>
+<td><code>149.152.234.1</code></td>
+<td>= R21 (R1 の隣人)</td>
+</tr>
+<tr>
+<td><strong>R1 の routes 2 行目</strong></td>
+<td>そのまま (<code>0.0.0.0/0</code> =&gt; <code>163.221.250.1</code>)</td>
+<td>Internet 行き default、固定値</td>
+</tr>
+<tr>
+<td><strong>R2 の routes 左</strong></td>
+<td><code>0.0.0.0/0</code> (旧 <code>10.0.0.0/8</code> を書き換え)</td>
+<td>Internet 行き default</td>
+</tr>
+<tr>
+<td><strong>R2 の routes 右</strong></td>
+<td><code>149.152.234.62</code> (固定)</td>
+<td>そのまま</td>
+</tr>
+<tr>
+<td><strong>Internet の routes 右</strong> (gate)</td>
+<td><code>163.221.250.12</code></td>
+<td>= R12 の IP</td>
+</tr>
+</tbody>
+</table>
+<p>→ 全部入れたら <strong>Check Again</strong> ボタン → 全 Goal が緑になればクリア 🎉</p>
+<hr />
+<h3 id="vs">📊 直す前 vs 直した後 (このユーザーの場合)</h3>
+<table>
+<thead>
+<tr>
+<th>場所</th>
+<th>直す前 (あなたの画面)</th>
+<th>直した後 (正解)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R13 IP</td>
+<td>❌ <code>10.0.0.1</code></td>
+<td>✅ <code>149.152.234.62</code></td>
+</tr>
+<tr>
+<td>R13 Mask</td>
+<td>❌ <code>255.255.255.0</code> (/24)</td>
+<td>✅ <code>255.255.255.192</code> (/26)</td>
+</tr>
+<tr>
+<td>R21 IP</td>
+<td>❌ <code>10.0.0.2</code></td>
+<td>✅ <code>149.152.234.1</code></td>
+</tr>
+<tr>
+<td>R21 Mask</td>
+<td>❌ <code>255.255.0.0</code> (/16)</td>
+<td>✅ <code>255.255.255.192</code> (/26)</td>
+</tr>
+<tr>
+<td>R23 IP</td>
+<td>❌ <code>7.8.9.10</code></td>
+<td>✅ <code>7.9.10.1</code></td>
+</tr>
+<tr>
+<td>R23 Mask</td>
+<td>❌ <code>/18</code></td>
+<td>✅ <code>255.255.255.240</code> (/28)</td>
+</tr>
+<tr>
+<td>R22 IP</td>
+<td>❌ <code>192.168.0.254</code></td>
+<td>✅ <code>7.9.10.17</code></td>
+</tr>
+<tr>
+<td>R22 Mask</td>
+<td>❌ <code>255.255.255.0</code> (/24)</td>
+<td>✅ <code>255.255.255.240</code> (/28)</td>
+</tr>
+<tr>
+<td>C1 IP</td>
+<td>❌ <code>192.168.0.1</code></td>
+<td>✅ <code>7.9.10.18</code></td>
+</tr>
+<tr>
+<td>C1 Mask</td>
+<td>❌ <code>255.255.255.0</code> (/24)</td>
+<td>✅ <code>255.255.255.240</code> (/28)</td>
+</tr>
+<tr>
+<td>C の gate</td>
+<td>❌ <code>10.0.0.254</code></td>
+<td>✅ <code>7.9.10.17</code></td>
+</tr>
+<tr>
+<td>D の gate</td>
+<td>❌ <code>9.9.9.9</code></td>
+<td>✅ <code>7.9.10.1</code></td>
+</tr>
+<tr>
+<td>R1 routes 1 左</td>
+<td>❌ <code>192.168.0.0/26</code></td>
+<td>✅ <code>7.9.10.0/27</code></td>
+</tr>
+<tr>
+<td>R1 routes 1 右</td>
+<td>❌ <code>10.0.0.2</code></td>
+<td>✅ <code>149.152.234.1</code></td>
+</tr>
+<tr>
+<td>R2 routes 左</td>
+<td>❌ <code>10.0.0.0/8</code></td>
+<td>✅ <code>0.0.0.0/0</code></td>
+</tr>
+<tr>
+<td>Internet routes 右</td>
+<td>❌ <code>163.221.250.254</code></td>
+<td>✅ <code>163.221.250.12</code></td>
+</tr>
+</tbody>
+</table>
+<p>→ <strong>薄ピンクの固定値 (D1, R12, R2 routes 右, Internet routes 左)</strong> だけを残して、白い欄を全部上書き。</p>
+<div class="admonition warning">
+<p class="admonition-title">⚠️ あなたの画面の数字は違う</p>
+<p>上の表は <strong>このスクリーンショットの個別事例</strong>。あなたの画面では：</p>
+<ul>
+<li><code>149.152.234.X</code> は別の数字 (R2 routes の右側を見て確認)</li>
+<li><code>7.9.10.X</code> は別の数字 (D1 の IP の最初 3 オクテットを見て確認)</li>
+<li><code>163.221.250.X</code> は別の数字 (R12 の IP の最初 3 オクテットを見て確認)</li>
+</ul>
+<p>でも <strong>「どこに何を入れるか」のロジック は同じ</strong>。</p>
+</div>
+<hr />
+<h2 id="_4">📖 このページは何？</h2>
+<p>NetPractice の <strong>応用問題</strong>。<strong>ルート集約 (route summarization / supernetting)</strong> という実務で必須のテクニックが登場します。
+固定値が連鎖していて、それを起点に逆算で全体を組み立てる思考力が試されます。</p>
+<p>このレベルで身につくこと：</p>
+<ol>
+<li><strong>ルート集約</strong> = 隣接する複数のサブネットを 1 つの広い <code>/N</code> で表す</li>
+<li>固定値の <strong>制約の連鎖</strong> から IP 配置を逆算</li>
+<li>C と D を <strong>隣接ブロック</strong> に意図的に配置して <code>/27</code> で包む技</li>
+</ol>
+<hr />
+<h2 id="_5">📷 問題画面</h2>
+<p><a href="../../images/screenshots/level8.png"><img alt="Level 8 のスクリーンショット" src="../../images/screenshots/level8.png" /></a></p>
+<hr />
+<h2 id="_6">🗺️ トポロジー</h2>
+<pre class="mermaid"><code>flowchart LR
+    C[💻 Host C] --- R22[R22&lt;br&gt;R2 上口]
+    D[💻 Host D] --- R23[R23&lt;br&gt;R2 下口]
+    R22 --- R2[📡 Router R2]
+    R23 --- R2
+    R2 --- R21[R21&lt;br&gt;R2 右口]
+    R21 --- R13[R13&lt;br&gt;R1 左口]
+    R13 --- R1[📡 Router R1]
+    R12[R12&lt;br&gt;R1 上口] --- R1
+    R12 --- I[🌍 Internet]
+
+    style C fill:#E3F2FD
+    style D fill:#FFF9C4
+    style R1 fill:#F8BBD0
+    style R2 fill:#F8BBD0
+    style I fill:#C8E6C9</code></pre>
+<hr />
+<h2 id="_7">📺 画面の編集できる箇所</h2>
+<table>
+<thead>
+<tr>
+<th>場所</th>
+<th>状態</th>
+<th>直すか？</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>R13, R21 の IP/Mask</strong></td>
+<td>大半が白</td>
+<td><strong>✅ /26 で揃える</strong></td>
+</tr>
+<tr>
+<td><strong>C, D の周辺 (R22, R23, C1)</strong></td>
+<td>白</td>
+<td><strong>✅ 隣接ブロックに配置</strong></td>
+</tr>
+<tr>
+<td>D1 (.11/28)</td>
+<td>薄ピンク</td>
+<td>❌ 触らない</td>
+</tr>
+<tr>
+<td>R12 (Internet 側)</td>
+<td>薄ピンク</td>
+<td>❌ 触らない</td>
+</tr>
+<tr>
+<td><strong>R2r1 route</strong></td>
+<td>白</td>
+<td><strong>✅ default に</strong></td>
+</tr>
+<tr>
+<td><strong>R1r2 route</strong></td>
+<td>白</td>
+<td><strong>✅ /27 集約</strong></td>
+</tr>
+<tr>
+<td><strong>Ir1 gate</strong></td>
+<td>白</td>
+<td><strong>✅ R12 の IP に</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_8">🔒 固定値（抜粋）</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th style="text-align: left;">値</th>
+<th style="text-align: left;">意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">R2r1 gate</td>
+<td style="text-align: left;"><code>161.138.113.62</code> 固定</td>
+<td style="text-align: left;">→ <strong>R13 の IP = これ</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ir1 route</td>
+<td style="text-align: left;"><code>161.138.113.0/26</code> 固定</td>
+<td style="text-align: left;">→ R1-R2 間は /26</td>
+</tr>
+<tr>
+<td style="text-align: left;">D1</td>
+<td style="text-align: left;"><code>7.9.10.11/28</code> 固定</td>
+<td style="text-align: left;">→ D の街 = <code>7.9.10.0/28</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">R12</td>
+<td style="text-align: left;"><code>163.178.250.12/28</code> 固定</td>
+<td style="text-align: left;">ルータ-Internet 間</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="step-by-step">🧭 解く順 — 「穴埋め」の進め方（絵で順番に追跡）</h2>
+<div class="admonition tip">
+<p class="admonition-title">💡 このセクションの目的</p>
+<p>Level 8 は固定値が多くて「<strong>どこから手を付けたらいいか分からない</strong>」と固まる人が多い。
+でも実は <strong>固定値が "答えへの矢印"</strong> になっていて、<strong>順番通りに埋めるだけのパズル</strong> です。
+ここでは「<strong>今どの箱の何欄を埋めるか</strong>」を <strong>絵 (Mermaid 図)</strong> で 1 ステップずつ実況します。</p>
+</div>
+<h3 id="_9">🎨 図の色の意味</h3>
+<p>各ステップで全体図を出します。色で進捗が分かります：</p>
+<ul>
+<li>🟫 <strong>グレー</strong> = 固定値（最初から埋まってる、変えられない）</li>
+<li>🟢 <strong>緑</strong> = <strong>今このステップで埋めた</strong> (注目！)</li>
+<li>🟦 <strong>青</strong> = 既に埋めた（前のステップで埋めた）</li>
+<li>⬜ <strong>白</strong> = まだ未着手 (<code>?</code>)</li>
+</ul>
+<hr />
+<h3 id="phase-0">🟫 Phase 0 — 開始時: 固定値だけがある状態</h3>
+<p>まず画面を見渡して、<strong>動かせない固定値（薄ピンク）</strong> を全部マークします。</p>
+<pre class="mermaid"><code>flowchart LR
+    subgraph Internet [" "]
+      I[🌍 Internet]
+    end
+    subgraph R1box ["📡 R1 (右側のルータ)"]
+      R12["📌 R12&lt;br/&gt;IP: 163.178.250.12&lt;br/&gt;Mask: /28"]
+      R13["R13&lt;br/&gt;IP: ?&lt;br/&gt;Mask: ?"]
+      R1r2["R1r2 route&lt;br/&gt;route: ?&lt;br/&gt;gate: ?"]
+    end
+    subgraph R2box ["📡 R2 (左側のルータ)"]
+      R21["R21&lt;br/&gt;IP: ?&lt;br/&gt;Mask: ?"]
+      R22["R22&lt;br/&gt;IP: ?&lt;br/&gt;Mask: ?"]
+      R23["R23&lt;br/&gt;IP: ?&lt;br/&gt;Mask: ?"]
+      R2r1["R2r1 route&lt;br/&gt;route: ?&lt;br/&gt;📌 gate: 161.138.113.62"]
+    end
+    subgraph Hosts ["💻 ホスト"]
+      C1["C1&lt;br/&gt;IP: ?&lt;br/&gt;Mask: ?&lt;br/&gt;gate: ?"]
+      D1["📌 D1&lt;br/&gt;IP: 7.9.10.11&lt;br/&gt;Mask: /28&lt;br/&gt;gate: ?"]
+    end
+    Ir1["Ir1 route&lt;br/&gt;📌 route: 161.138.113.0/26&lt;br/&gt;gate: ?"]
+
+    I --- Ir1
+    Ir1 --- R12
+    R12 --- R1r2
+    R1r2 --- R13
+    R13 -.- R21
+    R21 --- R2r1
+    R2r1 --- R22
+    R2r1 --- R23
+    R22 --- C1
+    R23 --- D1
+
+    classDef fixed fill:#E0E0E0,stroke:#616161,color:#000
+    classDef todo fill:#FFFFFF,stroke:#9E9E9E,color:#9E9E9E,stroke-dasharray: 5 5
+    class R12,R2r1,Ir1,D1 fixed
+    class R13,R1r2,R21,R22,R23,C1 todo</code></pre>
+<p>📌 = 固定値。<strong>5 個の手がかり</strong> があります：</p>
+<table>
+<thead>
+<tr>
+<th>固定値</th>
+<th>何を教えてくれる？</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>D1 = .11/28</strong></td>
+<td>D の街は <code>7.9.10.0/28</code></td>
+</tr>
+<tr>
+<td><strong>R12 = .250.12/28</strong></td>
+<td>R1-Internet 間は /28</td>
+</tr>
+<tr>
+<td><strong>R2r1 gate = .62</strong></td>
+<td><strong>R13 の IP はこれと同じでなければならない</strong></td>
+</tr>
+<tr>
+<td><strong>Ir1 route = .0/26</strong></td>
+<td><strong>R1-R2 間の街は /26 サイズ</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="step-1-r13-ip">🟢 Step 1 — R13 IP を埋める</h3>
+<p><strong>今、ここを埋めています:</strong> ★ R13 (R1 の左口) の <strong>IP</strong></p>
+<p><strong>理由:</strong> R2r1 gate (固定 <code>.62</code>) は「R2 が R1 に渡す時の宛先 = <code>.62</code>」。<strong>R13 IP はこの値と一致</strong> していなければ届かない。</p>
+<p>→ ✏️ <strong>R13 IP = <code>161.138.113.62</code></strong></p>
+<pre class="mermaid"><code>flowchart LR
+    subgraph Internet [" "]
+      I[🌍 Internet]
+    end
+    subgraph R1box ["📡 R1"]
+      R12["📌 R12&lt;br/&gt;163.178.250.12/28"]
+      R13["⭐ R13&lt;br/&gt;IP: 161.138.113.62 ✅&lt;br/&gt;Mask: ?"]
+      R1r2["R1r2&lt;br/&gt;route: ?&lt;br/&gt;gate: ?"]
+    end
+    subgraph R2box ["📡 R2"]
+      R21["R21&lt;br/&gt;IP: ?&lt;br/&gt;Mask: ?"]
+      R22["R22&lt;br/&gt;IP: ?&lt;br/&gt;Mask: ?"]
+      R23["R23&lt;br/&gt;IP: ?&lt;br/&gt;Mask: ?"]
+      R2r1["R2r1&lt;br/&gt;route: ?&lt;br/&gt;📌 gate: .62"]
+    end
+    subgraph Hosts ["💻 ホスト"]
+      C1["C1&lt;br/&gt;IP: ?&lt;br/&gt;Mask: ?"]
+      D1["📌 D1&lt;br/&gt;7.9.10.11/28"]
+    end
+    Ir1["Ir1&lt;br/&gt;📌 route: .0/26&lt;br/&gt;gate: ?"]
+
+    R2r1 -.-&gt;|"この .62 が…"| R13
+
+    I --- Ir1
+    Ir1 --- R12
+    R12 --- R1r2
+    R1r2 --- R13
+    R13 -.- R21
+    R21 --- R2r1
+    R2r1 --- R22
+    R2r1 --- R23
+    R22 --- C1
+    R23 --- D1
+
+    classDef fixed fill:#E0E0E0,stroke:#616161,color:#000
+    classDef justNow fill:#A5D6A7,stroke:#2E7D32,color:#000,stroke-width:3px
+    classDef todo fill:#FFFFFF,stroke:#9E9E9E,color:#9E9E9E,stroke-dasharray: 5 5
+    class R12,R2r1,Ir1,D1 fixed
+    class R13 justNow
+    class R1r2,R21,R22,R23,C1 todo</code></pre>
+<hr />
+<h3 id="step-2-r13-r21-mask">🟢 Step 2 — R13 と R21 の Mask を埋める</h3>
+<p><strong>今、ここを埋めています:</strong> ★ R13 と R21 の <strong>Mask</strong> (両方とも /26)</p>
+<details class="question">
+<summary>🤔 なんで R13 と R21 を "同じ /26" にしなきゃいけないの？(クリックで展開)</summary>
+<p>これ、めちゃくちゃ大事な質問です！</p>
+<p><strong>理由 ① — 直結 = 同じ街じゃないと話せない</strong></p>
+<p>R13 (R1 の左口) と R21 (R2 の右口) は <strong>1 本のケーブルで直結</strong> している。
+ケーブル直結 = 「<strong>同じ街の住人</strong> じゃないと話せない」というのがネットワークの大原則。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>R1 ─[R13]──ケーブル──[R21]─ R2
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>→ R13 と R21 は同じ街の住人でなきゃダメ
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>→ 同じ街と判定されるには「同じ IP プレフィックス + 同じマスク」
+</span></code></pre></div>
+<p><strong>理由 ② — マスクが揃ってないと "片思い" になる</strong></p>
+<p>もし R13 が /26、R21 が /28 だったら:</p>
+<ul>
+<li>R13 から見ると: 街は <code>.0/26</code> (.0〜.63)、R21 (.1) は同じ街 → 話せると思う</li>
+<li>R21 から見ると: 街は <code>.0/28</code> (.0〜.15)、R13 (.62) は別の街 → 話せないと思う</li>
+</ul>
+<p>→ <strong>R21 が R13 を「別人」扱いするので返事しない</strong> → 通信失敗。</p>
+<p><strong>理由 ③ — <code>/26</code> という具体的な数字は固定値 <code>Ir1 route</code> から決まる</strong></p>
+<p>Internet の routes に <code>Ir1 route = .0/26</code> (固定) と書いてある。
+これは「<strong>R1-R2 間の街は /26 サイズ</strong>」を Internet が前提にしているという意味。</p>
+<p>もし R13/R21 を <code>/28</code> にすると:
+- 実際の街 = .0/28 (.0〜.15) で 16 個分
+- でも Internet は「ここは /26 (.0〜.63) で 64 個分」だと思ってる
+- 矛盾 → ルーティング失敗</p>
+<p>→ <strong>だから /26 にしなきゃいけない</strong>。これは <a href="../../00-rules/#1">🎓 ルール 1: 同じ街 = 同じマスク</a> と <a href="../../00-rules/#2">連鎖の論理</a> の組み合わせ。</p>
+</details>
+<p><strong>短くまとめ:</strong> Ir1 route (固定 <code>.0/26</code>) が「R1-R2 間の街は /26」と言ってるので、R13 と R21 の Mask は両方 /26 にする。</p>
+<p>→ ✏️ <strong>R13 Mask = <code>255.255.255.192</code> (/26)</strong>
+→ ✏️ <strong>R21 Mask = <code>255.255.255.192</code> (/26)</strong></p>
+<pre class="mermaid"><code>flowchart LR
+    subgraph Internet [" "]
+      I[🌍 Internet]
+    end
+    subgraph R1box ["📡 R1"]
+      R12["📌 R12&lt;br/&gt;163.178.250.12/28"]
+      R13["✅ R13&lt;br/&gt;IP: .62&lt;br/&gt;⭐ Mask: /26 ✅"]
+      R1r2["R1r2&lt;br/&gt;route: ?&lt;br/&gt;gate: ?"]
+    end
+    subgraph R2box ["📡 R2"]
+      R21["⭐ R21&lt;br/&gt;IP: ?&lt;br/&gt;Mask: /26 ✅"]
+      R22["R22&lt;br/&gt;?"]
+      R23["R23&lt;br/&gt;?"]
+      R2r1["R2r1&lt;br/&gt;route: ?&lt;br/&gt;📌 gate: .62"]
+    end
+    subgraph Hosts ["💻 ホスト"]
+      C1["C1&lt;br/&gt;?"]
+      D1["📌 D1&lt;br/&gt;.11/28"]
+    end
+    Ir1["Ir1&lt;br/&gt;📌 route: .0/26&lt;br/&gt;gate: ?"]
+
+    Ir1 -.-&gt;|"この /26 が…"| R13
+    Ir1 -.-&gt;|"…と…"| R21
+
+    I --- Ir1
+    Ir1 --- R12
+    R12 --- R1r2
+    R1r2 --- R13
+    R13 -.- R21
+    R21 --- R2r1
+    R2r1 --- R22
+    R2r1 --- R23
+    R22 --- C1
+    R23 --- D1
+
+    classDef fixed fill:#E0E0E0,stroke:#616161,color:#000
+    classDef done fill:#90CAF9,stroke:#1565C0,color:#000
+    classDef justNow fill:#A5D6A7,stroke:#2E7D32,color:#000,stroke-width:3px
+    classDef todo fill:#FFFFFF,stroke:#9E9E9E,color:#9E9E9E,stroke-dasharray: 5 5
+    class R12,R2r1,Ir1,D1 fixed
+    class R13,R21 justNow
+    class R1r2,R22,R23,C1 todo</code></pre>
+<hr />
+<h3 id="step-3-r21-ip">🟢 Step 3 — R21 IP を埋める</h3>
+<p><strong>今、ここを埋めています:</strong> ★ R21 の <strong>IP</strong></p>
+<p><strong>理由:</strong> R13 (<code>.62</code>) と同じ街 (<code>.0/26</code>、住人 <code>.1〜.62</code>) の住人にする必要がある。<code>.62</code> は R13 が使うので、空いてる <code>.1</code> を選ぶ（任意 OK）。</p>
+<p>→ ✏️ <strong>R21 IP = <code>161.138.113.1</code></strong></p>
+<pre class="mermaid"><code>flowchart LR
+    subgraph Internet [" "]
+      I[🌍 Internet]
+    end
+    subgraph R1box ["📡 R1"]
+      R12["📌 R12&lt;br/&gt;.250.12/28"]
+      R13["✅ R13&lt;br/&gt;.62/26"]
+      R1r2["R1r2&lt;br/&gt;?"]
+    end
+    subgraph R2box ["📡 R2"]
+      R21["⭐ R21&lt;br/&gt;IP: .1 ✅&lt;br/&gt;Mask: /26"]
+      R22["R22&lt;br/&gt;?"]
+      R23["R23&lt;br/&gt;?"]
+      R2r1["R2r1&lt;br/&gt;route: ?&lt;br/&gt;📌 gate: .62"]
+    end
+    subgraph Hosts ["💻 ホスト"]
+      C1["C1&lt;br/&gt;?"]
+      D1["📌 D1&lt;br/&gt;.11/28"]
+    end
+    Ir1["Ir1&lt;br/&gt;📌 .0/26"]
+
+    R13 -.-&gt;|"R13 と同じ街&lt;br/&gt;(.0/26 住人) から選ぶ"| R21
+
+    I --- Ir1
+    Ir1 --- R12
+    R12 --- R1r2
+    R1r2 --- R13
+    R13 -.- R21
+    R21 --- R2r1
+    R2r1 --- R22
+    R2r1 --- R23
+    R22 --- C1
+    R23 --- D1
+
+    classDef fixed fill:#E0E0E0,stroke:#616161,color:#000
+    classDef done fill:#90CAF9,stroke:#1565C0,color:#000
+    classDef justNow fill:#A5D6A7,stroke:#2E7D32,color:#000,stroke-width:3px
+    classDef todo fill:#FFFFFF,stroke:#9E9E9E,color:#9E9E9E,stroke-dasharray: 5 5
+    class R12,R2r1,Ir1,D1 fixed
+    class R13 done
+    class R21 justNow
+    class R1r2,R22,R23,C1 todo</code></pre>
+<p>✨ <strong>これで R1-R2 間のリンクが完成！</strong> (R13 と R21 が同じ街にいて通信可)</p>
+<hr />
+<h3 id="step-4-d-r23-d-gate">🟢 Step 4 — D 周辺 (R23 と D の gate) を埋める</h3>
+<p><strong>今、ここを埋めています:</strong> ★ R23 IP/Mask + D の gate</p>
+<p><strong>理由:</strong> D1 = <code>.11/28</code> 固定 → D の街 = <code>7.9.10.0/28</code> (<code>.0〜.15</code>、住人 <code>.1〜.14</code>)。
+R23 (D の街の "玄関") はこの街の住人でなきゃダメ。</p>
+<p>→ ✏️ <strong>R23 IP = <code>7.9.10.1</code></strong> (空きの住人)
+→ ✏️ <strong>R23 Mask = <code>255.255.255.240</code> (/28)</strong>
+→ ✏️ <strong>D の gate = <code>7.9.10.1</code></strong> (= R23)</p>
+<pre class="mermaid"><code>flowchart LR
+    subgraph R2box ["📡 R2"]
+      R21["✅ R21&lt;br/&gt;.1/26"]
+      R22["R22&lt;br/&gt;?"]
+      R23["⭐ R23&lt;br/&gt;IP: 7.9.10.1 ✅&lt;br/&gt;Mask: /28 ✅"]
+      R2r1["R2r1&lt;br/&gt;route: ?&lt;br/&gt;📌 gate: .62"]
+    end
+    subgraph Hosts ["💻 ホスト"]
+      C1["C1&lt;br/&gt;?"]
+      D1["📌 D1&lt;br/&gt;7.9.10.11/28&lt;br/&gt;⭐ gate: 7.9.10.1 ✅"]
+    end
+
+    D1 -.-&gt;|"D の街 = .0/28&lt;br/&gt;住人から選ぶ"| R23
+    R23 -.-&gt;|"D の玄関 = R23"| D1
+
+    R21 --- R2r1
+    R2r1 --- R22
+    R2r1 --- R23
+    R22 --- C1
+    R23 --- D1
+
+    classDef fixed fill:#E0E0E0,stroke:#616161,color:#000
+    classDef done fill:#90CAF9,stroke:#1565C0,color:#000
+    classDef justNow fill:#A5D6A7,stroke:#2E7D32,color:#000,stroke-width:3px
+    classDef todo fill:#FFFFFF,stroke:#9E9E9E,color:#9E9E9E,stroke-dasharray: 5 5
+    class R2r1 fixed
+    class R21 done
+    class R23,D1 justNow
+    class R22,C1 todo</code></pre>
+<p>✨ <strong>D の街が完成！</strong> (R23 ↔ D1 が同じ街、D は R23 経由で外に出られる)</p>
+<hr />
+<h3 id="step-5-c-d">🟢 Step 5 — ⭐ 山場: C を「D の隣」に置く</h3>
+<p><strong>今、ここを埋めています:</strong> ★ R22, C1 IP/Mask + C gate</p>
+<p><strong>理由:</strong> R1 で書ける routes は <strong>1 本だけ</strong>。C と D 両方への戻り道を 1 本でカバーするには、<strong>C の街を D の隣 (<code>7.9.10.16/28</code>)</strong> に置く。</p>
+<p>そうすれば <code>.0/28</code> (D) と <code>.16/28</code> (C) を <strong><code>/27</code> で集約</strong> できる！</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>D の街:  7.9.10.0/28  (.0〜.15)   ──┐
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>                                    ├─ 合体すると 7.9.10.0/27 (.0〜.31)
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>C の街:  7.9.10.16/28 (.16〜.31)  ──┘
+</span></code></pre></div>
+<p>→ ✏️ <strong>R22 IP = <code>7.9.10.17</code></strong> (C の街の住人)
+→ ✏️ <strong>R22 Mask = <code>255.255.255.240</code> (/28)</strong>
+→ ✏️ <strong>C1 IP = <code>7.9.10.18</code></strong> (R22 と同じ街)
+→ ✏️ <strong>C1 Mask = <code>255.255.255.240</code> (/28)</strong>
+→ ✏️ <strong>C の gate = <code>7.9.10.17</code></strong> (= R22)</p>
+<pre class="mermaid"><code>flowchart LR
+    subgraph R2box ["📡 R2"]
+      R21["✅ R21&lt;br/&gt;.1/26"]
+      R22["⭐ R22&lt;br/&gt;IP: 7.9.10.17 ✅&lt;br/&gt;Mask: /28 ✅"]
+      R23["✅ R23&lt;br/&gt;7.9.10.1/28"]
+      R2r1["R2r1&lt;br/&gt;route: ?&lt;br/&gt;📌 gate: .62"]
+    end
+    subgraph Hosts ["💻 ホスト"]
+      C1["⭐ C1&lt;br/&gt;IP: 7.9.10.18 ✅&lt;br/&gt;Mask: /28 ✅&lt;br/&gt;gate: 7.9.10.17 ✅"]
+      D1["✅ D1&lt;br/&gt;.11/28&lt;br/&gt;gate: .1"]
+    end
+
+    R21 --- R2r1
+    R2r1 --- R22
+    R2r1 --- R23
+    R22 --- C1
+    R23 --- D1
+
+    classDef fixed fill:#E0E0E0,stroke:#616161,color:#000
+    classDef done fill:#90CAF9,stroke:#1565C0,color:#000
+    classDef justNow fill:#A5D6A7,stroke:#2E7D32,color:#000,stroke-width:3px
+    class R2r1 fixed
+    class R21,R23,D1 done
+    class R22,C1 justNow</code></pre>
+<p>✨ <strong>C の街も完成！しかも D の隣だから後で 1 本にまとめられる</strong> 💡</p>
+<hr />
+<h3 id="step-6-r2r1-route-internet">🟢 Step 6 — R2r1 route を埋める (Internet 行き)</h3>
+<p><strong>今、ここを埋めています:</strong> ★ R2r1 の <strong>route</strong> (gate は固定の <code>.62</code> のまま)</p>
+<p><strong>理由:</strong> R2 から見て、自分が知らない宛先 (= Internet 全部) は <strong>R1 経由</strong> で投げる。</p>
+<p>→ ✏️ <strong>R2r1 route = <code>0.0.0.0/0</code></strong> (default、全宛先カバー)</p>
+<pre class="mermaid"><code>flowchart LR
+    subgraph R2box ["📡 R2"]
+      R21["✅ .1/26"]
+      R22["✅ R22&lt;br/&gt;.17/28"]
+      R23["✅ R23&lt;br/&gt;.1/28"]
+      R2r1["⭐ R2r1&lt;br/&gt;route: 0.0.0.0/0 ✅&lt;br/&gt;📌 gate: .62"]
+    end
+    subgraph Internet [" "]
+      Out["🌍 Internet 全部&lt;br/&gt;= 0.0.0.0/0"]
+    end
+
+    R2r1 -.-&gt;|"R2 が知らない&lt;br/&gt;宛先は全部 R1 へ"| Out
+
+    R21 --- R2r1
+    R2r1 --- R22
+    R2r1 --- R23
+
+    classDef fixed fill:#E0E0E0,stroke:#616161,color:#000
+    classDef done fill:#90CAF9,stroke:#1565C0,color:#000
+    classDef justNow fill:#A5D6A7,stroke:#2E7D32,color:#000,stroke-width:3px
+    classDef ext fill:#FFE0B2,stroke:#F57C00
+    class R21,R22,R23 done
+    class R2r1 justNow
+    class Out ext</code></pre>
+<hr />
+<h3 id="step-7-r1r2-route-c-d-1">🟢 Step 7 — ⭐ 集約: R1r2 route で C と D 両方を 1 本でカバー</h3>
+<p><strong>今、ここを埋めています:</strong> ★ R1r2 の <strong>route + gate</strong></p>
+<p><strong>理由:</strong> Step 5 で C を D の隣に置いたおかげで、<code>/27</code> (= 32 個) 1 本で両方カバーできる！</p>
+<p>→ ✏️ <strong>R1r2 route = <code>7.9.10.0/27</code></strong> ⭐ 集約魔法
+→ ✏️ <strong>R1r2 gate = <code>161.138.113.1</code></strong> (= R21、R1 から見た隣人)</p>
+<pre class="mermaid"><code>flowchart TB
+    R1r2["⭐ R1r2 route&lt;br/&gt;route: 7.9.10.0/27 ✅&lt;br/&gt;gate: 161.138.113.1 ✅"]
+    R1r2 --&gt; CD["🎯 7.9.10.0/27&lt;br/&gt;(.0〜.31 の 32 個)"]
+    CD --&gt; D_block["📦 7.9.10.0/28 = D の街"]
+    CD --&gt; C_block["📦 7.9.10.16/28 = C の街"]
+    D_block --&gt; D["💻 D"]
+    C_block --&gt; C["💻 C"]
+
+    classDef justNow fill:#A5D6A7,stroke:#2E7D32,color:#000,stroke-width:3px
+    classDef target fill:#FFE082,stroke:#F57F17,color:#000
+    classDef done fill:#90CAF9,stroke:#1565C0,color:#000
+    class R1r2 justNow
+    class CD target
+    class D_block,C_block,D,C done</code></pre>
+<p>✨ <strong>これがルート集約 (supernetting) の威力！</strong> 1 本の routes で 2 つの街を覆える。</p>
+<hr />
+<h3 id="step-8-ir1-gate-internet-r1">🟢 Step 8 — Ir1 gate を埋める (Internet → R1 への入り口)</h3>
+<p><strong>今、ここを埋めています:</strong> ★ Ir1 の <strong>gate</strong> (route は <code>.0/26</code> 固定)</p>
+<p><strong>理由:</strong> Internet 側が「R1-R2 間の街宛は誰に投げる？」 → <strong>R12</strong> (R1 の Internet 側口)。</p>
+<p>→ ✏️ <strong>Ir1 gate = <code>163.178.250.12</code></strong> (= R12 の IP、固定値)</p>
+<pre class="mermaid"><code>flowchart LR
+    I[🌍 Internet]
+    Ir1["⭐ Ir1&lt;br/&gt;📌 route: .0/26&lt;br/&gt;gate: 163.178.250.12 ✅"]
+    R12["✅ R12&lt;br/&gt;163.178.250.12/28"]
+    R1[📡 R1]
+
+    I --- Ir1
+    Ir1 -.-&gt;|".0/26 宛は&lt;br/&gt;R12 (R1) に渡せ"| R12
+    R12 --- R1
+
+    classDef fixed fill:#E0E0E0,stroke:#616161,color:#000
+    classDef done fill:#90CAF9,stroke:#1565C0,color:#000
+    classDef justNow fill:#A5D6A7,stroke:#2E7D32,color:#000,stroke-width:3px
+    classDef ext fill:#FFE0B2,stroke:#F57C00
+    class R12 done
+    class Ir1 justNow
+    class I ext
+    class R1 done</code></pre>
+<hr />
+<h3 id="_10">🎉 完成！ 全部 ✅ になった状態</h3>
+<pre class="mermaid"><code>flowchart LR
+    subgraph Internet [" "]
+      I[🌍 Internet]
+    end
+    subgraph R1box ["📡 R1"]
+      R12["✅ R12&lt;br/&gt;163.178.250.12/28"]
+      R13["✅ R13&lt;br/&gt;161.138.113.62/26"]
+      R1r2["✅ R1r2&lt;br/&gt;route: 7.9.10.0/27&lt;br/&gt;gate: .1"]
+    end
+    subgraph R2box ["📡 R2"]
+      R21["✅ R21&lt;br/&gt;161.138.113.1/26"]
+      R22["✅ R22&lt;br/&gt;7.9.10.17/28"]
+      R23["✅ R23&lt;br/&gt;7.9.10.1/28"]
+      R2r1["✅ R2r1&lt;br/&gt;route: 0.0.0.0/0&lt;br/&gt;gate: .62"]
+    end
+    subgraph Hosts ["💻 ホスト"]
+      C1["✅ C1&lt;br/&gt;7.9.10.18/28&lt;br/&gt;gate: .17"]
+      D1["✅ D1&lt;br/&gt;7.9.10.11/28&lt;br/&gt;gate: .1"]
+    end
+    Ir1["✅ Ir1&lt;br/&gt;route: 161.138.113.0/26&lt;br/&gt;gate: 163.178.250.12"]
+
+    I --- Ir1
+    Ir1 --- R12
+    R12 --- R1r2
+    R1r2 --- R13
+    R13 -.- R21
+    R21 --- R2r1
+    R2r1 --- R22
+    R2r1 --- R23
+    R22 --- C1
+    R23 --- D1
+
+    classDef done fill:#A5D6A7,stroke:#2E7D32,color:#000,stroke-width:2px
+    class R12,R13,R1r2,R21,R22,R23,R2r1,C1,D1,Ir1 done</code></pre>
+<p>→ Check again ボタン → 全 Goal が 🟢 緑になればクリア！ 🎉</p>
+<hr />
+<h3 id="8">📝 全 8 ステップ コピペ用早見表</h3>
+<p>スクリーン上で <strong>この順番に上から埋める</strong> だけ：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">#</th>
+<th>埋める場所</th>
+<th>入れる値</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td>R13 IP</td>
+<td><code>161.138.113.62</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td>R13 Mask, R21 Mask</td>
+<td><code>255.255.255.192</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td>R21 IP</td>
+<td><code>161.138.113.1</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td>R23 IP</td>
+<td><code>7.9.10.1</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td>R23 Mask</td>
+<td><code>255.255.255.240</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td>D の gate</td>
+<td><code>7.9.10.1</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td>R22 IP</td>
+<td><code>7.9.10.17</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td>R22 Mask</td>
+<td><code>255.255.255.240</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td>C1 IP</td>
+<td><code>7.9.10.18</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td>C1 Mask</td>
+<td><code>255.255.255.240</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td>C の gate</td>
+<td><code>7.9.10.17</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">6</td>
+<td>R2r1 route</td>
+<td><code>0.0.0.0/0</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">7</td>
+<td>R1r2 route</td>
+<td><code>7.9.10.0/27</code> ⭐</td>
+</tr>
+<tr>
+<td style="text-align: center;">7</td>
+<td>R1r2 gate</td>
+<td><code>161.138.113.1</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">8</td>
+<td>Ir1 gate</td>
+<td><code>163.178.250.12</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="1">🧠 考え方の核心 (1 ステップずつ「今どこを考えているか」を見る)</h2>
+<div class="admonition tip">
+<p class="admonition-title">💡 このセクションの読み方</p>
+<p>各ステップの上に <strong>「📍 今ここに注目」</strong> というトポロジー図が出ます。
+🟡 黄色く光ってる箱が <strong>「今このステップで考えている対象」</strong> です。
+これで「<strong>今どこの話をしてるんだっけ？</strong>」と迷子になりません。</p>
+</div>
+<hr />
+<h3 id="step-1">Step 1: 制約の連鎖を読む (固定値だけに注目)</h3>
+<h4 id="_11">📍 今ここに注目</h4>
+<pre class="mermaid"><code>flowchart LR
+    HC[💻 Host C]
+    R22_[R22&lt;br/&gt;R2 左上口]
+    HD[💻 Host D]
+    R23_[R23&lt;br/&gt;R2 左下口]
+    R2[📡 Router R2]
+    R21["⭐ R21&lt;br/&gt;R2 右口"]
+    R13["⭐ R13&lt;br/&gt;R1 左口"]
+    R1[📡 Router R1]
+    R12_[R12&lt;br/&gt;R1 上口]
+    I[🌍 Internet]
+
+    HC --- R22_
+    R22_ --- R2
+    HD --- R23_
+    R23_ --- R2
+    R2 --- R21
+    R21 ===|"📌 R2r1 gate=.62 が指す&lt;br/&gt;📌 Ir1 route=.0/26 が縛る"| R13
+    R13 --- R1
+    R1 --- R12_
+    R12_ --- I
+
+    classDef host fill:#E3F2FD,stroke:#1976D2
+    classDef router fill:#F8BBD0,stroke:#C2185B
+    classDef iface fill:#EEEEEE,stroke:#757575,color:#9E9E9E
+    classDef focus fill:#FFEB3B,stroke:#F57F17,stroke-width:4px,color:#000
+    classDef ext fill:#C8E6C9,stroke:#388E3C
+    class HC,HD host
+    class R1,R2 router
+    class R22_,R23_,R12_ iface
+    class R13,R21 focus
+    class I ext</code></pre>
+<p>→ 🟡 光ってる <strong>R13</strong> と <strong>R21</strong> が今の注目箱。</p>
+<h4 id="_12">何を考えるか</h4>
+<p>固定値の中で「<strong>他の値を強制する</strong>」ものを見つけ出します。Level 8 では：</p>
+<div class="admonition info">
+<p class="admonition-title">🔥 逆算の出発点</p>
+<p><strong>R2r1 gate = <code>161.138.113.62</code></strong> (固定) → これは <strong>R2 が R1 にパケットを投げる時の宛先</strong> という意味。
+つまり <strong>R13 (R1 の R2 側口) の IP は必ず <code>161.138.113.62</code></strong>。</p>
+<p>さらに <strong>Ir1 route = <code>161.138.113.0/26</code></strong> (固定) → Internet が「<strong>R1-R2 間の街は /26 サイズ</strong>」と前提にしている。
+だから R13 と R21 の <strong>マスクは両方 /26</strong> にしないと矛盾する。</p>
+</div>
+<h4 id="_13">📊 この時点で確定したこと</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">箱</th>
+<th style="text-align: left;">値</th>
+<th style="text-align: left;">確定理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">✅ R13 IP</td>
+<td style="text-align: left;"><code>161.138.113.62</code></td>
+<td style="text-align: left;">R2r1 gate の固定値が指してる</td>
+</tr>
+<tr>
+<td style="text-align: left;">✅ R13 Mask</td>
+<td style="text-align: left;"><code>/26</code></td>
+<td style="text-align: left;">Ir1 route の /26 と一致させる</td>
+</tr>
+<tr>
+<td style="text-align: left;">✅ R21 Mask</td>
+<td style="text-align: left;"><code>/26</code></td>
+<td style="text-align: left;">同上 (R13 と直結だから同じマスク)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="step-2-r21-ip-r13">Step 2: R21 IP を埋める (R13 と同じ街にする)</h3>
+<h4 id="_14">📍 今ここに注目</h4>
+<pre class="mermaid"><code>flowchart LR
+    HC[💻 Host C]
+    R22_[R22]
+    HD[💻 Host D]
+    R23_[R23]
+    R2[📡 Router R2]
+    R21["⭐ R21&lt;br/&gt;= ?"]
+    R13["✅ R13&lt;br/&gt;.62/26"]
+    R1[📡 Router R1]
+    R12_[R12]
+    I[🌍 Internet]
+
+    HC --- R22_
+    R22_ --- R2
+    HD --- R23_
+    R23_ --- R2
+    R2 --- R21
+    R21 ===|"R13 と同じ街&lt;br/&gt;(.0/26 住人)&lt;br/&gt;から選ぶ"| R13
+    R13 --- R1
+    R1 --- R12_
+    R12_ --- I
+
+    classDef host fill:#E3F2FD
+    classDef router fill:#F8BBD0
+    classDef iface fill:#EEEEEE,color:#9E9E9E
+    classDef done fill:#90CAF9,stroke:#1565C0
+    classDef focus fill:#FFEB3B,stroke:#F57F17,stroke-width:4px,color:#000
+    classDef ext fill:#C8E6C9
+    class HC,HD host
+    class R1,R2 router
+    class R22_,R23_,R12_ iface
+    class R13 done
+    class R21 focus
+    class I ext</code></pre>
+<p>→ 🟡 光ってる <strong>R21</strong> だけが今の対象。R13 はもう確定したので 🟦 青。</p>
+<h4 id="_15">何を考えるか</h4>
+<p>R13 の街 = <code>.0/26</code> (<code>.0〜.63</code>、住人 <code>.1〜.62</code>)。
+R21 はこの街の中で <strong><code>.62</code> 以外の空き住人</strong> を選ぶ。</p>
+<p>→ <strong>R21 IP = <code>161.138.113.1</code></strong> (任意、<code>.1</code> が一番楽)</p>
+<h4 id="_16">📊 この時点で確定したこと (累積)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">箱</th>
+<th style="text-align: left;">値</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">✅ R13 IP / Mask</td>
+<td style="text-align: left;"><code>.62 / /26</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">✅ R21 IP</td>
+<td style="text-align: left;"><code>.1</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">✅ R21 Mask</td>
+<td style="text-align: left;"><code>/26</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="step-3-d-d">Step 3: D 周辺を埋める (D の街を完成させる)</h3>
+<h4 id="_17">📍 今ここに注目</h4>
+<pre class="mermaid"><code>flowchart LR
+    HC[💻 Host C]
+    R22_[R22]
+    HD["💻 Host D&lt;br/&gt;📌 D1=.11/28"]
+    R23["⭐ R23&lt;br/&gt;= ?"]
+    R2[📡 Router R2]
+    R21[✅ R21&lt;br/&gt;.1/26]
+    R13[✅ R13&lt;br/&gt;.62/26]
+
+    HC --- R22_
+    R22_ --- R2
+    HD ===|"D の街は .0/28&lt;br/&gt;(.11 から逆算)"| R23
+    R23 --- R2
+    R2 --- R21
+    R21 -.- R13
+
+    classDef host fill:#E3F2FD
+    classDef router fill:#F8BBD0
+    classDef iface fill:#EEEEEE,color:#9E9E9E
+    classDef done fill:#90CAF9,stroke:#1565C0
+    classDef focus fill:#FFEB3B,stroke:#F57F17,stroke-width:4px,color:#000
+    classDef fixed fill:#FFCCBC,stroke:#D84315
+    class HC host
+    class HD fixed
+    class R1,R2 router
+    class R22_ iface
+    class R13,R21 done
+    class R23 focus</code></pre>
+<p>→ 🟡 光ってる <strong>R23 (R2 左下口)</strong> が今の対象。
+→ 🟧 オレンジの <strong>D1</strong> は固定値ヒント。</p>
+<h4 id="_18">何を考えるか</h4>
+<p>D1 = <code>7.9.10.11/28</code> 固定 → D の街 = <code>7.9.10.0/28</code>（<code>.0〜.15</code>、住人 <code>.1〜.14</code>）。
+R23 はこの街の住人にする。</p>
+<p>→ <strong>R23 IP = <code>7.9.10.1</code></strong> (空き住人の中で <code>.1</code> を選ぶ)
+→ <strong>R23 Mask = <code>/28</code></strong> (D と同じマスク)
+→ <strong>D の gate = <code>7.9.10.1</code></strong> (= R23、D の街の玄関)</p>
+<hr />
+<h3 id="step-4-c-d_1">Step 4: ⭐ 山場! C を「D の隣」に置く (集約のための配置)</h3>
+<h4 id="_19">📍 今ここに注目</h4>
+<pre class="mermaid"><code>flowchart LR
+    HC["💻 Host C&lt;br/&gt;= ?"]
+    R22["⭐ R22&lt;br/&gt;= ?"]
+    HD[✅ D1&lt;br/&gt;.11/28]
+    R23[✅ R23&lt;br/&gt;7.9.10.1/28]
+    R2[📡 Router R2]
+    R21[✅ R21]
+    R1r2["⭐ R1r2 routes&lt;br/&gt;= ?"]
+    R1[📡 R1]
+
+    HC ===|"C の街を D の隣に!&lt;br/&gt;= .16/28 にする"| R22
+    R22 --- R2
+    HD --- R23
+    R23 --- R2
+    R2 --- R21
+    R21 -.- R1
+    R1 --- R1r2
+
+    classDef host fill:#E3F2FD
+    classDef router fill:#F8BBD0
+    classDef done fill:#90CAF9,stroke:#1565C0
+    classDef focus fill:#FFEB3B,stroke:#F57F17,stroke-width:4px,color:#000
+    class R1,R2 router
+    class HD,R23,R21 done
+    class HC,R22,R1r2 focus</code></pre>
+<p>→ 🟡 <strong>C, R22, R1r2</strong> が同時に光ってます (これらが連動して決まる)。</p>
+<h4 id="_20">何を考えるか — このレベル最大の罠</h4>
+<div class="admonition danger">
+<p class="admonition-title">🚨 制約: R1 で編集できる routes は 1 本だけ</p>
+<p>R1 から見て、C も D も「R2 経由で行く街」。
+でも R1 の routes は <strong>1 本しか書けない</strong> (他は固定で動かせない)。
+→ C と D を <strong>1 本でカバーする方法</strong> を考えるしかない！</p>
+</div>
+<h4 id="c-d-1628">解決: C を D の隣 (<code>.16/28</code>) に置く</h4>
+<p>D の街 (<code>.0/28</code> = <code>.0〜.15</code>) のすぐ隣が <code>.16/28</code> (<code>.16〜.31</code>)。
+この <strong>2 つを合わせると <code>.0〜.31</code> = <code>/27</code> 1 つ分</strong>！</p>
+<pre class="mermaid"><code>flowchart TB
+    A["🎯 R1 の routes 1 本: 7.9.10.0/27&lt;br/&gt;(.0〜.31 を全部カバー)"]
+    A --&gt; B["📦 7.9.10.0/28 = D の街&lt;br/&gt;(.0〜.15)"]
+    A --&gt; C["📦 7.9.10.16/28 = C の街&lt;br/&gt;(.16〜.31)"]
+
+    style A fill:#FFE082,stroke:#F57F17,stroke-width:3px
+    style B fill:#90CAF9
+    style C fill:#FFE0B2</code></pre>
+<h4 id="_21">配置の決定</h4>
+<p>→ <strong>R22 IP = <code>7.9.10.17</code></strong> (C の街の住人)
+→ <strong>R22 Mask = <code>/28</code></strong>
+→ <strong>C1 IP = <code>7.9.10.18</code></strong> (R22 と同じ街)
+→ <strong>C1 Mask = <code>/28</code></strong>
+→ <strong>C の gate = <code>7.9.10.17</code></strong> (= R22)</p>
+<blockquote>
+<p>💡 <strong>これがルート集約 (supernetting)</strong>。Level 8 が「<strong>C の街を自由に決められる</strong>」を逆手に取った設計問題なんです！</p>
+</blockquote>
+<hr />
+<h3 id="step-5-routes_1">Step 5: routes を埋める (経路を書く)</h3>
+<h4 id="_22">📍 今ここに注目</h4>
+<pre class="mermaid"><code>flowchart LR
+    HC[✅ Host C]
+    R22[✅ R22&lt;br/&gt;.17/28]
+    HD[✅ Host D]
+    R23[✅ R23]
+    R2["📡 R2"]
+    R2r1["⭐ R2r1 routes&lt;br/&gt;= 0.0.0.0/0"]
+    R21[✅ R21]
+    R13[✅ R13]
+    R1["📡 R1"]
+    R1r2["⭐ R1r2 routes&lt;br/&gt;= 7.9.10.0/27"]
+    R12[✅ R12]
+    Ir1["⭐ Ir1 routes&lt;br/&gt;gate = R12 IP"]
+    I[🌍 Internet]
+
+    HC --- R22
+    R22 --- R2
+    HD --- R23
+    R23 --- R2
+    R2 --- R2r1
+    R2 --- R21
+    R21 -.- R13
+    R13 --- R1
+    R1 --- R1r2
+    R1 --- R12
+    R12 --- I
+    I --- Ir1
+
+    classDef host fill:#E3F2FD
+    classDef router fill:#F8BBD0
+    classDef done fill:#90CAF9
+    classDef focus fill:#FFEB3B,stroke:#F57F17,stroke-width:4px,color:#000
+    classDef ext fill:#C8E6C9
+    class HC,HD host
+    class R1,R2 router
+    class R22,R23,R21,R13,R12 done
+    class R2r1,R1r2,Ir1 focus
+    class I ext</code></pre>
+<p>→ 🟡 光ってる <strong>R2r1, R1r2, Ir1</strong> の 3 つの routes 欄を埋めていく。</p>
+<h4 id="_23">それぞれの役割と値</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">routes 欄</th>
+<th style="text-align: left;">何を書く？</th>
+<th style="text-align: left;">値</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>R2r1 route</strong></td>
+<td style="text-align: left;">R2 から外に出る道 (= Internet 行き default)</td>
+<td style="text-align: left;"><code>0.0.0.0/0</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>R1r2 route</strong></td>
+<td style="text-align: left;">R1 から C と D 両方への戻り道 (集約!)</td>
+<td style="text-align: left;"><code>7.9.10.0/27</code> ⭐</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>R1r2 gate</strong></td>
+<td style="text-align: left;">R1 から見た R2 の入口</td>
+<td style="text-align: left;"><code>161.138.113.1</code> (= R21)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Ir1 gate</strong></td>
+<td style="text-align: left;">Internet が R1 に渡す相手</td>
+<td style="text-align: left;"><code>163.178.250.12</code> (= R12)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="_24">🎉 全部埋まった完成図</h3>
+<pre class="mermaid"><code>flowchart LR
+    HC[💻 Host C&lt;br/&gt;.18/28]
+    R22[R22&lt;br/&gt;.17/28]
+    HD[💻 Host D&lt;br/&gt;.11/28]
+    R23[R23&lt;br/&gt;.1/28]
+    R2[📡 R2]
+    R21[R21&lt;br/&gt;.1/26]
+    R13[R13&lt;br/&gt;.62/26]
+    R1[📡 R1]
+    R12[R12&lt;br/&gt;.250.12/28]
+    I[🌍 Internet]
+
+    HC --- R22
+    R22 --- R2
+    HD --- R23
+    R23 --- R2
+    R2 --- R21
+    R21 -.- R13
+    R13 --- R1
+    R1 --- R12
+    R12 --- I
+
+    classDef done fill:#A5D6A7,stroke:#2E7D32,stroke-width:2px
+    class HC,R22,HD,R23,R2,R21,R13,R1,R12,I done</code></pre>
+<p>→ Check Again ボタン → 🎉 <strong>全 Goal 緑になればクリア！</strong></p>
+<hr />
+<h2 id="c-internet">🎬 パケットの旅（C → Internet のゴール）</h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>🚀 行き: C (.18) → 8.8.8.8
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>C: default route → R22 (.17) ✅
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>R2: routes 確認
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>   直結 .0/28 (D) → 該当なし
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>   直結 .16/28 (C 自身の街) → 該当なし
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>   直結 .0/26 (R1 側) → 該当なし
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>   default (0.0.0.0/0) → R13 (.62) へ ✅
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>R1: default route → Internet ✅
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>配達完了
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>📬 帰り: Internet → C (.18)
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>Internet: routes → R12 経由
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>R1: routes 確認
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>   直結 .128/26 (R1-R2 間) → 該当なし
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>   集約 7.9.10.0/27 → ✅ 該当 (.18 含まれる)
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>   → R21 へ
+</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>R2: 直結 7.9.10.16/28 (C の街) → ✅ → R22 経由で C へ
+</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>配達完了
+</span></code></pre></div>
+<hr />
+<h2 id="_25">✅ 解答例</h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>R13 IP → 161.138.113.62,  Mask → 255.255.255.192
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>R21 IP → 161.138.113.1,   Mask → 255.255.255.192
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>R23 IP → 7.9.10.1,        Mask → 255.255.255.240
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>D1  IP → 7.9.10.11        (変更なし)
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>D gate → 7.9.10.1
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>R22 IP → 7.9.10.17,       Mask → 255.255.255.240
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>C1  IP → 7.9.10.18,       Mask → 255.255.255.240
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>C gate → 7.9.10.17
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>R2r1 route → 0.0.0.0/0   (Internet 向けデフォルト)
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>R1r2 route → 7.9.10.0/27, gate → 161.138.113.1   ⭐ 集約!
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>Ir1 gate   → 163.178.250.12 (R12 の IP)
+</span></code></pre></div>
+<hr />
+<h2 id="_26">🔗 関連概念</h2>
+<ul>
+<li>06 <a href="../../01-basics/routing-table/">ルーティングテーブル</a> — longest prefix match</li>
+<li>03 <a href="../../01-basics/cidr/">CIDR 早見表</a> — <code>/27</code> <code>/28</code> のサイズ感</li>
+<li>07 <a href="../../01-basics/bidirectional/">双方向到達性</a></li>
+</ul>
+<hr />
+<h2 id="_27">🎓 このレベルの抽象的な学び</h2>
+<div class="admonition tip">
+<p class="admonition-title">⭐ ルート集約 (supernetting)</p>
+<p>隣接する複数のサブネットを <strong>1 つの広いプレフィックス</strong> で表現する技。</p>
+<p><strong>実世界の応用</strong>:</p>
+<ul>
+<li>クラウドの VPC ルートテーブル（リージョン単位で /16 集約）</li>
+<li>巨大 CDN のルート広告（複数 AS を 1 つのプレフィックスで外に見せる）</li>
+<li>プログラムの case 文を <strong>範囲で書く</strong>（<code>if 0 &lt;= x &lt;= 15</code> を <code>if x &amp; ~0xF == 0</code> で表現）</li>
+</ul>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">制約の連鎖を辿る</p>
+<p>「固定値 A → したがって B が決まる → したがって C が決まる…」と
+<strong>1 つの固定値から連鎖的に他の値を導く</strong>。
+数独のマス埋めや論理パズルと同じ思考法。</p>
+</div>
+<hr />
+<h2 id="_28">⚠️ よくあるミス</h2>
+<div class="admonition warning">
+<p class="admonition-title">C と D を離れた位置に配置して集約できなくなる</p>
+<p>C を <code>.100/28</code> に置くと、D の <code>.0/28</code> と離れすぎて /27 で包めない。
+<strong>常に「隣のブロックに置ける？」を意識</strong>。</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">集約を /28 でやろうとする</p>
+<p>/28 では 16 アドレスしかカバーできず、C と D のどちらか片方しか入らない。
+<strong>2 ブロック = 32 アドレス = /27</strong> が正解。</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Ir1 gate を R13 にしようとする</p>
+<p>Internet → R は R12 経由。Ir1 gate は <strong>R12 の IP</strong> (= <code>163.178.250.12</code>)。</p>
+</div>
+<hr />
+<h2 id="_29">▶️ 次に読むページ</h2>
+<p><a href="../level9/">Level 9 — 大ボス（6 ゴール）</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  ページトップへ戻る
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="フッター" >
+        
+          
+          <a href="../level7/" class="md-footer__link md-footer__link--prev" aria-label="前: Level 7 — サブネット分割設計">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                前
+              </span>
+              <div class="md-ellipsis">
+                Level 7 — サブネット分割設計
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../level9/" class="md-footer__link md-footer__link--next" aria-label="次: Level 9 — 大ボス（6ゴール）">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                次
+              </span>
+              <div class="md-ellipsis">
+                Level 9 — 大ボス（6ゴール）
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="../../js/video-control.js"></script>
+      
+        <script src="../../js/mermaid-override.js"></script>
+      
+        <script src="../../js/user-notes.js"></script>
+      
+    
+  </body>
+</html>

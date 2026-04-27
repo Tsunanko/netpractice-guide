@@ -1,0 +1,2873 @@
+
+<!doctype html>
+<html lang="ja" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="42 Tokyo NetPractice プロジェクトの解説サイト（超初心者向け）">
+      
+      
+      
+        <link rel="canonical" href="https://tsunanko.github.io/netpractice-guide/01-basics/cidr/">
+      
+      
+        <link rel="prev" href="../subnet-mask/">
+      
+      
+        <link rel="next" href="../switch-router/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>03. CIDR 早見表と計算 - NetPractice Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans JP";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#03-cidr" class="md-skip">
+          コンテンツにスキップ
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="ヘッダー">
+    <a href="../.." title="NetPractice Guide" class="md-header__button md-logo" aria-label="NetPractice Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 2c-1.11 0-2 .89-2 2v3c0 1.11.89 2 2 2h1v2H2v2h4v2H5c-1.11 0-2 .89-2 2v3c0 1.11.89 2 2 2h4c1.11 0 2-.89 2-2v-3c0-1.11-.89-2-2-2H8v-2h8v2h-1c-1.11 0-2 .89-2 2v3c0 1.11.89 2 2 2h4c1.11 0 2-.89 2-2v-3c0-1.11-.89-2-2-2h-1v-2h4v-2h-9V9h1c1.11 0 2-.89 2-2V4c0-1.11-.89-2-2-2zm0 2h4v3h-4zM5 17h4v3H5zm10 0h4v3h-4z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            NetPractice Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              03. CIDR 早見表と計算
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="ダークモードへ"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="ダークモードへ" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="ライトモードへ"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="ライトモードへ" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="検索" placeholder="検索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="検索">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="共有" aria-label="共有" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="クリア" aria-label="クリア" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            検索を初期化
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="タブ" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  ホーム
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../00-start-here/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  はじめに
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../ip-address/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  第1部 ネットワークの基礎
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../02-levels/level1/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  第2部 全10レベル攻略
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../03-learnings/why-this-exercise/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  第3部 抽象化された学び
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../04-defense/qa/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  第4部 評価対策
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../glossary/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  📚 用語集
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="ナビゲーション" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="NetPractice Guide" class="md-nav__button md-logo" aria-label="NetPractice Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 2c-1.11 0-2 .89-2 2v3c0 1.11.89 2 2 2h1v2H2v2h4v2H5c-1.11 0-2 .89-2 2v3c0 1.11.89 2 2 2h4c1.11 0 2-.89 2-2v-3c0-1.11-.89-2-2-2H8v-2h8v2h-1c-1.11 0-2 .89-2 2v3c0 1.11.89 2 2 2h4c1.11 0 2-.89 2-2v-3c0-1.11-.89-2-2-2h-1v-2h4v-2h-9V9h1c1.11 0 2-.89 2-2V4c0-1.11-.89-2-2-2zm0 2h4v3h-4zM5 17h4v3H5zm10 0h4v3h-4z"/></svg>
+
+    </a>
+    NetPractice Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ホーム
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    はじめに
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    はじめに
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../00-start-here/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    00. このガイドの使い方
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../00-rules/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎓 数字の決め方 (4 黄金ルール)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../00-how-to-solve/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🧭 共通の解き方 (どこから手を付けるか)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1部 ネットワークの基礎
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    第1部 ネットワークの基礎
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ip-address/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01. IP アドレスって何？
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../subnet-mask/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02. サブネットマスクって何？
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03. CIDR 早見表と計算
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03. CIDR 早見表と計算
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        このページは何？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        このページで学ぶこと
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cidr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧩 CIDR って何？
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧩 CIDR って何？">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        書き方は超シンプル
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 早見表（これを暗記すると早い）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧮 計算公式
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧮 計算公式">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        例: /26 なら？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        例: /28 なら？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-24-25-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🗂️ 1 つの町を半分に分ける（/24 → /25 × 2）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🗂️ 1 つの町を半分に分ける（/24 → /25 × 2）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#24-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        視覚図: /24 を /25 で半分こ
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#24-4-26-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📏 もう一段細かく: /24 を 4 等分（→ /26 × 4）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📏 もう一段細かく: /24 を 4 等分（→ /26 × 4）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#24-26-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        視覚図: /24 を /26 で 4 等分
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📏 サブネット境界の倍数ルール（速算の核）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 「この IP はどのブロックに属する？」を一瞬で求める
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 「この IP はどのブロックに属する？」を一瞬で求める">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1921681222-27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        例: 192.168.1.222 /27 はどのブロック？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1921681132-28" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        例: 192.168.1.132 /28 はどのブロック？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔢 /18 みたいな「中途半端な」マスクの扱い
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔢 /18 みたいな「中途半端な」マスクの扱い">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#15040107254-18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        例: 150.40.107.254 / 18 の町は？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💡 暗算のコツ
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚠️ よくあるミス
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 まとめ
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ▶️ 次に読むページ
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../switch-router/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04. スイッチとルータの違い
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gateway/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    05. ゲートウェイって何？
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../routing-table/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    06. ルーティングテーブル
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bidirectional/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    07. 双方向到達性（最重要）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2部 全10レベル攻略
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    第2部 全10レベル攻略
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-levels/level1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Level 1 — 直結リンク
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-levels/level2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Level 2 — 不正マスクの修正
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-levels/level3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Level 3 — スイッチで3台接続
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-levels/level4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Level 4 — ルータ登場
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-levels/level5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Level 5 — ルーティング初登場
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-levels/level6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Level 6 — Internet 越しの通信
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-levels/level7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Level 7 — サブネット分割設計
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-levels/level8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Level 8 — 2つのLAN + Internet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-levels/level9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Level 9 — 大ボス（6ゴール）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-levels/level10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Level 10 — 最終ボス（7ゴール）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3部 抽象化された学び
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    第3部 抽象化された学び
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-learnings/why-this-exercise/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    なぜ 42 はこの課題を出す？
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-learnings/transferable/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    他分野に応用できる考え方
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-learnings/debugging-mindset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    制約からの逆算という思考法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4部 評価対策
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    第4部 評価対策
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-defense/qa/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎓 ディフェンス Q&A
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-defense/cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📋 当日チートシート
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📚 用語集
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        このページは何？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        このページで学ぶこと
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cidr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧩 CIDR って何？
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧩 CIDR って何？">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        書き方は超シンプル
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 早見表（これを暗記すると早い）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧮 計算公式
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧮 計算公式">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        例: /26 なら？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        例: /28 なら？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-24-25-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🗂️ 1 つの町を半分に分ける（/24 → /25 × 2）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🗂️ 1 つの町を半分に分ける（/24 → /25 × 2）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#24-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        視覚図: /24 を /25 で半分こ
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#24-4-26-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📏 もう一段細かく: /24 を 4 等分（→ /26 × 4）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📏 もう一段細かく: /24 を 4 等分（→ /26 × 4）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#24-26-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        視覚図: /24 を /26 で 4 等分
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📏 サブネット境界の倍数ルール（速算の核）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 「この IP はどのブロックに属する？」を一瞬で求める
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 「この IP はどのブロックに属する？」を一瞬で求める">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1921681222-27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        例: 192.168.1.222 /27 はどのブロック？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1921681132-28" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        例: 192.168.1.132 /28 はどのブロック？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔢 /18 みたいな「中途半端な」マスクの扱い
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔢 /18 みたいな「中途半端な」マスクの扱い">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#15040107254-18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        例: 150.40.107.254 / 18 の町は？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💡 暗算のコツ
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚠️ よくあるミス
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 まとめ
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ▶️ 次に読むページ
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="03-cidr">03. CIDR 早見表と計算</h1>
+<h2 id="_1">このページは何？</h2>
+<p><code>/24</code> とか <code>/25</code> という書き方（<strong>CIDR 表記</strong> = サイダー表記）の意味と、
+<strong>1 つの町に何人住めるか</strong> を 3 秒で計算するコツのページです。</p>
+<hr />
+<h2 id="_2">このページで学ぶこと</h2>
+<ul>
+<li>CIDR 表記は「マスクで 1 が連続している個数」</li>
+<li><code>/24</code> → 住人 254 人、<code>/30</code> → 住人 2 人…の感覚を掴む</li>
+<li>ホスト数 = <strong>2^(32 − マスク桁数) − 2</strong></li>
+<li>/25 以下で町を分割する考え方</li>
+</ul>
+<hr />
+<h2 id="cidr">🧩 CIDR って何？</h2>
+<div class="admonition info">
+<p class="admonition-title">正式名称</p>
+<p>CIDR = <strong>Classless Inter-Domain Routing</strong>（クラスレス・インタードメイン・ルーティング）。
+「/24」のような表記を <strong>CIDR 表記</strong> と呼ぶ。読み方は「サイダー」。</p>
+</div>
+<h3 id="_3">書き方は超シンプル</h3>
+<p><strong>マスクの 1 が何個並んでいるかを数字で書くだけ</strong>。</p>
+<div class="admonition info">
+<p class="admonition-title">💡 ここでつまずく人へ — <code>/24</code> の数字は何を表す？</p>
+<p><code>/24</code> の <code>24</code> は「<strong>マスクの先頭から 1 が 24 個並んでいる</strong>」という意味。
+<code>255.255.255.0</code> を 2 進にすると <code>11111111.11111111.11111111.00000000</code> で、
+確かに <code>1</code> が 24 個ですね。</p>
+<p>つまり <code>/数字</code> を見れば、<strong>ネットワーク部のビット長</strong> がそのまま分かる近道表記です。</p>
+</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">マスク（10 進）</th>
+<th style="text-align: left;">2 進（1 の個数）</th>
+<th style="text-align: center;">CIDR 表記</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>255.255.255.0</code></td>
+<td style="text-align: left;">1 が 24 個</td>
+<td style="text-align: center;"><strong>/24</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>255.255.255.128</code></td>
+<td style="text-align: left;">1 が 25 個</td>
+<td style="text-align: center;"><strong>/25</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>255.255.255.192</code></td>
+<td style="text-align: left;">1 が 26 個</td>
+<td style="text-align: center;"><strong>/26</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>255.255.255.240</code></td>
+<td style="text-align: left;">1 が 28 個</td>
+<td style="text-align: center;"><strong>/28</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>255.0.0.0</code></td>
+<td style="text-align: left;">1 が 8 個</td>
+<td style="text-align: center;"><strong>/8</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_4">📊 早見表（これを暗記すると早い）</h2>
+<div class="admonition tip">
+<p class="admonition-title">NetPractice 頻出のマスク</p>
+<p>Level 1〜10 で出てくるのはほぼ <strong>/8, /16, /18, /24, /25, /26, /27, /28, /29, /30</strong> です。</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">表の見方</p>
+<p><strong>住人数</strong> は「そのマスクで実際に機器を置ける台数」。
+<code>2^(32−CIDR) − 2</code> で計算しています（<code>− 2</code> はネットワークアドレスとブロードキャストを除くため）。
+NetPractice で必要になるのはこの <strong>住人数</strong> だけなので、この数字だけ覚えれば十分です。</p>
+</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">CIDR</th>
+<th style="text-align: left;">マスク</th>
+<th style="text-align: center;">使える住人数</th>
+<th style="text-align: left;">よくある用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">/8</td>
+<td style="text-align: left;"><code>255.0.0.0</code></td>
+<td style="text-align: center;">16,777,214</td>
+<td style="text-align: left;">大企業全体</td>
+</tr>
+<tr>
+<td style="text-align: center;">/16</td>
+<td style="text-align: left;"><code>255.255.0.0</code></td>
+<td style="text-align: center;">65,534</td>
+<td style="text-align: left;">中企業全体</td>
+</tr>
+<tr>
+<td style="text-align: center;">/18</td>
+<td style="text-align: left;"><code>255.255.192.0</code></td>
+<td style="text-align: center;">16,382</td>
+<td style="text-align: left;">大きめ LAN</td>
+</tr>
+<tr>
+<td style="text-align: center;">/24</td>
+<td style="text-align: left;"><code>255.255.255.0</code></td>
+<td style="text-align: center;"><strong>254</strong></td>
+<td style="text-align: left;"><strong>家庭・小オフィス</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">/25</td>
+<td style="text-align: left;"><code>255.255.255.128</code></td>
+<td style="text-align: center;">126</td>
+<td style="text-align: left;">小 LAN</td>
+</tr>
+<tr>
+<td style="text-align: center;">/26</td>
+<td style="text-align: left;"><code>255.255.255.192</code></td>
+<td style="text-align: center;">62</td>
+<td style="text-align: left;">小 LAN</td>
+</tr>
+<tr>
+<td style="text-align: center;">/27</td>
+<td style="text-align: left;"><code>255.255.255.224</code></td>
+<td style="text-align: center;">30</td>
+<td style="text-align: left;">小 LAN</td>
+</tr>
+<tr>
+<td style="text-align: center;">/28</td>
+<td style="text-align: left;"><code>255.255.255.240</code></td>
+<td style="text-align: center;">14</td>
+<td style="text-align: left;">部署</td>
+</tr>
+<tr>
+<td style="text-align: center;">/29</td>
+<td style="text-align: left;"><code>255.255.255.248</code></td>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;">小グループ</td>
+</tr>
+<tr>
+<td style="text-align: center;">/30</td>
+<td style="text-align: left;"><code>255.255.255.252</code></td>
+<td style="text-align: center;"><strong>2</strong></td>
+<td style="text-align: left;"><strong>ルータ間専用</strong></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">/31, /32 は特殊</p>
+<p><code>/31</code>（RFC 3021, 点対点リンク用）と <code>/32</code>（単体ホスト）は
+上の <code>-2</code> ルールの例外扱いで、住人数はそれぞれ 2 台 / 1 台になります。
+<strong>NetPractice ではほぼ出てこない</strong> ので、存在だけ頭の隅に入れておけば OK。</p>
+</div>
+<hr />
+<h2 id="_5">🧮 計算公式</h2>
+<div class="admonition info">
+<p class="admonition-title">覚えるのはこれだけ</p>
+<p><strong>使える住人数</strong> = <code>2 ^ (32 − CIDR) − 2</code></p>
+<p>右側の <code>− 2</code> は <strong>ネットワークアドレスとブロードキャストの 2 個は住人に使えない</strong> から引きます。
+（例: <code>/24</code> なら <code>2⁸ − 2 = 256 − 2 = 254</code> 台）</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">💡 ここでつまずく人へ — どうして <code>2 ^ (32 - CIDR)</code>？</p>
+<p>IP は <strong>全部で 32 ビット</strong>。そのうち先頭 CIDR ビットが「町名」、
+残り <strong>(32 − CIDR) ビット</strong> が「番地」です。
+番地のビット数だけ自由に組み合わせられるので、その町の総アドレス数は
+<strong>2 を (32 − CIDR) 回掛けた数</strong>（= 2^(32 − CIDR)）になります。</p>
+<p>例: <code>/24</code> なら番地は 8 ビット → <code>2⁸ = 256</code> 個 → 使える住人は 254 人 (<code>256 − 2</code>)。</p>
+</div>
+<h3 id="26">例: /26 なら？</h3>
+<div class="step-flow">
+  <div class="step"><span class="step-num">1</span>CIDR<br><code>/26</code></div>
+  <div class="step"><span class="step-num">2</span>32 − 26<br>= <b>6</b></div>
+  <div class="step"><span class="step-num">3</span>アドレス数<br><code>2⁶ = 64</code></div>
+  <div class="step"><span class="step-num">4</span>住人数<br><code>64 − 2 = 62</code></div>
+</div>
+
+<h3 id="28">例: /28 なら？</h3>
+<div class="step-flow">
+  <div class="step"><span class="step-num">1</span>CIDR<br><code>/28</code></div>
+  <div class="step"><span class="step-num">2</span>32 − 28<br>= <b>4</b></div>
+  <div class="step"><span class="step-num">3</span>アドレス数<br><code>2⁴ = 16</code></div>
+  <div class="step"><span class="step-num">4</span>住人数<br><code>16 − 2 = 14</code></div>
+</div>
+
+<hr />
+<h2 id="1-24-25-2">🗂️ 1 つの町を半分に分ける（/24 → /25 × 2）</h2>
+<div class="admonition tip">
+<p class="admonition-title">これをやる理由</p>
+<p>NetPractice の Level 5 以降で <strong>「1 つの <code>/24</code> の町を 2 つに割って、別々の LAN として使わせる」</strong> という操作が頻出します。
+（例: 「A 社と B 社で IP 帯は共有するが、互いに干渉しないよう分けたい」）</p>
+<p>分割すると <strong>町が 2 個に増え、使える住人数も変わる</strong> ので、
+どの番地が使えてどの番地が使えないかを先に掴んでおくと Level 5+ で迷いません。</p>
+</div>
+<p>大きい町 <code>/24</code>（住人 254 人） を <strong>半分ずつ</strong> に分けると <strong><code>/25</code> が 2 つ</strong>（1 つあたり 126 人）できます。</p>
+<div class="admonition info">
+<p class="admonition-title">💡 用語: ブロックって何？</p>
+<p>分割してできた <strong>1 つ 1 つの小さな町</strong> のことを、この先では <strong>「ブロック」</strong> と呼びます。
+（ネットワーク用語の「subnet block」の略で、「アドレスのかたまり」の意味）</p>
+<p>例えば <code>/24</code> を 2 分割すると <strong><code>/25</code> のブロックが 2 個</strong> できる、
+4 分割すると <strong><code>/26</code> のブロックが 4 個</strong> できる、という数え方をします。</p>
+<p>もう少し正確に言うと:</p>
+<ul>
+<li><strong>町（サブネット）= ブロック</strong> で、ほぼ同じ意味</li>
+<li>ただし「ブロック」は <strong>他の隣り合うブロックと一緒に大きな町を作っていたもの</strong> というニュアンス</li>
+<li>だから <strong>「<code>/24</code> を 4 つのブロックに割る」</strong> のような使い方が自然</li>
+</ul>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">🎯 マスクとブロックの関係 — 一番大事</p>
+<p>マスクの長さ（<code>/XX</code> の数字）を決めると、<strong>ブロックの幅（= 中のアドレス数）が自動で決まる</strong> のがポイント。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">マスク</th>
+<th style="text-align: center;">ブロック幅（アドレス数）</th>
+<th style="text-align: center;">住人が使える数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>/24</code></td>
+<td style="text-align: center;">256 個</td>
+<td style="text-align: center;">254 人</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>/25</code></td>
+<td style="text-align: center;">128 個</td>
+<td style="text-align: center;">126 人</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>/26</code></td>
+<td style="text-align: center;">64 個</td>
+<td style="text-align: center;">62 人</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>/27</code></td>
+<td style="text-align: center;">32 個</td>
+<td style="text-align: center;">30 人</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>/28</code></td>
+<td style="text-align: center;">16 個</td>
+<td style="text-align: center;">14 人</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>/30</code></td>
+<td style="text-align: center;">4 個</td>
+<td style="text-align: center;">2 人</td>
+</tr>
+</tbody>
+</table>
+<p>式にすると <strong>ブロック幅 = 2 の (32 − マスク) 乗</strong>。
+つまり <strong>マスクを 1 ビット伸ばす = ブロックが半分になる</strong> という関係。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/24 [██████████████████████████████████] 256 個
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>/25 [███████████████]                     128 個（半分）
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>/26 [███████]                              64 個（さらに半分）
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>/27 [███]                                  32 個（もう一段）
+</span></code></pre></div>
+</div>
+<div class="admonition info">
+<p class="admonition-title">🏛️ 町の中にブロックが並ぶイメージ</p>
+<p>「街」と「ブロック」の位置付けはこうイメージすると分かりやすい:</p>
+<ul>
+<li><strong>大きな町 <code>/24</code></strong> = 街区全体（256 軒分の地番）</li>
+<li><strong>ブロック <code>/25</code> × 2</strong> = 街区を真ん中で分けた <strong>2 街区</strong></li>
+<li><strong>ブロック <code>/26</code> × 4</strong> = 同じ街区を <strong>4 街区</strong> に分けた状態</li>
+</ul>
+<p>つまり「町の中にブロックがある」というより、<strong>町そのものを細かく区切ったのがブロック</strong>。
+呼び方が違うだけで、<strong>ブロック = 小さくなった町</strong> です。</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">🚚 ルータはブロック単位（= 町単位）で荷物を運ぶ（次章で詳しく）</p>
+<p>ちなみに、<strong>町と町をつなぐ機械「ルータ」</strong> は、<strong>1 軒 1 軒ではなくブロック（町）をひとまとめに扱います</strong>。</p>
+<ul>
+<li>行き先を「この <code>/25</code> ブロックは 左、あの <code>/25</code> ブロックは 右」のように <strong>ブロック単位</strong> で判断する</li>
+<li>だから <strong>マスクを細かくするとルータの判断も細かくなる</strong>（町が増える = ルートも増える）</li>
+</ul>
+<p>この「ブロック単位で運ぶ機械」の実物については、次のページ
+<a href="../switch-router/">04. スイッチとルータの違い</a> で
+<strong>物理的にどんな箱か</strong> も含めて詳しく説明します。今はまだ「そういう機械があるんだな」
+くらいで大丈夫です。</p>
+</div>
+<h4 id="24-25">視覚図: <code>/24</code> を <code>/25</code> で半分こ</h4>
+<div class="subnet-ruler cols-2">
+  <div class="subnet-block target">
+    <span class="block-name">.0/25</span>
+    <span class="block-range">.0〜.127</span>
+    <span class="block-host-range">住人 .1〜.126 (126 人)</span>
+  </div>
+  <div class="subnet-block target-2">
+    <span class="block-name">.128/25</span>
+    <span class="block-range">.128〜.255</span>
+    <span class="block-host-range">住人 .129〜.254 (126 人)</span>
+  </div>
+</div>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">分割後のブロック</th>
+<th style="text-align: left;">住人が使える範囲</th>
+<th style="text-align: left;">使えない 2 つの番地</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>192.168.1.0/25</code></td>
+<td style="text-align: left;"><code>.1</code>〜<code>.126</code>（126 人）</td>
+<td style="text-align: left;"><code>.0</code>・<code>.127</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>192.168.1.128/25</code></td>
+<td style="text-align: left;"><code>.129</code>〜<code>.254</code>（126 人）</td>
+<td style="text-align: left;"><code>.128</code>・<code>.255</code></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title"><code>.255</code> は「使えない」と限らない</p>
+<p><code>/24</code> の感覚で「<code>.255</code> はブロードキャスト専用だから住人に渡せない」と覚えていると、
+分割後の <code>/25</code> で <strong><code>.127</code> も同じ理由で使えない</strong> ことを見落とします。</p>
+<p>正しいルール: <strong>各ブロックの先頭（= 全 0）と末尾（= 全 1）の 2 つ</strong> が使えない。
+<code>/25</code> の場合、<code>.0</code> と <code>.127</code>（下のブロック）・<code>.128</code> と <code>.255</code>（上のブロック）の <strong>合計 4 個</strong> がダメ。</p>
+</div>
+<hr />
+<h2 id="24-4-26-4">📏 もう一段細かく: /24 を 4 等分（→ /26 × 4）</h2>
+<p>Level 7 前後で <strong>「1 つの町を 3 つ以上の LAN に分ける」</strong> 問題が出ます。
+このときは <code>/25</code> では足りないので、さらに半分にして <code>/26</code> を 4 つ作ります。</p>
+<p><code>192.168.1.0/24</code> を 4 等分すると下記の通り:</p>
+<h4 id="24-26-4">視覚図: <code>/24</code> を <code>/26</code> で 4 等分</h4>
+<div class="subnet-ruler cols-4">
+  <div class="subnet-block target">
+    <span class="block-name">.0/26</span>
+    <span class="block-range">.0〜.63</span>
+    <span class="block-host-range">住人 .1〜.62</span>
+  </div>
+  <div class="subnet-block target-2">
+    <span class="block-name">.64/26</span>
+    <span class="block-range">.64〜.127</span>
+    <span class="block-host-range">住人 .65〜.126</span>
+  </div>
+  <div class="subnet-block target">
+    <span class="block-name">.128/26</span>
+    <span class="block-range">.128〜.191</span>
+    <span class="block-host-range">住人 .129〜.190</span>
+  </div>
+  <div class="subnet-block target-2">
+    <span class="block-name">.192/26</span>
+    <span class="block-range">.192〜.255</span>
+    <span class="block-host-range">住人 .193〜.254</span>
+  </div>
+</div>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">ブロック</th>
+<th style="text-align: left;">住人が使える範囲</th>
+<th style="text-align: center;">人数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>192.168.1.0/26</code></td>
+<td style="text-align: left;"><code>.1</code>〜<code>.62</code></td>
+<td style="text-align: center;">62 人</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>192.168.1.64/26</code></td>
+<td style="text-align: left;"><code>.65</code>〜<code>.126</code></td>
+<td style="text-align: center;">62 人</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>192.168.1.128/26</code></td>
+<td style="text-align: left;"><code>.129</code>〜<code>.190</code></td>
+<td style="text-align: center;">62 人</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>192.168.1.192/26</code></td>
+<td style="text-align: left;"><code>.193</code>〜<code>.254</code></td>
+<td style="text-align: center;">62 人</td>
+</tr>
+</tbody>
+</table>
+<p><strong>ブロックの切れ目</strong> は <strong>64 の倍数</strong>（= マスク最後の桁の値）になります。</p>
+<hr />
+<h2 id="_6">📏 サブネット境界の倍数ルール（速算の核）</h2>
+<p>NetPractice で「この IP はどの街に属する？」を秒で出すための <strong>核となる対応表</strong>。
+マスクを見たら、<strong>そのマスクのブロック幅の倍数</strong>でしか街は始まりません。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">マスク</th>
+<th style="text-align: center;">ブロック幅</th>
+<th style="text-align: left;">街の先頭になりうる値（区切り）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>/24</code></td>
+<td style="text-align: center;">256</td>
+<td style="text-align: left;"><code>.0</code> だけ</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>/25</code></td>
+<td style="text-align: center;">128</td>
+<td style="text-align: left;"><code>.0</code>, <code>.128</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>/26</code></td>
+<td style="text-align: center;">64</td>
+<td style="text-align: left;"><code>.0</code>, <code>.64</code>, <code>.128</code>, <code>.192</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>/27</code></td>
+<td style="text-align: center;">32</td>
+<td style="text-align: left;"><code>.0</code>, <code>.32</code>, <code>.64</code>, <code>.96</code>, <code>.128</code>, <code>.160</code>, <code>.192</code>, <code>.224</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>/28</code></td>
+<td style="text-align: center;">16</td>
+<td style="text-align: left;"><code>.0</code>, <code>.16</code>, <code>.32</code>, ..., <code>.240</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>/29</code></td>
+<td style="text-align: center;">8</td>
+<td style="text-align: left;"><code>.0</code>, <code>.8</code>, <code>.16</code>, ..., <code>.248</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>/30</code></td>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;"><code>.0</code>, <code>.4</code>, <code>.8</code>, ..., <code>.252</code></td>
+</tr>
+</tbody>
+</table>
+<p>押さえるべき対応はこの 4 つ：</p>
+<ul>
+<li><code>/26</code> → <strong>64 の倍数</strong></li>
+<li><code>/27</code> → <strong>32 の倍数</strong></li>
+<li><code>/28</code> → <strong>16 の倍数</strong></li>
+<li><code>/30</code> → <strong>4 の倍数</strong></li>
+</ul>
+<p>たとえばマスク <code>/26</code> で IP <code>.130</code> を見たら、<strong>64 の倍数で <code>.130</code> を超えない最大</strong> = <code>.128</code>。
+だから街は <code>.128/26</code>（範囲 <code>.128〜.191</code>）と即決できます。</p>
+<hr />
+<h2 id="ip">🎯 「この IP はどのブロックに属する？」を一瞬で求める</h2>
+<p>NetPractice で一番使うテクニックです。</p>
+<div class="admonition tip">
+<p class="admonition-title">計算手順</p>
+<ol>
+<li>ブロックサイズ = 256 − マスク最後の桁 の値</li>
+<li>IP の最後の桁をブロックサイズで割って <strong>切り捨て</strong> × ブロックサイズ = ブロック先頭</li>
+</ol>
+</div>
+<h3 id="1921681222-27">例: <code>192.168.1.222 /27</code> はどのブロック？</h3>
+<div class="step-flow">
+  <div class="step"><span class="step-num">1</span>マスク<br><code>/27</code><br>= <code>...224</code></div>
+  <div class="step"><span class="step-num">2</span>ブロック幅<br><code>256 − 224</code><br>= <b>32</b></div>
+  <div class="step"><span class="step-num">3</span>222 ÷ 32<br>= 6.93…<br>切り捨て <b>6</b></div>
+  <div class="step"><span class="step-num">4</span>6 × 32<br>= <b>192</b></div>
+  <div class="step"><span class="step-num">5</span>ブロック<br><code>.192/27</code></div>
+</div>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">項目</th>
+<th style="text-align: left;">値</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">ブロック全範囲</td>
+<td style="text-align: left;"><code>.192〜.223</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">ネットワークアドレス</td>
+<td style="text-align: left;"><code>.192</code>（使用不可）</td>
+</tr>
+<tr>
+<td style="text-align: left;">住人範囲</td>
+<td style="text-align: left;"><code>.193〜.222</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">ブロードキャスト</td>
+<td style="text-align: left;"><code>.223</code>（使用不可）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1921681132-28">例: <code>192.168.1.132 /28</code> はどのブロック？</h3>
+<div class="step-flow">
+  <div class="step"><span class="step-num">1</span>マスク<br><code>/28</code><br>= <code>...240</code></div>
+  <div class="step"><span class="step-num">2</span>ブロック幅<br><code>256 − 240</code><br>= <b>16</b></div>
+  <div class="step"><span class="step-num">3</span>132 ÷ 16<br>= 8.25<br>切り捨て <b>8</b></div>
+  <div class="step"><span class="step-num">4</span>8 × 16<br>= <b>128</b></div>
+  <div class="step"><span class="step-num">5</span>ブロック<br><code>.128/28</code></div>
+</div>
+
+<p>ブロック全範囲 <code>.128〜.143</code>、住人範囲 <code>.129〜.142</code>。</p>
+<hr />
+<h2 id="18">🔢 /18 みたいな「中途半端な」マスクの扱い</h2>
+<h3 id="15040107254-18">例: <code>150.40.107.254 / 18</code> の町は？</h3>
+<p><code>/18</code> は <strong>第 3 オクテットの途中で切る</strong>（マスク = <code>255.255.192.0</code>）。
+第 3 オクテットのブロック幅は <code>256 − 192 = 64</code>。</p>
+<div class="step-flow">
+  <div class="step"><span class="step-num">1</span>IP<br><code>150.40.107.254</code></div>
+  <div class="step"><span class="step-num">2</span>マスク<br><code>/18</code><br>= <code>255.255.192.0</code></div>
+  <div class="step"><span class="step-num">3</span>第 3 オクテット<br><code>107 ÷ 64</code><br>= 1.67 切り捨て <b>1</b></div>
+  <div class="step"><span class="step-num">4</span>1 × 64<br>= <b>64</b></div>
+  <div class="step"><span class="step-num">5</span>町<br><code>150.40.64.0/18</code></div>
+</div>
+
+<p>使える IP 範囲: <code>150.40.64.1</code> 〜 <code>150.40.127.254</code>（約 16,382 人）。</p>
+<div class="admonition info">
+<p class="admonition-title">第 3 オクテットの早見表（/18 系）</p>
+<p>/17 → 128 区切り：<code>.0, .128</code>
+/18 → 64 区切り： <code>.0, .64, .128, .192</code>
+/19 → 32 区切り： <code>.0, .32, .64, ..., .224</code></p>
+</div>
+<hr />
+<h2 id="_7">💡 暗算のコツ</h2>
+<div class="admonition tip">
+<p class="admonition-title">256 から引いて考える</p>
+<p>マスクの最後の桁を見たら、<strong>256 からその値を引く</strong> とブロックサイズになる。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">マスク最後の桁</th>
+<th style="text-align: center;">ブロックサイズ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">256</td>
+</tr>
+<tr>
+<td style="text-align: center;">128</td>
+<td style="text-align: center;">128</td>
+</tr>
+<tr>
+<td style="text-align: center;">192</td>
+<td style="text-align: center;">64</td>
+</tr>
+<tr>
+<td style="text-align: center;">224</td>
+<td style="text-align: center;">32</td>
+</tr>
+<tr>
+<td style="text-align: center;">240</td>
+<td style="text-align: center;">16</td>
+</tr>
+<tr>
+<td style="text-align: center;">248</td>
+<td style="text-align: center;">8</td>
+</tr>
+<tr>
+<td style="text-align: center;">252</td>
+<td style="text-align: center;">4</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr />
+<h2 id="_8">⚠️ よくあるミス</h2>
+<div class="admonition warning">
+<p class="admonition-title">CIDR とマスクの変換を間違える</p>
+<p><code>/27</code> を <code>255.255.255.32</code> と書いてしまうミスが多い。
+正しくは <code>255.255.255.224</code>（= 先頭から 1 が 27 個）。</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">ホスト数の −2 を忘れる</p>
+<p>「/26 だから 64 人入る」ではなく <strong>62 人</strong>。
+ネットワークとブロードキャストを引き忘れがち。</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">/30 に 3 人入れる</p>
+<p>/30 は 4 アドレス中 <strong>2 人しか入らない</strong>。
+ルータ間のリンクで最もよく使う（2 人で十分だから）。</p>
+</div>
+<hr />
+<h2 id="_9">🎯 まとめ</h2>
+<ul>
+<li>CIDR = マスクの 1 の個数を <code>/24</code> 形式で書く表記</li>
+<li>住人数 = 2^(32 − CIDR) − 2</li>
+<li><code>/24</code> = 254 人、<code>/25</code> = 126 人 × 2 ブロック、<code>/30</code> = 2 人（ルータ間）</li>
+<li>ブロックサイズ = 256 − マスク最後の桁</li>
+<li>「この IP はどのブロック？」は IP ÷ ブロックサイズ を切り捨てて × ブロックサイズ</li>
+</ul>
+<hr />
+<h2 id="_10">▶️ 次に読むページ</h2>
+<p><a href="../switch-router/">04. スイッチとルータの違い</a> — タコ足配線 vs 郵便局</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  ページトップへ戻る
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="フッター" >
+        
+          
+          <a href="../subnet-mask/" class="md-footer__link md-footer__link--prev" aria-label="前: 02. サブネットマスクって何？">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                前
+              </span>
+              <div class="md-ellipsis">
+                02. サブネットマスクって何？
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../switch-router/" class="md-footer__link md-footer__link--next" aria-label="次: 04. スイッチとルータの違い">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                次
+              </span>
+              <div class="md-ellipsis">
+                04. スイッチとルータの違い
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="../../js/video-control.js"></script>
+      
+        <script src="../../js/mermaid-override.js"></script>
+      
+        <script src="../../js/user-notes.js"></script>
+      
+    
+  </body>
+</html>
