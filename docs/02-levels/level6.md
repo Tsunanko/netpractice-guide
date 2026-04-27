@@ -19,6 +19,18 @@ NetPractice の最重要概念 **「双方向通信」** の入門編です。
 
 ---
 
+## 🌟 このレベルで腑に落ちる 5 つの核心
+
+L6 はネットワーク設計の **「双方向性」と「Internet 接続の作法」** が一気に見えるレベル。先に答えだけ並べると：
+
+1. **通信は双方向、行きと帰りで別々に routes が必要** — A→Internet の行き道 (R の `0.0.0.0/0`) だけでは不十分。Internet→A の帰り道も Internet の routes に必ず書く
+2. **ルータが直結で知っているサブネットには routes を書かない** ⭐ — R は自分のインターフェース R1 / R2 が繋がっているサブネット 2 つを **自動で**知っている。手書きするのは「**自分が直結していない宛先**」だけ — ここでは Internet 全部 (`0.0.0.0/0`) の 1 行で済む
+3. **Internet 接続側はパブリック IP — プライベート IP は使えない** ⭐ — L6 のすべての IP が `42.x.x.x` / `55.x.x.x` / `163.x.x.x` のようなパブリック IP。`192.168.x.x` のようなプライベート IP は ISP で破棄され Internet には出られない（後述）
+4. **routes の範囲は相手の街全体を包含する** — `/31` は `.0` と `.1` の 2 個だけ。A の街 `.128/25`（128 軒）の `.227` には届かない。**街の住所**（ネットワークアドレス + 適切なマスク）を書く
+5. **エラーメッセージを読む** — "No forward way" = 行き道がない（R の routes 不足）、"No reverse way" = 帰り道がない（Internet の routes が狭すぎ）。**どっちが詰まっているかをエラーが教えてくれる**
+
+---
+
 ## 📷 問題画面
 
 [![Level 6 のスクリーンショット](../images/screenshots/level6.png)](../images/screenshots/level6.png)
@@ -33,10 +45,13 @@ flowchart LR
     R1 --- R2[R2<br>R の右口]
     R2 --- I[🌍 Internet]
 
-    style A fill:#E3F2FD
-    style R1 fill:#F8BBD0
-    style R2 fill:#F8BBD0
-    style I fill:#FFF9C4
+    classDef host fill:#E3F2FD,stroke:#1976D2,color:#000,stroke-width:2px
+    classDef router fill:#F8BBD0,stroke:#C2185B,color:#000,stroke-width:2px
+    classDef internet fill:#FFF9C4,stroke:#F9A825,color:#000,stroke-width:2px
+
+    class A host
+    class R1,R2 router
+    class I internet
 ```
 
 ---
@@ -83,6 +98,36 @@ A1 (`.227`) はこの範囲？ → ✅ YES
 - **A gate → `55.232.27.254`** (= R1 の IP)
 
 ### Step 2: 行き道 — R の route を `0.0.0.0/0` に
+
+#### 🔍 先に「R が直結で知っているサブネット」を整理
+
+R は **インターフェース R1（A 側）と R2（Internet 側）** を持っています。インターフェースを持っているサブネットは、**routes 欄に書かなくても自動で知っている**（直結ルート）。書く必要があるのは「**自分が直結していない宛先**」だけ。
+
+```mermaid
+flowchart LR
+    subgraph known ["✅ R が自動で知っている（書かない）"]
+      direction TB
+      L["A 側<br>42.120.188.128/25<br>= R1 が居る街"]
+      RR["Internet 側<br>163.172.250.0/28<br>= R2 が居る街"]
+    end
+    subgraph unknown ["❓ R が知らない（routes に書く）"]
+      Other["Internet 全部<br>0.0.0.0/0<br>→ 163.172.250.1 に丸投げ"]
+    end
+    known -. これ以外を .-> unknown
+
+    classDef knownNode fill:#C8E6C9,stroke:#2E7D32,color:#000,stroke-width:2px
+    classDef unknownNode fill:#FFF59D,stroke:#F9A825,color:#000,stroke-width:2px
+    class L,RR knownNode
+    class Other unknownNode
+```
+
+→ つまり R の routes 欄に書くのは **`0.0.0.0/0` の 1 行だけ** で十分。「A 側の街」「Internet 直結の街」は **書く欄が無い**（自動扱い）。
+
+!!! tip "鉄則"
+    ルータの routes 欄に書くのは「**自分が直結で見えていない宛先**」のみ。
+    直結している隣の街は黙っていても届けられる。
+
+#### 行き道のロジック
 
 `10.0.0.0/8` のままだと `8.8.8.8` (Internet) は該当しない → R が次にどこに送ればいいか分からず破棄 → **"No forward way"**。
 
@@ -167,6 +212,33 @@ I route  → 55.232.27.128/25   ⭐ 帰り道の修正 (核心)
     route は **広すぎても狭すぎてもダメ**。
     狭いと相手を含まず、広いと他の LAN を巻き込んで誤配送。
     「ちょうどいい粒度」を選ぶ感覚は、例外キャッチや正規表現の指定と同じ。
+
+---
+
+## 🚫 プライベート IP を Internet 越しで使ってはいけない（このレベル特有）
+
+L6 の **すべての IP が意図的にパブリック IP**（`42.x.x.x` / `55.x.x.x` / `163.x.x.x`）。
+もし誰かが Internet 側で `192.168.x.x` のようなプライベート IP を使ったらどうなるか？
+
+| IP の種類 | 例 | Internet 越しで使える？ |
+|---|---|:-:|
+| **パブリック IP** | `42.120.188.227`（L6 の A1） | ✅ 使える |
+| **プライベート IP** | `192.168.0.1`, `10.0.0.5`, `172.16.0.1` | ❌ **ISP で破棄** |
+| ループバック | `127.0.0.1` | ❌ 自分の中だけ |
+
+### なぜプライベート IP は Internet に出られないのか
+
+プライベート IP は **「世界中の家庭・社内 LAN で重複して使い回されている」** から：
+
+- あなたの家の Wi-Fi ルータ: `192.168.0.1`
+- 隣の家の Wi-Fi ルータ: 同じく `192.168.0.1`
+- 数百万軒で同じ `192.168.0.1` が並走
+
+→ もし `192.168.0.1` 宛のパケットが Internet に流れ出したら、**数百万件のうちどれが宛先か特定不能**。だから ISP のルータは「プライベート IP 宛・プライベート IP 発のパケットは Internet には流さない」ルール（**RFC 1918**）を持つ。
+
+→ L6 のように **Internet 接続が前提のレベル**では、すべての IP に**パブリック IP** を使うのが必然。逆に L7 のような閉じた LAN だと `192.168.0.0/24` のようなプライベート IP も登場します。
+
+詳しい解説 → [01. IP アドレスって何？](../01-basics/ip-address.md#private-vs-public)
 
 ---
 
