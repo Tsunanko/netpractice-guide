@@ -24,6 +24,20 @@ NetPractice の **大ボス**。**6 つのゴール** を同時に満たす複�
 
 ---
 
+## 🌟 このレベルで腑に落ちる 5 つの核心
+
+L9 は **6 ゴール** にビビるけど、実は **「分割統治」で順番に解くだけ**。先に答えを並べると：
+
+1. **6 ゴールに圧倒されず分割統治** — 「D 側 → ルータ間 → A/B 側 → C 側 → ルーティング」と **5 つの独立サブセット** に分けて順に解く。一度に全体を見ようとすると破綻する
+2. **固定値の連鎖から逆算する** — `Dr1 gate = .78` 固定 → R23 IP は `.78` に一致、R23 mask `/18` から D の街確定、というように **1 つの固定値が次の値を決める**
+3. **Internet routes は LAN 別に複数本書く** ⭐ — L10 と対照的に、L9 で `0.0.0.0/0` 1 本に集約すると Internet 自身まで含んでしまい循環する。**A/B 街、C 街、その他の default** の **3 本に分ける** のが正解
+4. **直結ルートは書かない** — 各ルータの routes に書くのは「**自分が直結していない宛先**」だけ（→ [next hop 三原則](../01-basics/routing-table.md#next-hop)）
+5. **複雑問題は「分割 + 逆算」のテンプレ** — プログラミングのモジュール分割、大きな機能をスプリント単位に切るのと同じ思考。詰まったら「**今はどのサブセットを考えているか**」を声に出す
+
+詳細は下の「🧠 考え方」で 5 ステップに分けて追っていきます。
+
+---
+
 ## 📷 問題画面
 
 [![Level 9 のスクリーンショット](../images/screenshots/level9.png)](../images/screenshots/level9.png)
@@ -47,13 +61,17 @@ flowchart LR
     R2 --- R23[R23]
     R23 --- D[💻 D]
 
-    style A fill:#E3F2FD
-    style B fill:#E3F2FD
-    style C fill:#C8E6C9
-    style D fill:#FFF9C4
-    style R1 fill:#F8BBD0
-    style R2 fill:#F8BBD0
-    style I fill:#FFE0B2
+    classDef hostAB fill:#E3F2FD,stroke:#1976D2,color:#000,stroke-width:2px
+    classDef hostC fill:#C8E6C9,stroke:#388E3C,color:#000,stroke-width:2px
+    classDef hostD fill:#FFF9C4,stroke:#F9A825,color:#000,stroke-width:2px
+    classDef router fill:#F8BBD0,stroke:#C2185B,color:#000,stroke-width:2px
+    classDef internet fill:#FFE0B2,stroke:#F57C00,color:#000,stroke-width:2px
+
+    class A,B hostAB
+    class C hostC
+    class D hostD
+    class R1,R2,R11,R12,R13,R21,R22,R23 router
+    class I internet
 ```
 
 ### 6 つのゴール
