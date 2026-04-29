@@ -18,6 +18,16 @@
 
 ---
 
+## 🌟 このレベルで腑に落ちる 3 つの核心
+
+L3 は **「スイッチ配下は同じサブネット必須」** が体感できるレベル。先に答えを並べると：
+
+1. **スイッチ配下は全員 = 同じサブネット** ⭐ — スイッチは IP を持たず MAC アドレスだけで動く透明な集約機。配下のホストが違うサブネットに属すると一切通信できない
+2. **マスクは固定値に揃える** — 1 人でも違うマスクを設定すると「同じ町判定」がズレる。固定マスク (`/25` 等) があるなら他全員その値に
+3. **同サブネット内で IP は一意** — `.125` `.50` `.100` のように被らない値を選ぶ。重複すると即赤エラー（→ [IP の一意性](../01-basics/ip-address.md)）
+
+---
+
 ## 📷 問題画面
 
 [![Level 3 のスクリーンショット](../images/screenshots/level3.png)](../images/screenshots/level3.png)
@@ -36,10 +46,15 @@ flowchart TD
     S --- B
     S --- C
 
-    style S fill:#FFE0B2
-    style A fill:#E3F2FD
-    style B fill:#FFF9C4
-    style C fill:#C8E6C9
+    classDef switch fill:#FFE0B2,stroke:#F57C00,color:#000,stroke-width:2px
+    classDef hostA fill:#E3F2FD,stroke:#1976D2,color:#000,stroke-width:2px
+    classDef hostB fill:#FFF9C4,stroke:#F9A825,color:#000,stroke-width:2px
+    classDef hostC fill:#C8E6C9,stroke:#388E3C,color:#000,stroke-width:2px
+
+    class S switch
+    class A hostA
+    class B hostB
+    class C hostC
 ```
 
 > 💡 **スイッチは IP も Mask も持たない**。配下の 3 台が同じサブネットになっていれば、スイッチが透明に橋渡ししてくれる。

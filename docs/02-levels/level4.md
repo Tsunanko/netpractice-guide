@@ -19,6 +19,16 @@
 
 ---
 
+## 🌟 このレベルで腑に落ちる 3 つの核心
+
+L4 は **ルータの基本ルール「各 IF は別サブネット」** が初登場。先に答えを並べると：
+
+1. **ルータの各インターフェース (R1, R2, R3) は別サブネット** ⭐ — 同じサブネットに 2 つの IF を置くと意味がない（ルータの本質はサブネット間の橋渡し）。R2 と R3 が固定で街を押さえているので、R1 はそれと重ならない別の街に
+2. **占有マップを先に書く** — 固定値の R2 / R3 がどの範囲を占有しているかを `/24` 全体マップで視覚化。`.0/26` `.64/26` `.128/26` `.192/26` のうち空いているのはどこか
+3. **A1 のマスクが固定 → 街の幅が決まる** — A1 が `/28` 固定なら、空き範囲の中で `/28` (16 個) のブロック境界に合わせる。**マスク幅と境界倍数（→ [サブネット境界](../01-basics/cidr.md)）** がすべて
+
+---
+
 ## 📷 問題画面
 
 [![Level 4 のスクリーンショット](../images/screenshots/level4.png)](../images/screenshots/level4.png)
@@ -43,12 +53,15 @@ flowchart LR
     R -.-> R2
     R -.-> R3
 
-    style S fill:#FFE0B2
-    style A fill:#E3F2FD
-    style B fill:#E3F2FD
-    style R fill:#F8BBD0
-    style R2 fill:#EEEEEE
-    style R3 fill:#EEEEEE
+    classDef switch fill:#FFE0B2,stroke:#F57C00,color:#000,stroke-width:2px
+    classDef host fill:#E3F2FD,stroke:#1976D2,color:#000,stroke-width:2px
+    classDef router fill:#F8BBD0,stroke:#C2185B,color:#000,stroke-width:2px
+    classDef fixed fill:#EEEEEE,stroke:#757575,color:#000,stroke-width:2px
+
+    class S switch
+    class A,B host
+    class R router
+    class R2,R3 fixed
 ```
 
 ---

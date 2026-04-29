@@ -20,6 +20,16 @@
 
 ---
 
+## 🌟 このレベルで腑に落ちる 3 つの核心
+
+L2 は **「マスクの形式バリデーション」** が初登場するレベル。先に答えを並べると：
+
+1. **マスクは「先頭から 1 が連続してから 0 が連続」が絶対ルール** — `.32` (`00100000`) のように 1 が間に紛れた値は無効。NetPractice では赤エラーで弾かれる
+2. **ブロック幅 = 256 − マスク最後の桁** — `/27` (`...224`) なら `256-224=32` ずつ、`/30` (`...252`) なら `256-252=4` ずつ。これさえ覚えれば任意の `/N` で街の境界が割り出せる
+3. **`/30` はルータ間リンク専用** — 4 個のうち住人になれるのは 2 個だけ（`.0`=Net, `.3`=Bcast を除く）。L5 以降でルータ同士を結ぶ時に頻出
+
+---
+
 ## 📷 問題画面
 
 [![Level 2 のスクリーンショット](../images/screenshots/level2.png)](../images/screenshots/level2.png)
@@ -41,10 +51,11 @@ flowchart LR
       C --- D
     end
 
-    style A fill:#E3F2FD
-    style B fill:#FFF9C4
-    style C fill:#E3F2FD
-    style D fill:#FFF9C4
+    classDef leftHost fill:#E3F2FD,stroke:#1976D2,color:#000,stroke-width:2px
+    classDef rightHost fill:#FFF9C4,stroke:#F9A825,color:#000,stroke-width:2px
+
+    class A,C leftHost
+    class B,D rightHost
 ```
 
 ---
