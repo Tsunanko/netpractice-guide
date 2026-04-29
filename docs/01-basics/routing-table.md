@@ -77,6 +77,49 @@ flowchart LR
 
 ---
 
+## 🎯 next hop 三原則（書ける相手は決まっている）
+
+routes 欄の **右側（next hop = バトンを渡す相手）** には、好きな IP を書けるわけではありません。以下 3 つの原則を**全部**満たさないと配達できない：
+
+| 原則 | 意味 |
+|:---|:---|
+| **1. next hop は「自分の隣人」** | パケットをバトンタッチする相手だから、**直接話せる存在** でなければならない |
+| **2. 「自分の直結サブネット内」の IP しか書けない** | 隣人 = 同じサブネットに属する誰か。別サブネットの IP を書いてもバトンを渡せない |
+| **3. 直結外の IP を書いてもパケットは届かない** | NetPractice の判定では「No forward way」で配達失敗 |
+
+### 図で見る
+
+```mermaid
+flowchart LR
+    subgraph net ["🏘️ ルータ R の直結サブネット"]
+      direction LR
+      R["R<br>（自分）"]
+      N1["N1<br>👤 隣人 OK"]
+      N2["N2<br>👤 隣人 OK"]
+    end
+    Far["🌍 直結外<br>F"]
+    R -.❌ next hop に書けない.- Far
+
+    classDef self fill:#FFF59D,stroke:#F9A825,color:#000,stroke-width:3px
+    classDef neighbor fill:#A5D6A7,stroke:#2E7D32,color:#000,stroke-width:2px
+    classDef far fill:#FFCDD2,stroke:#C62828,color:#000,stroke-width:2px
+
+    class R self
+    class N1,N2 neighbor
+    class Far far
+```
+
+→ next hop に書けるのは **緑（隣人）の IP だけ**。赤（直結外）は書いても届かない。
+
+!!! abstract "鉄則 — Routes 欄に書くべきは「知らない場所への行き方」だけ"
+    - **自分が直結している街は書く必要がない**（自動で配達できる）
+    - Routes 欄に書くのは「**自分が直接届けられない宛先**」と「**それを誰に丸投げするか**」のセット
+    - 丸投げ先（next hop）は **必ず自分の隣人**（= 直結サブネット内の IP）
+
+    この 1 つの鉄則を覚えておけば、Level 5 以降のルータ設定で迷わなくなります。
+
+---
+
 ## 🤔 ❓ よく混乱する: 「`.0/26` や `.64/26` の数字って何？」 {#routes-cidr-meaning}
 
 NetPractice の画面で routes を見ていると、こんな数字が出てきます：
