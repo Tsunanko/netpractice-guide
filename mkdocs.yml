@@ -87,6 +87,9 @@ plugins:
         - ja
         - en
 
+hooks:
+  - hooks/breadcrumbs.py
+
 extra_css:
   - stylesheets/extra.css
 
