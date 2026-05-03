@@ -24,6 +24,20 @@
 
 ---
 
+## 🌟 このレベルで腑に落ちる 5 つの核心
+
+L10 は **7 ゴール** で一見最難関だが、**固定値が多すぎて自由度が逆に低い** ので、実はサクッと解ける。先に答えを並べると：
+
+1. **「自由度が低い = こうするしかない」が L10 の真髄** ⭐ — 編集できる場所は数箇所だけ。固定値の連鎖から逆算するだけで答えが**1 通りに絞られる**ので迷わない
+2. **固定値の連鎖から逆算する** — `H4r1 gate = .129` 固定 → R23 IP は `.129` に一致、H41 = `.131/26` から H4 の街は `.128/26` 確定、というドミノ倒し
+3. **`0.0.0.0/0` 1 本で全戻りカバー** ⭐ — L9 と対照的に、L10 は Internet routes を **1 本に集約 OK**（自分自身を含む循環が発生しないトポロジー）
+4. **直結ルートは書かない** — 各ルータの routes に書くのは「**自分が直結していない宛先**」だけ（→ [next hop 三原則](../01-basics/routing-table.md#next-hop)）
+5. **NetPractice 全機能の総決算** — マスク変換 / サブネット境界倍数 / 街の住所 / next hop 三原則 / 双方向到達性 / route 集約 のすべてを一度に使う最終演習
+
+詳細は下の「🧠 考え方」で 5 ステップに分けて追っていきます。
+
+---
+
 ## 📷 問題画面
 
 [![Level 10 のスクリーンショット](../images/screenshots/level10.png)](../images/screenshots/level10.png)
@@ -47,13 +61,17 @@ flowchart LR
     R2 --- R23[R23]
     R23 --- H4[💻 H4]
 
-    style H1 fill:#E3F2FD
-    style H2 fill:#E3F2FD
-    style H3 fill:#C8E6C9
-    style H4 fill:#FFF9C4
-    style R1 fill:#F8BBD0
-    style R2 fill:#F8BBD0
-    style I fill:#FFE0B2
+    classDef hostH12 fill:#E3F2FD,stroke:#1976D2,color:#000,stroke-width:2px
+    classDef hostH3 fill:#C8E6C9,stroke:#388E3C,color:#000,stroke-width:2px
+    classDef hostH4 fill:#FFF9C4,stroke:#F9A825,color:#000,stroke-width:2px
+    classDef router fill:#F8BBD0,stroke:#C2185B,color:#000,stroke-width:2px
+    classDef internet fill:#FFE0B2,stroke:#F57C00,color:#000,stroke-width:2px
+
+    class H1,H2 hostH12
+    class H3 hostH3
+    class H4 hostH4
+    class R1,R2,R11,R12,R13,R21,R22,R23 router
+    class I internet
 ```
 
 ### 7 つのゴール
