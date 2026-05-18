@@ -19,6 +19,17 @@ A と B は別の街に住んでいるので、直接話せない。**R 経由**
 
 ---
 
+## 🌟 このレベルで腑に落ちる 4 つの核心
+
+L5 は **「ルータ越しの通信」と「routes の書き方」** が初登場するレベル。先に答えを並べると：
+
+1. **ルータの両足は別サブネット** ⭐ — R の左口 (R1) と右口 (R2) は別の街。A と B は直接話せず、必ず R を経由する
+2. **gateway は「自分の街にいる玄関」** — A の gateway は R1（A と同じ街にいる）の IP。R2 の IP は別の街なので gateway に書けない（→ [next hop 三原則](../01-basics/routing-table.md#next-hop)）
+3. **default route `0.0.0.0/0` でホストは「街の外は全部玄関に投げる」** — ホストにとって routing は単純：自分の街以外は全部 gateway へ
+4. **ルータは直結ルートを自動で知っている** ⭐ — R は R1 側の街と R2 側の街を直結で持つので、`routes` 欄に書かなくていい。L5 では R に static routes は不要
+
+---
+
 ## 📷 問題画面
 
 [![Level 5 のスクリーンショット](../images/screenshots/level5.png)](../images/screenshots/level5.png)
@@ -37,10 +48,13 @@ flowchart LR
     R1 -.- R2
     R2 --- B
 
-    style A fill:#E3F2FD
-    style R1 fill:#F8BBD0
-    style R2 fill:#F8BBD0
-    style B fill:#FFF9C4
+    classDef hostA fill:#E3F2FD,stroke:#1976D2,color:#000,stroke-width:2px
+    classDef router fill:#F8BBD0,stroke:#C2185B,color:#000,stroke-width:2px
+    classDef hostB fill:#FFF9C4,stroke:#F9A825,color:#000,stroke-width:2px
+
+    class A hostA
+    class R1,R2 router
+    class B hostB
 ```
 
 > 💡 R は **両方の街にまたがって立っている集配局**。R1 (左口) は A 街の住人、R2 (右口) は B 街の住人。
